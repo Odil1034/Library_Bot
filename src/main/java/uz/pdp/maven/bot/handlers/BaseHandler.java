@@ -7,7 +7,6 @@ import uz.pdp.maven.bean.BeanController;
 import uz.pdp.maven.backend.models.myUser.MyUser;
 import uz.pdp.maven.backend.service.UserService;
 import uz.pdp.maven.backend.paths.PathConstants;
-import uz.pdp.maven.bot.states.BaseState;
 import uz.pdp.maven.bot.states.registerState.RegisterState;
 
 public abstract class BaseHandler implements PathConstants {
