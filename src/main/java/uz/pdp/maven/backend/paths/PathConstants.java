@@ -1,4 +1,4 @@
-package uz.pdp.maven.paths;
+package uz.pdp.maven.backend.paths;
 
 public interface PathConstants {
 

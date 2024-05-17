@@ -9,7 +9,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import static uz.pdp.maven.paths.PathConstants.BOT_TOKEN;
+import static uz.pdp.maven.backend.paths.PathConstants.BOT_TOKEN;
 
 public class Bot {
 
