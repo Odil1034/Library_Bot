@@ -41,7 +41,7 @@ public class MessageHandler extends BaseHandler {
         }else {
             String baseStateStr = curUser.getBaseState();
             String state = curUser.getState();
-            if(Objects.equals(baseStateStr, )
+
         }
 
 
