@@ -1,4 +1,4 @@
-package uz.pdp.maven.backend.bean;
+package uz.pdp.maven.bean;
 
 import uz.pdp.maven.backend.service.UserService;
 

@@ -3,10 +3,12 @@ package uz.pdp.maven.bot.handlers;
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.model.User;
-import uz.pdp.maven.backend.bean.BeanController;
+import uz.pdp.maven.bean.BeanController;
 import uz.pdp.maven.backend.models.myUser.MyUser;
 import uz.pdp.maven.backend.service.UserService;
 import uz.pdp.maven.backend.paths.PathConstants;
+import uz.pdp.maven.bot.states.BaseState;
+import uz.pdp.maven.bot.states.registerState.RegisterState;
 
 public abstract class BaseHandler implements PathConstants {
 
@@ -28,6 +30,7 @@ public abstract class BaseHandler implements PathConstants {
                     .username(from.username())
                     .firstname(from.firstName())
                     .lastname(from.lastName())
+                    .baseState(RegisterState.REGISTER_STATE.name())
                     .build();
             userService.save(myUser);
         }

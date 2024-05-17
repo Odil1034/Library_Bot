@@ -19,5 +19,4 @@ public class Book {
     private Long userId;
     private boolean isCompleted;
 
-
 }
