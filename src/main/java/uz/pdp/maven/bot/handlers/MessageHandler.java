@@ -15,6 +15,7 @@ import uz.pdp.maven.bot.states.mainState.MainState;
 import uz.pdp.maven.bot.states.registerState.RegisterState;
 
 import java.util.Objects;
+
 public class MessageHandler extends BaseHandler {
 
     private final UserService userService;
@@ -39,6 +40,8 @@ public class MessageHandler extends BaseHandler {
             handleContactMessage(message.contact());
         } else if (text != null && text.equals("Search Book")) {
             handleSearchBook();
+        } else if (text != null) {
+            handleSearchBookOptions(text);
         } else {
             sendMainMenu();
         }
@@ -82,6 +85,33 @@ public class MessageHandler extends BaseHandler {
         if (Objects.equals(curUser.getBaseState(), MainState.MAIN_MENU_STATE.name())) {
             SendMessage sendMessage = messageMaker.searchBookMenu(curUser);
             bot.execute(sendMessage);
+        }
+    }
+
+    private void handleSearchBookOptions(String text) {
+        if (Objects.equals(curUser.getBaseState(), MainState.MAIN_MENU_STATE.name())) {
+            SendMessage responseMessage;
+
+            switch (text) {
+                case "By Author":
+                    responseMessage = new SendMessage(curUser.getId(), "You chose to search by Author.");
+                    break;
+                case "By Name":
+                    responseMessage = new SendMessage(curUser.getId(), "You chose to search by Name.");
+                    break;
+                case "By Genre":
+                    responseMessage = new SendMessage(curUser.getId(), "You chose to search by Genre.");
+                    break;
+                case "Skip":
+                    responseMessage = new SendMessage(curUser.getId(), "You chose to Skip.");
+                    break;
+                default:
+                    responseMessage = new SendMessage(curUser.getId(), "Invalid option. Please choose again.");
+                    bot.execute(messageMaker.searchBookMenu(curUser));
+                    return;
+            }
+
+            bot.execute(responseMessage);
         }
     }
 }
