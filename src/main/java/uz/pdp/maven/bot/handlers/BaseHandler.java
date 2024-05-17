@@ -17,11 +17,15 @@ public abstract class BaseHandler implements PathConstants {
     protected UserService userService;
     protected BookService bookService;
     protected MessageMaker messageMaker;
+    protected Update update;
+
+    protected MyUser myUser;
 
     public BaseHandler() {
         this.bot = new TelegramBot(BOT_TOKEN);
         this.userService = BeanController.userServiceByThreadLocal.get();
         this.bookService = BeanController.bookServiceByThreadLocal.get();
+        this.messageMaker = BeanController.messageMakerByThreadLocal.get();
     }
 
     public abstract void handle(Update update);
