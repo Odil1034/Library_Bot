@@ -7,16 +7,20 @@ import uz.pdp.maven.bean.BeanController;
 import uz.pdp.maven.backend.models.myUser.MyUser;
 import uz.pdp.maven.backend.service.userService.UserService;
 import uz.pdp.maven.backend.paths.PathConstants;
+import uz.pdp.maven.bot.maker.MessageMaker;
 import uz.pdp.maven.bot.states.registerState.RegisterState;
 
 public abstract class BaseHandler implements PathConstants {
 
     protected TelegramBot bot;
     protected UserService userService;
+    protected BookService bookService;
+    protected MessageMaker messageMaker;
 
     public BaseHandler() {
         this.bot = new TelegramBot(BOT_TOKEN);
         this.userService = BeanController.userServiceByThreadLocal.get();
+        this.bookService = BeanController.bookServiceByThreadLocal.get();
     }
 
     public abstract void handle(Update update);
