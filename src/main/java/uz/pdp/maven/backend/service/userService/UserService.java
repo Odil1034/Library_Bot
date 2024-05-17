@@ -1,6 +1,5 @@
 package uz.pdp.maven.backend.service.userService;
 
-import uz.pdp.fileWriterAndLoader.FileWriterAndLoader;
 import uz.pdp.maven.backend.models.myUser.MyUser;
 import uz.pdp.maven.backend.paths.PathConstants;
 import uz.pdp.maven.backend.service.BaseService;
@@ -19,7 +18,6 @@ public class UserService implements BaseService, PathConstants {
 
     public void save(MyUser myUser){
         List<MyUser> users = writerAndReader.load();
-
         for (int i = 0; i < users.size(); i++) {
             MyUser curUser = users.get(i);
             if(Objects.equals(curUser.getId(), myUser.getId())){
@@ -43,7 +41,6 @@ public class UserService implements BaseService, PathConstants {
                 return curUser;
             }
         }
-
         return null;
     }
 }

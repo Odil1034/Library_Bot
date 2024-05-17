@@ -22,7 +22,6 @@ public class UpdateManager extends BaseHandler {
         }else if(update.callbackQuery() != null){
             callBackQueryHandler.handle(update);
         }else {
-
         }
 
     }
