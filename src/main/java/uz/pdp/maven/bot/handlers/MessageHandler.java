@@ -15,6 +15,7 @@ import uz.pdp.maven.bot.states.mainState.MainState;
 import uz.pdp.maven.bot.states.registerState.RegisterState;
 
 import java.util.Objects;
+
 public class MessageHandler extends BaseHandler {
 
     private final UserService userService;
@@ -49,7 +50,9 @@ public class MessageHandler extends BaseHandler {
         SendMessage welcome = new SendMessage(from.id(), welcomeMessage);
         bot.execute(welcome);
 
-        if (Objects.isNull(curUser.getPhoneNumber()) || curUser.getPhoneNumber().isEmpty() || curUser.getPhoneNumber().isBlank()) {
+        if (Objects.isNull(curUser.getPhoneNumber())
+                || curUser.getPhoneNumber().isEmpty()
+                || curUser.getPhoneNumber().isBlank()) {
             curUser.setState(RegisterState.REGISTER_STATE.name());
             userService.save(curUser);
             enterPhoneNumber();
