@@ -13,7 +13,7 @@ public class UserService implements BaseService, PathConstants {
     FileWriterAndLoader<MyUser> writerAndReader;
 
     public UserService() {
-        this.writerAndReader = new FileWriterAndLoader<>(USERS_TXT);
+        this.writerAndReader = new FileWriterAndLoader<>(USERS_JSON);
     }
 
     public void save(MyUser myUser){
@@ -29,7 +29,6 @@ public class UserService implements BaseService, PathConstants {
 
         users.add(myUser);
         writerAndReader.write(users);
-        return;
     }
 
     public MyUser get(Long Id){
