@@ -4,12 +4,15 @@ import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.model.User;
 import com.pengrad.telegrambot.request.DeleteMessage;
+import com.pengrad.telegrambot.request.SendMessage;
 import uz.pdp.maven.backend.service.bookService.BookService;
 import uz.pdp.maven.bean.BeanController;
 import uz.pdp.maven.backend.models.myUser.MyUser;
 import uz.pdp.maven.backend.service.userService.UserService;
 import uz.pdp.maven.backend.paths.PathConstants;
 import uz.pdp.maven.bot.maker.MessageMaker;
+import uz.pdp.maven.bot.states.BaseState;
+import uz.pdp.maven.bot.states.mainState.MainState;
 import uz.pdp.maven.bot.states.registerState.RegisterState;
 
 public abstract class BaseHandler implements PathConstants {
@@ -47,11 +50,16 @@ public abstract class BaseHandler implements PathConstants {
         }
     }
 
+protected void sendMainMenu(){
+curUser.setState(MainState.MAIN_MENU_STATE.name());
+userService.save(curUser);
+SendMessage sendMessage = messageMaker.mainMenu(curUser);
+bot.execute(sendMessage);
+    }
+
     protected void deleteMessage(int messageId){
         DeleteMessage deleteMessage = new DeleteMessage(curUser.getId(), messageId);
         bot.execute(deleteMessage);
     }
-    /*protected void execute(Message message){
-        
-    }*/
+
 }

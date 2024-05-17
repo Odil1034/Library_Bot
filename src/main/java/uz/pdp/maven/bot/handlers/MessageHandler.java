@@ -30,22 +30,21 @@ public class MessageHandler extends BaseHandler {
                 SendMessage salomlashuv = new SendMessage(from.id(), salomlashuvStr);
                 bot.execute(salomlashuv);
 
-                if(Objects.isNull(curUser.getPhoneNumber()) ||
-                        curUser.getPhoneNumber().isEmpty() ||
+                if(Objects.isNull(curUser.getPhoneNumber()) || curUser.getPhoneNumber().isEmpty() ||
                         curUser.getPhoneNumber().isBlank()){
                     enterPhoneNumber();
                 }
                 String enterPhoneNumberRequest = "Registratsiyadan o'tish uchun telefon raqamingizni kiritish";
                 SendMessage registerRequest = new SendMessage(from.id(), enterPhoneNumberRequest);
             }
-        }else {
-            String baseStateStr = curUser.getBaseState();
-            String state = curUser.getState();
-
+        }
+        else {
+            sendMainMenu();
         }
 
 
     }
+
 
     private void enterPhoneNumber() {
 

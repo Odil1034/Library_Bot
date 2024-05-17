@@ -7,18 +7,6 @@
     "password": null,
     "phoneNumber": null,
     "baseState": "REGISTER_STATE",
-    "state": null
-  }
-]
-[
-  {
-    "Id": 1040000390,
-    "username": "Odil1034",
-    "firstname": "Odiljon",
-    "lastname": "Baxriddinov",
-    "password": null,
-    "phoneNumber": null,
-    "baseState": "REGISTER_STATE",
-    "state": null
+    "state": "MAIN_MENU_STATE"
   }
 ]
