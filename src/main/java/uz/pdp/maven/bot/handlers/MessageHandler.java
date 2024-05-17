@@ -4,15 +4,12 @@ import com.pengrad.telegrambot.model.Contact;
 import com.pengrad.telegrambot.model.Message;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.model.User;
-import com.pengrad.telegrambot.model.request.KeyboardButton;
-import com.pengrad.telegrambot.model.request.ReplyKeyboardMarkup;
 import com.pengrad.telegrambot.request.SendMessage;
-import uz.pdp.maven.backend.models.myUser.MyUser;
 import uz.pdp.maven.backend.service.userService.UserService;
 import uz.pdp.maven.bot.maker.MessageMaker;
-import uz.pdp.maven.bot.states.BaseState;
-import uz.pdp.maven.bot.states.mainState.MainState;
-import uz.pdp.maven.bot.states.registerState.RegisterState;
+import uz.pdp.maven.bot.states.base.BaseState;
+import uz.pdp.maven.bot.states.child.mainMenuState.MainMenuState;
+import uz.pdp.maven.bot.states.child.registrationState.RegistrationState;
 
 import java.util.Objects;
 
@@ -55,11 +52,12 @@ public class MessageHandler extends BaseHandler {
         if (Objects.isNull(curUser.getPhoneNumber())
                 || curUser.getPhoneNumber().isEmpty()
                 || curUser.getPhoneNumber().isBlank()) {
-            curUser.setState(RegisterState.REGISTER_STATE.name());
+            curUser.setBaseState(BaseState.REGISTRATION_STATE.name());
+            curUser.setState(RegistrationState.REGISTER.name());
             userService.save(curUser);
             enterPhoneNumber();
         } else {
-            curUser.setBaseState(MainState.MAIN_MENU_STATE.name());
+            curUser.setBaseState(BaseState.MAIN_MENU_STATE.name());
             userService.save(curUser);
             sendMainMenu();
         }
@@ -68,7 +66,7 @@ public class MessageHandler extends BaseHandler {
     private void handleContactMessage(Contact contact) {
         String phoneNumber = contact.phoneNumber();
         curUser.setPhoneNumber(phoneNumber);
-        curUser.setBaseState(MainState.MAIN_MENU_STATE.name());
+        curUser.setBaseState(BaseState.MAIN_MENU_STATE.name());
         userService.save(curUser);
         sendMainMenu();
     }
@@ -84,28 +82,28 @@ public class MessageHandler extends BaseHandler {
     }
 
     private void handleSearchBook() {
-        if (Objects.equals(curUser.getBaseState(), MainState.MAIN_MENU_STATE.name())) {
+        if (Objects.equals(curUser.getBaseState(), BaseState.MAIN_MENU_STATE.name())) {
             SendMessage sendMessage = messageMaker.searchBookMenu(curUser);
             bot.execute(sendMessage);
         }
     }
 
     private void handleSearchBookOptions(String text) {
-        if (Objects.equals(curUser.getBaseState(), MainState.MAIN_MENU_STATE.name())) {
+        if (Objects.equals(curUser.getBaseState(), BaseState.MAIN_MENU_STATE.name())) {
             SendMessage responseMessage;
 
             switch (text) {
                 case "By Author":
-                    responseMessage = new SendMessage(curUser.getId(), "You chose to search by Author.");
+                    responseMessage = new SendMessage(curUser.getId(), "You choose to search by Author.");
                     break;
                 case "By Name":
-                    responseMessage = new SendMessage(curUser.getId(), "You chose to search by Name.");
+                    responseMessage = new SendMessage(curUser.getId(), "You choose to search by Name.");
                     break;
                 case "By Genre":
-                    responseMessage = new SendMessage(curUser.getId(), "You chose to search by Genre.");
+                    responseMessage = new SendMessage(curUser.getId(), "You choose to search by Genre.");
                     break;
                 case "Skip":
-                    responseMessage = new SendMessage(curUser.getId(), "You chose to Skip.");
+                    responseMessage = new SendMessage(curUser.getId(), "You choose to Skip.");
                     break;
                 default:
                     responseMessage = new SendMessage(curUser.getId(), "Invalid option. Please choose again.");

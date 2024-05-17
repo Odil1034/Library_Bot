@@ -11,9 +11,9 @@ import uz.pdp.maven.backend.models.myUser.MyUser;
 import uz.pdp.maven.backend.service.userService.UserService;
 import uz.pdp.maven.backend.paths.PathConstants;
 import uz.pdp.maven.bot.maker.MessageMaker;
-import uz.pdp.maven.bot.states.BaseState;
-import uz.pdp.maven.bot.states.mainState.MainState;
-import uz.pdp.maven.bot.states.registerState.RegisterState;
+import uz.pdp.maven.bot.states.base.BaseState;
+import uz.pdp.maven.bot.states.child.mainMenuState.MainMenuState;
+import uz.pdp.maven.bot.states.child.registrationState.RegistrationState;
 
 public abstract class BaseHandler implements PathConstants {
 
@@ -41,23 +41,24 @@ public abstract class BaseHandler implements PathConstants {
                     .username(from.username())
                     .firstname(from.firstName())
                     .lastname(from.lastName())
-                    .baseState(RegisterState.REGISTER_STATE.name())
+                    .baseState(BaseState.REGISTRATION_STATE.name())
+                    .state(RegistrationState.REGISTER.name())
                     .build();
             userService.save(newMyUser);
             return newMyUser;
-        }else {
+        } else {
             return myUser;
         }
     }
 
-protected void sendMainMenu(){
-curUser.setState(MainState.MAIN_MENU_STATE.name());
-userService.save(curUser);
-SendMessage sendMessage = messageMaker.mainMenu(curUser);
-bot.execute(sendMessage);
+    protected void sendMainMenu() {
+        curUser.setState(BaseState.MAIN_MENU_STATE.name());
+        userService.save(curUser);
+        SendMessage sendMessage = messageMaker.mainMenu(curUser);
+        bot.execute(sendMessage);
     }
 
-    protected void deleteMessage(int messageId){
+    protected void deleteMessage(int messageId) {
         DeleteMessage deleteMessage = new DeleteMessage(curUser.getId(), messageId);
         bot.execute(deleteMessage);
     }

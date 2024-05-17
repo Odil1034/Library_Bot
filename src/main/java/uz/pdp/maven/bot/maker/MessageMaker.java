@@ -4,9 +4,6 @@ import com.pengrad.telegrambot.model.request.KeyboardButton;
 import com.pengrad.telegrambot.model.request.ReplyKeyboardMarkup;
 import com.pengrad.telegrambot.request.SendMessage;
 import uz.pdp.maven.backend.models.myUser.MyUser;
-import uz.pdp.maven.bot.states.BaseState;
-
-import java.util.Objects;
 
 public class MessageMaker {
 

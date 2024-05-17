@@ -7,7 +7,7 @@ public enum Genre {
     SHERIYAT,
     ILMIY,
     DINIY,
-    SARGUSHART,
+    SARGUZASHT,
     BOSHQALAR;
 
 }
