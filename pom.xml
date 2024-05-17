@@ -20,11 +20,6 @@
             <artifactId>java-telegram-bot-api</artifactId>
             <version>7.2.1</version>
         </dependency>
-        <dependency>
-            <groupId>uz.pdp.maven</groupId>
-            <artifactId>Utils</artifactId>
-            <version>1.0</version>
-        </dependency>
     </dependencies>
 
 </project>
