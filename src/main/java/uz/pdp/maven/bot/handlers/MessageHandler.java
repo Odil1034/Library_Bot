@@ -80,7 +80,7 @@ public class MessageHandler extends BaseHandler {
 
     private void handleSearchBook() {
         if (Objects.equals(curUser.getBaseState(), MainState.MAIN_MENU_STATE.name())) {
-            SendMessage sendMessage = new SendMessage(curUser.getId(), "Search Book running");
+            SendMessage sendMessage = messageMaker.searchBookMenu(curUser);
             bot.execute(sendMessage);
         }
     }

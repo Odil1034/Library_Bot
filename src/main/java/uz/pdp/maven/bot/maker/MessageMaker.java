@@ -10,13 +10,13 @@ import java.util.Objects;
 
 public class MessageMaker {
 
-    public SendMessage enterPhoneNumber(MyUser curUser){
+    public SendMessage enterPhoneNumber(MyUser curUser) {
 
         SendMessage sendMessage = new SendMessage(curUser.getId(), "Telefon raqamini jo'natish: ");
 
         KeyboardButton[][] buttons = {
                 {
-                    new KeyboardButton("Mening telefon raqamimni jo'natish ").requestContact(true)
+                        new KeyboardButton("Mening telefon raqamimni jo'natish ").requestContact(true)
                 }
         };
 
@@ -30,6 +30,18 @@ public class MessageMaker {
         SendMessage sendMessage = new SendMessage(curUser.getId(), "Choose Menu");
         KeyboardButton[][] buttons = {
                 {new KeyboardButton("Add Book"), new KeyboardButton("Search Book")}
+        };
+
+        ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup(buttons).oneTimeKeyboard(true).resizeKeyboard(true);
+        sendMessage.replyMarkup(replyKeyboardMarkup);
+        return sendMessage;
+    }
+
+    public SendMessage searchBookMenu(MyUser curUser) {
+        SendMessage sendMessage = new SendMessage(curUser.getId(), "Search Book");
+        KeyboardButton[][] buttons = {
+                {new KeyboardButton("By Author"), new KeyboardButton("By Name")},
+                {new KeyboardButton("By Genre"), new KeyboardButton("Skip")}
         };
 
         ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup(buttons).oneTimeKeyboard(true).resizeKeyboard(true);
