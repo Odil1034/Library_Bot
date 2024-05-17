@@ -21,9 +21,6 @@ public class UpdateManager extends BaseHandler {
             messageHandler.handle(update);
         }else if(update.callbackQuery() != null){
             callBackQueryHandler.handle(update);
-        }else {
-
         }
-
     }
 }
