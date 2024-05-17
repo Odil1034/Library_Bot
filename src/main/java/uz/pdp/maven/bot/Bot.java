@@ -16,8 +16,10 @@ public class Bot {
     static final ExecutorService pool = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
     static ThreadLocal<UpdateManager> updateHandlerThreadLocal = ThreadLocal.withInitial(UpdateManager::new);
 
+
     public static void main(String[] args) {
 
+        System.out.println("sdfgsdfg");
         TelegramBot bot = new TelegramBot(BOT_TOKEN);
         bot.setUpdatesListener((updates) -> {
             for (Update update : updates) {
