@@ -1,6 +1,6 @@
 package uz.pdp.maven.bean;
 
-import uz.pdp.maven.backend.service.UserService;
+import uz.pdp.maven.backend.service.userService.UserService;
 
 public interface BeanController {
 
