@@ -19,7 +19,6 @@ public class Bot {
 
     public static void main(String[] args) {
 
-        System.out.println("sdfgsdfg");
         TelegramBot bot = new TelegramBot(BOT_TOKEN);
         bot.setUpdatesListener((updates) -> {
             for (Update update : updates) {
