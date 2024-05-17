@@ -1,8 +1,9 @@
-package uz.pdp.maven.backend.service;
+package uz.pdp.maven.backend.service.userService;
 
 import uz.pdp.fileWriterAndLoader.FileWriterAndLoader;
 import uz.pdp.maven.backend.models.myUser.MyUser;
 import uz.pdp.maven.backend.paths.PathConstants;
+import uz.pdp.maven.backend.service.BaseService;
 
 import java.util.List;
 import java.util.Objects;

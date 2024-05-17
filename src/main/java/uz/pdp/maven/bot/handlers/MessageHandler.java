@@ -4,15 +4,12 @@ import com.pengrad.telegrambot.model.Message;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.model.User;
 import uz.pdp.maven.backend.models.myUser.MyUser;
-import uz.pdp.maven.bot.processor.message.MainMessage;
 import uz.pdp.maven.bot.states.BaseState;
 import uz.pdp.maven.bot.states.mainState.MainState;
 
 import java.util.Objects;
 
 public class MessageHandler extends BaseHandler {
-
-    private MainMessage mainMessage = new MainMessage();
 
     @Override
     public void handle(Update update) {
@@ -27,7 +24,7 @@ public class MessageHandler extends BaseHandler {
         }else {
             BaseState baseState = BaseState.valueOf(baseStateStr);
             if (Objects.equals(baseState, MainState.MAIN_STATE)) {
-                mainMessage.processor(update, curUser);
+
 
             }
         }
