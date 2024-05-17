@@ -21,15 +21,13 @@ public class MessageHandler extends BaseHandler {
     public void handle(Update update) {
         Message message = update.message();
         User from = message.from();
+        super.update = update;
+        super.curUser = curUser;
+        String text = message.text();
 
-        curUser = getUserOrCreate(from);
-
-        String baseStateStr = curUser.getBaseState();
-
-        if(baseStateStr == null){
-
-        }else {
-
+        if (text!=null && text.equals("/start")){
+            SendMessage sendMessage = new SendMessage(from.id(),"Assalomu Alayku asfasdfas");
+            bot.execute(sendMessage);
         }
 
 

@@ -19,7 +19,7 @@ public abstract class BaseHandler implements PathConstants {
     protected MessageMaker messageMaker;
     protected Update update;
 
-    protected MyUser myUser;
+    protected MyUser curUser;
 
     public BaseHandler() {
         this.bot = new TelegramBot(BOT_TOKEN);

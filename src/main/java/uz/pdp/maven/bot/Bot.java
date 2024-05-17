@@ -22,7 +22,6 @@ public class Bot {
         TelegramBot bot = new TelegramBot(BOT_TOKEN);
         bot.setUpdatesListener((updates) -> {
             for (Update update : updates) {
-
                 CompletableFuture.runAsync(() -> {
                             try {
                                 updateHandlerThreadLocal.get().handle(update);
@@ -32,7 +31,6 @@ public class Bot {
                         },
                         pool);
             }
-
             return UpdatesListener.CONFIRMED_UPDATES_ALL;
         }, Throwable::printStackTrace);
     }
