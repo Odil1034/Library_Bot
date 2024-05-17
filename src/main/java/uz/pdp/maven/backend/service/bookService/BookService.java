@@ -1,6 +1,7 @@
 package uz.pdp.maven.backend.service.bookService;
 
 import uz.pdp.maven.backend.models.book.Book;
+import uz.pdp.maven.backend.models.myUser.MyUser;
 import uz.pdp.maven.backend.service.BaseService;
 import uz.pdp.maven.backend.utils.fileWriterAndLoader.FileWriterAndLoader;
 
@@ -18,7 +19,7 @@ public class BookService implements BaseService {
     }
 
     public void save(Book book){
-        List<Book> books = bookWriterAndLoader.load();
+        List<Book> books = bookWriterAndLoader.load(Book.class);
 
         for (int i = 0; i < books.size(); i++) {
             Book curBook = books.get(i);
@@ -35,7 +36,7 @@ public class BookService implements BaseService {
     }
 
     public Book load(Long Id){
-        List<Book> books = bookWriterAndLoader.load();
+        List<Book> books = bookWriterAndLoader.load(Book.class);
 
         for (int i = 0; i < books.size(); i++) {
             Book curBook = books.get(i);

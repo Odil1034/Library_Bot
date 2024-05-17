@@ -3,6 +3,7 @@ package uz.pdp.maven.bot.handlers;
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.model.User;
+import com.pengrad.telegrambot.request.DeleteMessage;
 import uz.pdp.maven.backend.service.bookService.BookService;
 import uz.pdp.maven.bean.BeanController;
 import uz.pdp.maven.backend.models.myUser.MyUser;
@@ -18,7 +19,6 @@ public abstract class BaseHandler implements PathConstants {
     protected BookService bookService;
     protected MessageMaker messageMaker;
     protected Update update;
-
     protected MyUser curUser;
 
     public BaseHandler() {
@@ -33,16 +33,23 @@ public abstract class BaseHandler implements PathConstants {
     protected MyUser getUserOrCreate(User from) {
         MyUser myUser = userService.get(from.id());
         if (myUser == null) {
-            myUser = MyUser.builder()
+            MyUser newMyUser = MyUser.builder()
                     .Id(from.id())
                     .username(from.username())
                     .firstname(from.firstName())
                     .lastname(from.lastName())
                     .baseState(RegisterState.REGISTER_STATE.name())
                     .build();
-            userService.save(myUser);
+            userService.save(newMyUser);
+            return newMyUser;
+        }else {
+            return myUser;
         }
-        return myUser;
+    }
+
+    protected void deleteMessage(int messageId){
+        DeleteMessage deleteMessage = new DeleteMessage(curUser.getId(), messageId);
+        bot.execute(deleteMessage);
     }
     /*protected void execute(Message message){
         

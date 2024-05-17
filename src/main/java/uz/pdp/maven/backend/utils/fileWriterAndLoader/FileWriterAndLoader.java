@@ -21,7 +21,7 @@ public class FileWriterAndLoader<M> {
         this.gson = buildGson();
     }
 
-    public void write(List<M> list){
+    public void write(List<M> list) {
         String json = gson.toJson(list);
         try {
             Files.writeString(path, json);
@@ -30,12 +30,13 @@ public class FileWriterAndLoader<M> {
         }
     }
 
-    public List<M> load(){
+    public List<M> load(Class<M> mClass) {
         try {
             String json = Files.readString(path);
-            Type type = new TypeToken<List<M>>() {}.getType();
+            Type type = TypeToken.getParameterized(List.class, mClass).getType();
+            ArrayList<M> arrayList = gson.fromJson(json, type);
 
-            return gson.<ArrayList<M>>fromJson(json, type);
+            return arrayList == null ? new ArrayList<>() : arrayList;
 
         } catch (IOException e) {
             e.printStackTrace();

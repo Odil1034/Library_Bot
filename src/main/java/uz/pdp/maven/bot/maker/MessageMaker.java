@@ -9,11 +9,15 @@ public class MessageMaker {
 
     public SendMessage enterPhoneNumber(MyUser curUser){
 
-        SendMessage sendMessage = new SendMessage(curUser.getId(), "Enter Phone Number: ");
+        SendMessage sendMessage = new SendMessage(curUser.getId(), "Telefon raqamini jo'natish: ");
 
-        KeyboardButton[][] buttons = { {new KeyboardButton("Send My Phone Number")} };
+        KeyboardButton[][] buttons = {
+                {
+                    new KeyboardButton("Mening telefon raqamimni jo'natish ").requestContact(true)
+                }
+        };
 
-        ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup(buttons);
+        ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup(buttons).oneTimeKeyboard(true).resizeKeyboard(true);
         sendMessage.replyMarkup(replyKeyboardMarkup);
 
         return sendMessage;
