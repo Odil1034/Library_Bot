@@ -11,7 +11,7 @@ public class UpdateManager extends BaseHandler {
     private BaseHandler callBackQueryHandler;
 
     public UpdateManager() {
-        this.messageHandler = new MessageHandler();
+        this.messageHandler = new MessageHandler(userService,messageMaker);
         this.callBackQueryHandler = new CallBackQueryHandler();
     }
 

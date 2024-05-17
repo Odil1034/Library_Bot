@@ -5,8 +5,8 @@
     "firstname": "G\u0027ayrat",
     "lastname": "Shirinboyev 👑",
     "password": null,
-    "phoneNumber": null,
-    "baseState": "REGISTER_STATE",
-    "state": "MAIN_MENU_STATE"
+    "phoneNumber": "+998979341277",
+    "baseState": "MAIN_MENU_STATE",
+    "state": "REGISTER_STATE"
   }
 ]

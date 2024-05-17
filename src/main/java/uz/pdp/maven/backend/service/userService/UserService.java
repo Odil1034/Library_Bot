@@ -11,34 +11,31 @@ import java.util.Objects;
 
 public class UserService implements BaseService, PathConstants {
 
-    FileWriterAndLoader<MyUser> writerAndReader;
+    private final FileWriterAndLoader<MyUser> writerAndReader;
 
     public UserService() {
         this.writerAndReader = new FileWriterAndLoader<>(USERS_JSON);
     }
 
-    public void save(MyUser myUser){
+    public void save(MyUser myUser) {
         List<MyUser> users = writerAndReader.load(MyUser.class);
         for (int i = 0; i < users.size(); i++) {
             MyUser curUser = users.get(i);
-            if(Objects.equals(curUser.getId(), myUser.getId())){
+            if (Objects.equals(curUser.getId(), myUser.getId())) {
                 users.set(i, myUser);
                 writerAndReader.write(users);
                 return;
             }
         }
-
         users.add(myUser);
         writerAndReader.write(users);
     }
 
-    public MyUser get(Long Id){
+    public MyUser get(Long id) {
         List<MyUser> users = writerAndReader.load(MyUser.class);
-
-        for (int i = 0; i < users.size(); i++) {
-            MyUser curUser = users.get(i);
-            if(Objects.equals(curUser.getId(), Id)){
-                return curUser;
+        for (MyUser user : users) {
+            if (Objects.equals(user.getId(), id)) {
+                return user;
             }
         }
         return null;

@@ -18,7 +18,10 @@ public class FileWriterAndLoader<M> {
 
     public FileWriterAndLoader(String path) {
         this.path = Path.of(path);
-        this.gson = buildGson();
+        this.gson = new Gson().newBuilder()
+                .setPrettyPrinting()
+                .serializeNulls()
+                .create();;
     }
 
     public void write(List<M> list) {
