@@ -5,10 +5,10 @@ import com.pengrad.telegrambot.model.Message;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.model.User;
 import com.pengrad.telegrambot.request.SendMessage;
+import org.jetbrains.annotations.NotNull;
 import uz.pdp.maven.backend.service.userService.UserService;
 import uz.pdp.maven.bot.maker.MessageMaker;
 import uz.pdp.maven.bot.states.base.BaseState;
-import uz.pdp.maven.bot.states.child.mainMenuState.MainMenuState;
 import uz.pdp.maven.bot.states.child.registrationState.RegistrationState;
 
 import java.util.Objects;
@@ -39,14 +39,17 @@ public class MessageHandler extends BaseHandler {
             handleSearchBook();
         } else if (text != null) {
             handleSearchBookOptions(text);
+        } else if (text != null && text.equals("Add Book")) {
+            handleSearchBook();
+        } else if (text != null) {
+            handleSearchBookOptions(text);
         } else {
             sendMainMenu();
         }
     }
 
     private void handleStartCommand(User from) {
-        String welcomeMessage = "Assalomu Alaykum kutubxona botimizga xush kelibsiz 😊😊😊";
-        SendMessage welcome = new SendMessage(from.id(), welcomeMessage);
+        SendMessage welcome = welcomeMessage(from);
         bot.execute(welcome);
 
         if (Objects.isNull(curUser.getPhoneNumber())
@@ -61,6 +64,11 @@ public class MessageHandler extends BaseHandler {
             userService.save(curUser);
             sendMainMenu();
         }
+    }
+
+    private static @NotNull SendMessage welcomeMessage(User from) {
+        String welcomeMessage = "Assalomu Alaykum kutubxona botimizga xush kelibsiz 😊😊😊";
+        return new SendMessage(from.id(), welcomeMessage);
     }
 
     private void handleContactMessage(Contact contact) {
