@@ -36,19 +36,20 @@ public class CallBackQueryHandler extends BaseHandler {
     private void mainState(String data) {
         MainMenuState curState = MainMenuState.valueOf(data); // search or add book
         switch (curState) {
+            case MAIN_MENU:
+                break;
             case ADD_BOOK:
                 curUser.setBaseState(BaseState.ADD_BOOK_STATE.name());
-                curUser.setState(AddBookState.ENTER_BOOK_NAME.name());
                 SendMessage sendMessage = messageMaker.addBookMenu(curUser);
                 bot.execute(sendMessage);
                 break;
             case SEARCH_BOOK:
+                curUser.setBaseState(BaseState.SEARCH_BOOK_STATE.name());
                 searchBookState(data);
-                curUser.setState(MainMenuState.SEARCH_BOOK.name());
                 break;
             case MY_FAVOURITE_BOOKS:
+                curUser.setBaseState(BaseState.MY_FAVOURITE_BOOKS_STATE.name());
                 myFavouriteBooksState(data);
-                curUser.setState(MainMenuState.MY_FAVOURITE_BOOKS.name());
                 break;
             default:
                 bot.execute(new SendMessage(curUser.getId(), "Anything is wrong"));
@@ -64,7 +65,7 @@ public class CallBackQueryHandler extends BaseHandler {
 
     private void addBookState(String data) {
         curUser.setState(AddBookState.ENTER_BOOK_NAME.name());
-        SendMessage sendMessage = new SendMessage(curUser.getId(), "Please enter the book name:");
+        SendMessage sendMessage = messageMaker.enterBookNameMenu(curUser);
         bot.execute(sendMessage);
     }
 

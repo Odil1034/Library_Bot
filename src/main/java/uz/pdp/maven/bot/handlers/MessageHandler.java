@@ -87,69 +87,88 @@ public class MessageHandler extends BaseHandler {
 
     private void handleAddBook(MyUser curUser) {
 
-        String curUserState = curUser.getState();
-        AddBookState addBookState = AddBookState.valueOf(curUserState);
-
-        BookBuilder newBook = Book.builder();
-
-        switch (addBookState) {
-            case ENTER_BOOK_NAME -> {
-                curUser.setState(AddBookState.ENTER_BOOK_NAME.name());
-                SendMessage bookNameMessage = messageMaker.enterBookNameMenu(curUser);
-                newBook.name(getText());
-                userService.save(curUser);
-                bot.execute(bookNameMessage);
-            }
-            case ENTER_BOOK_AUTHOR -> {
-                curUser.setState(AddBookState.ENTER_BOOK_AUTHOR.name());
-                SendMessage bookAuthorMessage = messageMaker.enterBookAuthor(curUser);
-                newBook.author(getText());
-                userService.save(curUser);
-                bot.execute(bookAuthorMessage);
-            }
-            case ENTER_BOOK_GENRE -> {
-                curUser.setState(AddBookState.ENTER_BOOK_GENRE.name());
-                SendMessage sendMessage = messageMaker.enterSelectGenreMenu(curUser);
-                userService.save(curUser);
-                newBook.genre(getGenre());
-                bot.execute(sendMessage);
-            }
-            case ENTER_BOOK_DESCRIPTION -> {
-                curUser.setState(AddBookState.ENTER_BOOK_DESCRIPTION.name());
-                SendMessage sendMessage = messageMaker.enterBookDescription(curUser);
-                newBook.description(getText());
-                userService.save(curUser);
-                bot.execute(sendMessage);
-            }
-            case ENTER_BOOK_FILE_ID -> {
-                curUser.setState(AddBookState.ENTER_BOOK_FILE_ID.name());
-                SendMessage sendMessage = messageMaker.enterBookFile(curUser);
-                newBook.fileId(update.message().document().fileId());
-                userService.save(curUser);
-                bot.execute(sendMessage);
-            }
-            case ENTER_BOOK_PHOTO_ID -> {
-                PhotoSize[] photo = update.message().photo();
-                for (PhotoSize photoSize : photo) {
-                    newBook.photoId(photoSize.fileId());
+        String state = curUser.getState();
+        AddBookState curState;
+        if (state != null) {
+            curState = AddBookState.valueOf(state);
+            BookBuilder newBook = builder();
+            while (!checkBookIsValid(newBook.build())) {
+                switch (curState) {
+                    case AddBookState.ENTER_BOOK_NAME -> {
+                        curUser.setState(AddBookState.ENTER_BOOK_AUTHOR.name());
+                        SendMessage bookNameMessage = messageMaker.enterBookNameMenu(curUser);
+                        newBook.name(getText());
+                        userService.save(curUser);
+                        bot.execute(bookNameMessage);
+                    }
+                    case ENTER_BOOK_AUTHOR -> {
+                        curUser.setState(AddBookState.ENTER_BOOK_GENRE.name());
+                        SendMessage bookAuthorMessage = messageMaker.enterBookAuthor(curUser);
+                        newBook.author(getText());
+                        userService.save(curUser);
+                        bot.execute(bookAuthorMessage);
+                    }
+                    case ENTER_BOOK_GENRE -> {
+                        curUser.setState(AddBookState.ENTER_BOOK_DESCRIPTION.name());
+                        SendMessage sendMessage = messageMaker.enterSelectGenreMenu(curUser);
+                        userService.save(curUser);
+                        newBook.genre(getGenre());
+                        bot.execute(sendMessage);
+                    }
+                    case ENTER_BOOK_DESCRIPTION -> {
+                        curUser.setState(AddBookState.ENTER_BOOK_PHOTO_ID.name());
+                        SendMessage sendMessage = messageMaker.enterBookDescription(curUser);
+                        newBook.description(getText());
+                        userService.save(curUser);
+                        bot.execute(sendMessage);
+                    }
+                    case ENTER_BOOK_PHOTO_ID -> {
+                        PhotoSize[] photo = update.message().photo();
+                        for (PhotoSize photoSize : photo) {
+                            newBook.photoId(photoSize.fileId());
+                        }
+                    }
+                    case ENTER_BOOK_FILE_ID -> {
+                        curUser.setState(null);
+                        SendMessage sendMessage = messageMaker.enterBookFile(curUser);
+                        newBook.fileId(update.message().document().fileId());
+                        userService.save(curUser);
+                        bot.execute(sendMessage);
+                    }
+                    default -> {
+                        return;
+                    }
                 }
             }
-            default -> bot.execute(new SendMessage(curUser.getId(), "Anything is wrong ❌❌❌"));
+            Book newBuilderBook = newBook.isComplete(true).build();
+            curUser.setBaseState(BaseState.MAIN_MENU_STATE.name());
+            userService.save(curUser);
+
+            if (newBuilderBook.isComplete()) {
+                SendMessage bookIsAddedMessage = messageMaker.bookIsAddedMessage(curUser, newBuilderBook);
+                bookService.save(newBuilderBook);
+                bot.execute(bookIsAddedMessage);
+            } else {
+                handleAddBook(curUser);
+            }
+            handleMainMenu(curUser);
         }
+    }
 
-        Book newBuilderBook = newBook.isComplete(true).build();
 
-        curUser.setState(null);
-        curUser.setBaseState(BaseState.MAIN_MENU_STATE.name());
-        userService.save(curUser);
+    private boolean checkBookIsValid(Book book) {
+        return book.getName() != null
+                && book.getDescription() != null
+                && !Objects.isNull(book.getGenre())
+                && checkStrIsBlankNullAndEmpty(book.getFileId())
+                && checkStrIsBlankNullAndEmpty(book.getAuthor())
+                && checkStrIsBlankNullAndEmpty(book.getName())
+                && checkStrIsBlankNullAndEmpty(book.getPhotoId())
+                && checkStrIsBlankNullAndEmpty(book.getDescription());
+    }
 
-        if (newBuilderBook.isComplete()) {
-            SendMessage bookIsAddedMessage = messageMaker.bookIsAddedMessage(curUser, newBuilderBook);
-            bot.execute(bookIsAddedMessage);
-        }else {
-
-        }
-        handleMainMenu(curUser);
+    public boolean checkStrIsBlankNullAndEmpty(String str) {
+        return str == null || str.isEmpty() || str.isBlank();
     }
 
     private Genre getGenre() {
