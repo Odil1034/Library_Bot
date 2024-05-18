@@ -30,25 +30,28 @@ public class CallBackQueryHandler extends BaseHandler {
         } else if (Objects.equals(baseState, BaseState.MY_FAVOURITE_BOOKS_STATE)) {
             myFavouriteBooksState(data);
         }
-
     }
 
     private void mainState(String data) {
-        MainMenuState curState = MainMenuState.valueOf(data); // search or add book
+        String state = curUser.getState();
+        MainMenuState curState = MainMenuState.valueOf(state);
         switch (curState) {
             case MAIN_MENU:
-                break;
-            case ADD_BOOK:
-                curUser.setBaseState(BaseState.ADD_BOOK_STATE.name());
-                SendMessage sendMessage = messageMaker.addBookMenu(curUser);
+                curUser.setState(MainMenuState.MAIN_MENU.name());
+                SendMessage sendMessage = messageMaker.mainMenu(curUser);
                 bot.execute(sendMessage);
                 break;
+            case ADD_BOOK:
+                curUser.setState(MainMenuState.ADD_BOOK.name());
+                SendMessage sendMessage1 = messageMaker.addBookMenu(curUser);
+                bot.execute(sendMessage1);
+                break;
             case SEARCH_BOOK:
-                curUser.setBaseState(BaseState.SEARCH_BOOK_STATE.name());
+                curUser.setState(MainMenuState.SEARCH_BOOK.name());
                 searchBookState(data);
                 break;
             case MY_FAVOURITE_BOOKS:
-                curUser.setBaseState(BaseState.MY_FAVOURITE_BOOKS_STATE.name());
+                curUser.setState(MainMenuState.MY_FAVOURITE_BOOKS.name());
                 myFavouriteBooksState(data);
                 break;
             default:
@@ -64,9 +67,39 @@ public class CallBackQueryHandler extends BaseHandler {
     }
 
     private void addBookState(String data) {
+        String stateStr = curUser.getState();
+        AddBookState curState = AddBookState.valueOf(stateStr);
+        switch (curState){
+            case ENTER_BOOK_AUTHOR -> {
+
+            }
+            case ENTER_BOOK_GENRE -> {
+
+            }
+            case ENTER_BOOK_NAME -> {
+
+            }
+            case ENTER_BOOK_FILE_ID -> {
+
+            }
+            case ENTER_BOOK_PHOTO_ID -> {
+
+            }
+            case ENTER_BOOK_DESCRIPTION -> {
+
+            }
+            default -> {
+                incorrectValue("Option");
+            }
+        }
+
         curUser.setState(AddBookState.ENTER_BOOK_NAME.name());
         SendMessage sendMessage = messageMaker.enterBookNameMenu(curUser);
         bot.execute(sendMessage);
+    }
+
+    public void incorrectValue(String data) {
+        bot.execute(new SendMessage(curUser.getId(), "You entered incorrect " + data));
     }
 
     private void myFavouriteBooksState(String data) {
