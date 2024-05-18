@@ -5,18 +5,17 @@ import uz.pdp.maven.bot.handlers.BaseHandler;
 import uz.pdp.maven.bot.handlers.CallBackQueryHandler;
 import uz.pdp.maven.bot.handlers.MessageHandler;
 
-public class UpdateManager extends BaseHandler {
+public class UpdateManager {
 
     private BaseHandler messageHandler;
     private BaseHandler callBackQueryHandler;
 
     public UpdateManager() {
-        this.messageHandler = new MessageHandler(userService,messageMaker);
+        this.messageHandler = new MessageHandler();
         this.callBackQueryHandler = new CallBackQueryHandler();
     }
 
-    @Override
-    public void handle(Update update){
+    public void manage(Update update){
         if(update.message() != null){
             messageHandler.handle(update);
         }else if(update.callbackQuery() != null){

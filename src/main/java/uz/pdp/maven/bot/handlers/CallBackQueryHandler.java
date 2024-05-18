@@ -7,8 +7,6 @@ import uz.pdp.maven.bot.states.child.mainMenuState.MainMenuState;
 
 import java.util.Objects;
 
-import static uz.pdp.maven.bot.states.child.addBookState.AddBookState.*;
-
 public class CallBackQueryHandler extends BaseHandler {
 
     @Override
@@ -22,101 +20,58 @@ public class CallBackQueryHandler extends BaseHandler {
         String baseStateStr = curUser.getBaseState();
         BaseState baseState = BaseState.valueOf(baseStateStr);
 
-        String data;
         if (Objects.equals(baseState, BaseState.MAIN_MENU_STATE)) {
-            data = callbackQuery.data();
-            mainMenuState();   // go to Main Menu
-        } else if (Objects.equals(baseState, BaseState.ADD_BOOK_STATE)) {
-            data = callbackQuery.data();
-            addBookState(data);     //  go to Add Book
-        } else if (Objects.equals(baseState, BaseState.SEARCH_BOOK_STATE)) {
-            data = callbackQuery.data();
-            searchBookState();  //  go to search Book
-        } else if (Objects.equals(baseState, BaseState.MY_FAVOURITE_BOOKS_STATE)) {
-            data = callbackQuery.data();
-            myFavouriteBooksState();    //  go to My Favourite Book
+            mainState();
+        }else if(Objects.equals(baseState, BaseState.ADD_BOOK_STATE)){
+            addBookState();
+        }else if(Objects.equals(baseState, BaseState.MY_FAVOURITE_BOOKS_STATE)){
+            myFavouriteBooksState();
         }
 
+
+    }
+
+    private void mainState(){
+        String stateStr = curUser.getState();
+        MainMenuState state = MainMenuState.valueOf(stateStr);
+        CallbackQuery callbackQuery = update.callbackQuery();
+
+        switch (state){
+            case ADD_BOOK -> {
+                String data = callbackQuery.data();
+                mainMenu(data);
+            }
+            case SEARCH_BOOK -> {
+                String data = callbackQuery.data();
+                searchBookMenu(data);
+            }
+            case MY_FAVOURITE_BOOKS -> {
+                String data = callbackQuery.data();
+                myFavouriteBooks(data);
+            }
+            default -> {
+                SendMessage sendMessage = new SendMessage(curUser.getId(), "Anything is wrong");
+                bot.execute(sendMessage);
+            }
+        }
+    }
+
+    private void mainMenu(String data) {
+
+    }
+
+    private void myFavouriteBooks(String data) {
+    }
+
+    private void searchBookMenu(String data) {
+
+    }
+
+    private void addBookState() {
     }
 
     private void myFavouriteBooksState() {
 
     }
 
-    private void searchBookState() {
-
-    }
-
-    private void addBookState(String data) {
-        String stateStr = curUser.getState();
-        MainMenuState curState = MainMenuState.valueOf(stateStr);
-        CallbackQuery callbackQuery = update.callbackQuery();
-
-        Message message = callbackQuery.message();
-
-        String data2;
-        switch (data) {
-            case "BOOK_NAME" -> {
-                data2 = callbackQuery.data();
-                deleteMessage(message.messageId());
-            }
-            case "SELECT_GENRE" -> {
-                data2 = callbackQuery.data();
-                deleteMessage(message.messageId());
-            }
-            case "ENTER_AUTHOR" -> {
-                data2 = callbackQuery.data();
-                deleteMessage(message.messageId());
-            }
-            case "ENTER_PHOTO_OF_BOOK" -> {
-                data2 = callbackQuery.data();
-                deleteMessage(message.messageId());
-            }
-            case "ENTER_DESCRIPTION" -> {
-                data2 = callbackQuery.data();
-                deleteMessage(message.messageId());
-            }
-            case "UPLOAD_FILE" ->{
-                data2 = callbackQuery.data();
-                deleteMessage(message.messageId());
-            }
-            default -> throw new IllegalStateException("Unexpected value: " + curState);
-        }
-    }
-
-    private void mainMenuState() {
-        String stateStr = curUser.getState();
-        MainMenuState curState = MainMenuState.valueOf(stateStr);
-        CallbackQuery callbackQuery = update.callbackQuery();
-
-        String data;
-        switch (curState) {
-            case SEARCH_BOOK -> {
-                data = callbackQuery.data();
-                searchBook(data);
-            }
-            case ADD_BOOK -> {
-                data = callbackQuery.data();
-                addBook(data);
-            }
-            default -> bot.execute(new SendMessage(curUser.getId(), "Nimadir xatoda"));
-        }
-    }
-
-    private void addBook(String data) {
-        CallbackQuery callbackQuery = update.callbackQuery();
-        Message message = callbackQuery.message();
-
-        String bookName;
-        if (Objects.isNull(message.text()) || message.text().isBlank() || message.text().isEmpty()) {
-
-        }
-
-    }
-
-    private void searchBook(String data) {
-        CallbackQuery callbackQuery = update.callbackQuery();
-        Message message = callbackQuery.message();
-
-    }
 }

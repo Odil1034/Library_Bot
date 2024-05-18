@@ -12,8 +12,6 @@ import uz.pdp.maven.backend.service.userService.UserService;
 import uz.pdp.maven.backend.paths.PathConstants;
 import uz.pdp.maven.bot.maker.MessageMaker;
 import uz.pdp.maven.bot.states.base.BaseState;
-import uz.pdp.maven.bot.states.child.mainMenuState.MainMenuState;
-import uz.pdp.maven.bot.states.child.registrationState.RegistrationState;
 
 public abstract class BaseHandler implements PathConstants {
 
@@ -42,7 +40,6 @@ public abstract class BaseHandler implements PathConstants {
                     .firstname(from.firstName())
                     .lastname(from.lastName())
                     .baseState(BaseState.REGISTRATION_STATE.name())
-                    .state(RegistrationState.REGISTER.name())
                     .build();
             userService.save(newMyUser);
             return newMyUser;
@@ -51,7 +48,7 @@ public abstract class BaseHandler implements PathConstants {
         }
     }
 
-    protected void sendMainMenu() {
+    protected void mainMenu() {
         curUser.setState(BaseState.MAIN_MENU_STATE.name());
         userService.save(curUser);
         SendMessage sendMessage = messageMaker.mainMenu(curUser);
