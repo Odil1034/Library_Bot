@@ -1,22 +1,77 @@
 package uz.pdp.maven.bot.handlers;
 
-import com.pengrad.telegrambot.model.CallbackQuery;
-import com.pengrad.telegrambot.model.Update;
-import com.pengrad.telegrambot.model.User;
-import uz.pdp.maven.backend.models.myUser.MyUser;
+import com.pengrad.telegrambot.model.*;
+import com.pengrad.telegrambot.request.SendMessage;
+import uz.pdp.maven.bot.states.base.BaseState;
+import uz.pdp.maven.bot.states.child.mainMenuState.MainMenuState;
+
+import java.util.Objects;
 
 public class CallBackQueryHandler extends BaseHandler {
 
     @Override
     public void handle(Update update) {
+
         CallbackQuery callbackQuery = update.callbackQuery();
         User from = callbackQuery.from();
-        MyUser curUser = getUserOrCreate(from);
-        String data = callbackQuery.data();
-        if (data != null) {
+        super.curUser = getUserOrCreate(from);
+        super.update = update;
 
+        String baseStateStr = curUser.getBaseState();
+        BaseState baseState = BaseState.valueOf(baseStateStr);
+
+        if (Objects.equals(baseState, BaseState.MAIN_MENU_STATE)) {
+            mainState();
+        }else if(Objects.equals(baseState, BaseState.ADD_BOOK_STATE)){
+            addBookState();
+        }else if(Objects.equals(baseState, BaseState.MY_FAVOURITE_BOOKS_STATE)){
+            myFavouriteBooksState();
         }
 
 
     }
+
+    private void mainState(){
+        String stateStr = curUser.getState();
+        MainMenuState state = MainMenuState.valueOf(stateStr);
+        CallbackQuery callbackQuery = update.callbackQuery();
+
+        switch (state){
+            case ADD_BOOK -> {
+                String data = callbackQuery.data();
+                mainMenu(data);
+            }
+            case SEARCH_BOOK -> {
+                String data = callbackQuery.data();
+                searchBookMenu(data);
+            }
+            case MY_FAVOURITE_BOOKS -> {
+                String data = callbackQuery.data();
+                myFavouriteBooks(data);
+            }
+            default -> {
+                SendMessage sendMessage = new SendMessage(curUser.getId(), "Anything is wrong");
+                bot.execute(sendMessage);
+            }
+        }
+    }
+
+    private void mainMenu(String data) {
+
+    }
+
+    private void myFavouriteBooks(String data) {
+    }
+
+    private void searchBookMenu(String data) {
+
+    }
+
+    private void addBookState() {
+    }
+
+    private void myFavouriteBooksState() {
+
+    }
+
 }

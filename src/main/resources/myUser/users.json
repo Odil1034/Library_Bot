@@ -1,15 +1,5 @@
 [
   {
-    "Id": 1712225965,
-    "username": "Gayrat_Shirinboyev",
-    "firstname": "G\u0027ayrat",
-    "lastname": "Shirinboyev 👑",
-    "password": null,
-    "phoneNumber": "+998979341277",
-    "baseState": "MAIN_MENU_STATE",
-    "state": "REGISTER_STATE"
-  },
-  {
     "Id": 1040000390,
     "username": "Odil1034",
     "firstname": "Odiljon",
@@ -17,6 +7,6 @@
     "password": null,
     "phoneNumber": "998974351034",
     "baseState": "MAIN_MENU_STATE",
-    "state": "REGISTER_STATE"
+    "state": null
   }
 ]

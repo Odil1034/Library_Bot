@@ -24,7 +24,7 @@ public class Bot {
             for (Update update : updates) {
                 CompletableFuture.runAsync(() -> {
                             try {
-                                updateHandlerThreadLocal.get().handle(update);
+                                updateHandlerThreadLocal.get().manage(update);
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }

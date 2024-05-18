@@ -5,23 +5,13 @@ import com.pengrad.telegrambot.model.Message;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.model.User;
 import com.pengrad.telegrambot.request.SendMessage;
-import uz.pdp.maven.backend.service.userService.UserService;
-import uz.pdp.maven.bot.maker.MessageMaker;
 import uz.pdp.maven.bot.states.base.BaseState;
-import uz.pdp.maven.bot.states.child.mainMenuState.MainMenuState;
-import uz.pdp.maven.bot.states.child.registrationState.RegistrationState;
 
 import java.util.Objects;
 
+import static uz.pdp.maven.bot.maker.MessageMaker.welcomeMessage;
+
 public class MessageHandler extends BaseHandler {
-
-    private final UserService userService;
-    private final MessageMaker messageMaker;
-
-    public MessageHandler(UserService userService, MessageMaker messageMaker) {
-        this.userService = userService;
-        this.messageMaker = messageMaker;
-    }
 
     @Override
     public void handle(Update update) {
@@ -31,35 +21,48 @@ public class MessageHandler extends BaseHandler {
         super.curUser = getUserOrCreate(from);
         String text = message.text();
 
-        if (text != null && text.equals("/start")) {
-            handleStartCommand(from);
-        } else if (message.contact() != null) {
-            handleContactMessage(message.contact());
-        } else if (text != null && text.equals("Search Book")) {
-            handleSearchBook();
-        } else if (text != null) {
-            handleSearchBookOptions(text);
+        if (text != null) {
+            if (Objects.equals(text, "/start")) {
+                handleStartCommand(from);
+            }
         } else {
-            sendMainMenu();
+            String baseState = curUser.getBaseState();
+            BaseState curBaseState = BaseState.valueOf(baseState);
+            if (message.contact() != null) {
+                handleContactMessage(message.contact());
+            } else if (text.equals("Search Book")) {
+                handleSearchBook();
+            } else if (text.equals("Add Book")) {
+                handleAddBook();
+            } else if (Objects.equals(text, "My favourite Books")){
+
+            }
+            else {
+                SendMessage sendMessage = new SendMessage(curUser.getId(), "Unexpected option");
+                bot.execute(sendMessage);
+            }
         }
     }
 
+    private void handleAddBook() {
+
+    }
+
     private void handleStartCommand(User from) {
-        String welcomeMessage = "Assalomu Alaykum kutubxona botimizga xush kelibsiz 😊😊😊";
-        SendMessage welcome = new SendMessage(from.id(), welcomeMessage);
+        SendMessage welcome = welcomeMessage(from);
         bot.execute(welcome);
 
         if (Objects.isNull(curUser.getPhoneNumber())
                 || curUser.getPhoneNumber().isEmpty()
                 || curUser.getPhoneNumber().isBlank()) {
-            curUser.setBaseState(BaseState.REGISTRATION_STATE.name());
-            curUser.setState(RegistrationState.REGISTER.name());
-            userService.save(curUser);
             enterPhoneNumber();
-        } else {
+//            curUser.setPhoneNumber();
             curUser.setBaseState(BaseState.MAIN_MENU_STATE.name());
             userService.save(curUser);
-            sendMainMenu();
+        } else {
+            mainMenu();
+            curUser.setBaseState(BaseState.MAIN_MENU_STATE.name());
+            userService.save(curUser);
         }
     }
 
@@ -68,7 +71,7 @@ public class MessageHandler extends BaseHandler {
         curUser.setPhoneNumber(phoneNumber);
         curUser.setBaseState(BaseState.MAIN_MENU_STATE.name());
         userService.save(curUser);
-        sendMainMenu();
+        mainMenu();
     }
 
     private void enterPhoneNumber() {
@@ -76,7 +79,7 @@ public class MessageHandler extends BaseHandler {
         bot.execute(sendMessage);
     }
 
-    public void sendMainMenu() {
+    public void mainMenu() {
         SendMessage sendMessage = messageMaker.mainMenu(curUser);
         bot.execute(sendMessage);
     }
@@ -88,7 +91,7 @@ public class MessageHandler extends BaseHandler {
         }
     }
 
-    private void handleSearchBookOptions(String text) {
+    /*private void handleSearchBookOptions(String text) {
         if (Objects.equals(curUser.getBaseState(), BaseState.MAIN_MENU_STATE.name())) {
             SendMessage responseMessage;
 
@@ -107,10 +110,9 @@ public class MessageHandler extends BaseHandler {
                     break;
                 default:
                     responseMessage = new SendMessage(curUser.getId(), "Invalid option. Please choose again.");
-                    bot.execute(messageMaker.searchBookMenu(curUser));
-                    return;
             }
+            bot.execute(messageMaker.searchBookMenu(curUser));
             bot.execute(responseMessage);
         }
-    }
+    }*/
 }

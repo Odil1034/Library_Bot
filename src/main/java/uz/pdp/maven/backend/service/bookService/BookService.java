@@ -1,7 +1,6 @@
 package uz.pdp.maven.backend.service.bookService;
 
 import uz.pdp.maven.backend.models.book.Book;
-import uz.pdp.maven.backend.models.myUser.MyUser;
 import uz.pdp.maven.backend.service.BaseService;
 import uz.pdp.maven.backend.utils.fileWriterAndLoader.FileWriterAndLoader;
 
