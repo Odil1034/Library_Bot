@@ -37,7 +37,7 @@ public class CallBackQueryHandler extends BaseHandler {
     private void mainState(String data) {
         MainMenuState curState = MainMenuState.valueOf(data); // search or add book
         CallbackQuery callbackQuery = update.callbackQuery();
-        SendMessage sendMessage = null;
+        SendMessage sendMessage = new SendMessage(curUser.getId(),"a");
         switch (curState) {
             case ADD_BOOK -> {
                 String addBookStr = callbackQuery.data();
@@ -80,7 +80,12 @@ public class CallBackQueryHandler extends BaseHandler {
         }
 
 //        addBookState(addBookStr);
-        bot.execute(sendMessage);
+        if (sendMessage != null) {
+            bot.execute(sendMessage);
+        } else {
+            SendMessage sendMessage1 = new SendMessage(curUser.getId(),"SendMessage object is null");
+            bot.execute(sendMessage1);
+        }
     }
 
     private void myFavouriteBooks(String data) {

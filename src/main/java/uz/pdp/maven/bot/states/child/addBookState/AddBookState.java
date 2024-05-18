@@ -6,8 +6,9 @@ import uz.pdp.maven.bot.states.State;
 @Getter
 public enum AddBookState implements State {
 
-    BOOK_NAME(null),
+    ADD_BOOK(null),
 
+    BOOK_NAME(ADD_BOOK),
     SELECT_GENRE(BOOK_NAME),
     ENTER_AUTHOR(SELECT_GENRE),
     ENTER_PHOTO_OF_BOOK(ENTER_AUTHOR),
