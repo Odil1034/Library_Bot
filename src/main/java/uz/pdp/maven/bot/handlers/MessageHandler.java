@@ -110,7 +110,6 @@ public class MessageHandler extends BaseHandler {
                     bot.execute(messageMaker.searchBookMenu(curUser));
                     return;
             }
-
             bot.execute(responseMessage);
         }
     }
