@@ -76,16 +76,16 @@ public class MessageMaker {
         SendMessage sendMessage = new SendMessage(curUser.getId(), "Addition Book Info");
         InlineKeyboardButton[][] buttons = {
                 new InlineKeyboardButton[]{
-                        new InlineKeyboardButton("Enter Book Name ").callbackData("ENTER_BOOK_NAME")
+                            new InlineKeyboardButton("Enter Book Name").callbackData("ENTER_BOOK_NAME")
                 },
                 new InlineKeyboardButton[]{
-                        new InlineKeyboardButton("Enter Book Author ").callbackData("ENTER_BOOK_AUTHOR")
+                            new InlineKeyboardButton("Enter Book Author").callbackData("ENTER_BOOK_AUTHOR")
                 },
                 new InlineKeyboardButton[]{
-                        new InlineKeyboardButton("Enter Description ").callbackData("ENTER_DESCRIPTION")
+                        new InlineKeyboardButton("Enter Description").callbackData("ENTER_DESCRIPTION")
                 },
                 new InlineKeyboardButton[]{
-                        new InlineKeyboardButton("Select Genre ").callbackData("SELECT_GENRE")
+                        new InlineKeyboardButton("Select Genre").callbackData("SELECT_GENRE")
                 },
                 {
                         new InlineKeyboardButton("Back").callbackData("BACK")

@@ -20,6 +20,7 @@ public class MessageHandler extends BaseHandler {
     public void handle(Update update) {
         Message message = update.message();
         User from = message.from();
+        Book book;
         super.update = update;
         super.curUser = getUserOrCreate(from);
         String text = message.text();
@@ -78,13 +79,20 @@ public class MessageHandler extends BaseHandler {
         Message message = update.message();
         String text = message.text();
         System.out.println(text);
-        /*if (text != null) {
-            if(text.equals("Add Book")){
+        if (text != null) {
+            switch (curUser.getState()) {
+                case "Enter Book Name" -> {
+                    curBook.setName(text);
+                    bot.execute(new SendMessage(curUser.getId(), "Please enter the author's name:"));
+                }
+                case "ASK_AUTHOR" -> {
+                    curUser.setState("ASK_GENRE");
+                    curBook.setAuthor(text);
+                    bot.execute(new SendMessage(curUser.getId(), "Please enter the genre:"));
+                }
 
             }
-        }else {
-
-        }*/
+        }
 
         /*Book.builder()
                 .name()
@@ -96,8 +104,8 @@ public class MessageHandler extends BaseHandler {
                 .Id()
                 .userId(curUser.getId())
                 .isComplete(true)
-                .build();*/
-
+                .build();
+*/
     }
 
     private void handleContactMessage(Contact contact) {

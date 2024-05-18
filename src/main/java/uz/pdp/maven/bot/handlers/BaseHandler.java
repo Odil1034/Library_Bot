@@ -5,6 +5,7 @@ import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.model.User;
 import com.pengrad.telegrambot.request.DeleteMessage;
 import com.pengrad.telegrambot.request.SendMessage;
+import uz.pdp.maven.backend.models.book.Book;
 import uz.pdp.maven.backend.service.bookService.BookService;
 import uz.pdp.maven.bean.BeanController;
 import uz.pdp.maven.backend.models.myUser.MyUser;
@@ -21,6 +22,7 @@ public abstract class BaseHandler implements PathConstants {
     protected MessageMaker messageMaker;
     protected Update update;
     protected MyUser curUser;
+    protected Book curBook;
 
     public BaseHandler() {
         this.bot = new TelegramBot(BOT_TOKEN);
