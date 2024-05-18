@@ -6,7 +6,13 @@
     "lastname": "Shirinboyev 👑",
     "phoneNumber": "+998979341277",
     "baseState": "MAIN_MENU_STATE",
-    "state": "MAIN_MENU_STATE"
+    "state": null,
+    "tempBookName": "Java",
+    "tempAuthor": "John",
+    "tempGenre": "ILMIY",
+    "tempDescription": "Bu Kitob Java tiliga oid 1005 yil yaratilgan",
+    "tempFileId": "BQACAgIAAxkBAAMrZke7_WnFpYShw0WZ9Lfk7zgLd9gAAmFPAAJoiEFKcrCOjP8wYSY1BA",
+    "tempPhotoId": "AgACAgIAAxkBAAMkZke0sGukua_lBMM-mP3WPYvKbAYAAm7hMRtoiEFK3mpSv9QoWv4BAAMCAAN4AAM1BA"
   },
   {
     "Id": 1040000390,
@@ -15,6 +21,12 @@
     "lastname": "Baxriddinov",
     "phoneNumber": "+998974351034",
     "baseState": "MAIN_MENU_STATE",
-    "state": "MAIN_MENU_STATE"
+    "state": "MAIN_MENU_STATE",
+    "tempBookName": null,
+    "tempAuthor": null,
+    "tempGenre": null,
+    "tempDescription": null,
+    "tempFileId": null,
+    "tempPhotoId": null
   }
 ]

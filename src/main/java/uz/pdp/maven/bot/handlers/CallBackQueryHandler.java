@@ -2,7 +2,6 @@ package uz.pdp.maven.bot.handlers;
 
 import com.pengrad.telegrambot.model.*;
 import com.pengrad.telegrambot.request.SendMessage;
-import uz.pdp.maven.bot.maker.MessageMaker;
 import uz.pdp.maven.bot.states.base.BaseState;
 import uz.pdp.maven.bot.states.child.addBookState.AddBookState;
 import uz.pdp.maven.bot.states.child.mainMenuState.MainMenuState;
@@ -37,22 +36,25 @@ public class CallBackQueryHandler extends BaseHandler {
     private void mainState(String data) {
         MainMenuState curState = MainMenuState.valueOf(data); // search or add book
         switch (curState) {
-            case ADD_BOOK -> {
-                addBookState(data);
-                curUser.setState(MainMenuState.ADD_BOOK.name());
-            }
-            case SEARCH_BOOK -> {
+            case ADD_BOOK:
+                curUser.setBaseState(BaseState.ADD_BOOK_STATE.name());
+                curUser.setState(AddBookState.ENTER_BOOK_NAME.name());
+                SendMessage sendMessage = messageMaker.addBookMenu(curUser);
+                bot.execute(sendMessage);
+                break;
+            case SEARCH_BOOK:
                 searchBookState(data);
                 curUser.setState(MainMenuState.SEARCH_BOOK.name());
-            }
-            case MY_FAVOURITE_BOOKS -> {
+                break;
+            case MY_FAVOURITE_BOOKS:
                 myFavouriteBooksState(data);
                 curUser.setState(MainMenuState.MY_FAVOURITE_BOOKS.name());
-            }
-            default -> {
+                break;
+            default:
                 bot.execute(new SendMessage(curUser.getId(), "Anything is wrong"));
-            }
+                break;
         }
+        userService.save(curUser);
     }
 
     private void searchBookState(String data) {
@@ -61,7 +63,8 @@ public class CallBackQueryHandler extends BaseHandler {
     }
 
     private void addBookState(String data) {
-        SendMessage sendMessage = messageMaker.addBookMenu(curUser);
+        curUser.setState(AddBookState.ENTER_BOOK_NAME.name());
+        SendMessage sendMessage = new SendMessage(curUser.getId(), "Please enter the book name:");
         bot.execute(sendMessage);
     }
 
@@ -69,5 +72,4 @@ public class CallBackQueryHandler extends BaseHandler {
         SendMessage sendMessage = messageMaker.myFavouriteBookMenu(curUser);
         bot.execute(sendMessage);
     }
-
 }

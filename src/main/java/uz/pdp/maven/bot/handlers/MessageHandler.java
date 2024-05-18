@@ -8,7 +8,9 @@ import com.pengrad.telegrambot.request.SendMessage;
 import uz.pdp.maven.backend.models.book.Book;
 import uz.pdp.maven.backend.models.myUser.MyUser;
 import uz.pdp.maven.backend.service.bookService.BookService;
+import uz.pdp.maven.backend.types.bookTypes.Genre;
 import uz.pdp.maven.bot.states.base.BaseState;
+import uz.pdp.maven.bot.states.child.addBookState.AddBookState;
 
 import java.util.Objects;
 
@@ -16,11 +18,20 @@ import static uz.pdp.maven.bot.maker.MessageMaker.welcomeMessage;
 
 public class MessageHandler extends BaseHandler {
 
+    private final BookService bookService;
+
+    public MessageHandler(BookService bookService) {
+        this.bookService = bookService;
+    }
+
+    public MessageHandler() {
+        this.bookService = new BookService();
+    }
+
     @Override
     public void handle(Update update) {
         Message message = update.message();
         User from = message.from();
-        Book book;
         super.update = update;
         super.curUser = getUserOrCreate(from);
         String text = message.text();
@@ -28,25 +39,30 @@ public class MessageHandler extends BaseHandler {
         if (text != null) {
             if (Objects.equals(text, "/start")) {
                 handleStartCommand(from);
-            }
-        } else {
-            if (message.contact() == null) {
-                handleContactMessage(message.contact());
-            }
-            String baseState = curUser.getBaseState();
-            BaseState curBaseState = BaseState.valueOf(baseState);
-            if (Objects.equals(curBaseState, BaseState.MAIN_MENU_STATE)) {
-                handleMainMenu(curUser);
-            } else if (Objects.equals(curBaseState, BaseState.ADD_BOOK_STATE)) {
-                handleAddBook(curUser);
-            } else if (Objects.equals(curBaseState, BaseState.SEARCH_BOOK_STATE)) {
-                handleSearchBook(curUser);
-            } else if (Objects.equals(curBaseState, BaseState.MY_FAVOURITE_BOOKS_STATE)) {
-                handleMyFavouriteBook(curUser);
             } else {
-                SendMessage sendMessage = new SendMessage(curUser.getId(), "Unexpected option");
-                bot.execute(sendMessage);
+                String baseState = curUser.getBaseState();
+                BaseState curBaseState = BaseState.valueOf(baseState);
+
+                switch (curBaseState) {
+                    case MAIN_MENU_STATE:
+                        handleMainMenu(curUser);
+                        break;
+                    case ADD_BOOK_STATE:
+                        handleAddBook(curUser, text);
+                        break;
+                    case SEARCH_BOOK_STATE:
+                        handleSearchBook(curUser);
+                        break;
+                    case MY_FAVOURITE_BOOKS_STATE:
+                        handleMyFavouriteBook(curUser);
+                        break;
+                    default:
+                        bot.execute(new SendMessage(curUser.getId(), "Unexpected option"));
+                        break;
+                }
             }
+        } else if (message.contact() != null) {
+            handleContactMessage(message.contact());
         }
     }
 
@@ -70,42 +86,64 @@ public class MessageHandler extends BaseHandler {
     }
 
     private void handleMyFavouriteBook(MyUser curUser) {
-        Message message = update.message();
-
     }
 
-    private void handleAddBook(MyUser curUser) {
-
-        Message message = update.message();
-        String text = message.text();
-        System.out.println(text);
-        if (text != null) {
-            switch (curUser.getState()) {
-                case "Enter Book Name" -> {
-                    curBook.setName(text);
-                    bot.execute(new SendMessage(curUser.getId(), "Please enter the author's name:"));
-                }
-                case "ASK_AUTHOR" -> {
-                    curUser.setState("ASK_GENRE");
-                    curBook.setAuthor(text);
-                    bot.execute(new SendMessage(curUser.getId(), "Please enter the genre:"));
-                }
-
-            }
+    private void handleAddBook(MyUser curUser, String text) {
+        AddBookState addBookState = AddBookState.valueOf(curUser.getState());
+        switch (addBookState) {
+            case ENTER_BOOK_NAME:
+                curUser.setState(AddBookState.ENTER_BOOK_AUTHOR.name());
+                curUser.setTempBookName(text);
+                bot.execute(new SendMessage(curUser.getId(), "Please enter the author's name:"));
+                break;
+            case ENTER_BOOK_AUTHOR:
+                curUser.setState(AddBookState.ENTER_BOOK_GENRE.name());
+                curUser.setTempAuthor(text);
+                bot.execute(new SendMessage(curUser.getId(), "Please enter the genre:"));
+                break;
+            case ENTER_BOOK_GENRE:
+                curUser.setState(AddBookState.ENTER_BOOK_DESCRIPTION.name());
+                curUser.setTempGenre(text);
+                bot.execute(new SendMessage(curUser.getId(), "Please enter the description:"));
+                break;
+            case ENTER_BOOK_DESCRIPTION:
+                curUser.setState(AddBookState.ENTER_BOOK_FILE_ID.name());
+                curUser.setTempDescription(text);
+                bot.execute(new SendMessage(curUser.getId(), "Please upload the file or send the file ID:"));
+                break;
+            case ENTER_BOOK_FILE_ID:
+                curUser.setState(AddBookState.ENTER_BOOK_PHOTO_ID.name());
+                curUser.setTempFileId(text);
+                bot.execute(new SendMessage(curUser.getId(), "Please upload the photo or send the photo ID:"));
+                break;
+            case ENTER_BOOK_PHOTO_ID:
+                curUser.setTempPhotoId(text);
+                saveBook(curUser);
+                curUser.setState(null);
+                curUser.setBaseState(BaseState.MAIN_MENU_STATE.name());
+                bot.execute(new SendMessage(curUser.getId(), "Book has been successfully added!"));
+                handleMainMenu(curUser);
+                break;
+            default:
+                curUser.setState(AddBookState.ENTER_BOOK_NAME.name());
+                bot.execute(new SendMessage(curUser.getId(), "Please enter the book name:"));
+                break;
         }
+        userService.save(curUser);
+    }
 
-        /*Book.builder()
-                .name()
-                .author()
-                .genre()
-                .description()
-                .fileId()
-                .photoId()
-                .Id()
+    private void saveBook(MyUser curUser) {
+        Book book = Book.builder()
+                .name(curUser.getTempBookName())
+                .author(curUser.getTempAuthor())
+                .genre(Genre.valueOf(curUser.getTempGenre()))
+                .description(curUser.getTempDescription())
+                .fileId(curUser.getTempFileId())
+                .photoId(curUser.getTempPhotoId())
                 .userId(curUser.getId())
                 .isComplete(true)
                 .build();
-*/
+        bookService.save(book);
     }
 
     private void handleContactMessage(Contact contact) {
@@ -113,7 +151,7 @@ public class MessageHandler extends BaseHandler {
         curUser.setPhoneNumber(phoneNumber);
         curUser.setBaseState(BaseState.MAIN_MENU_STATE.name());
         userService.save(curUser);
-        mainMenu();
+        handleMainMenu(curUser);
     }
 
     private void enterPhoneNumber() {

@@ -21,4 +21,11 @@ public class MyUser {
     private String baseState;
     private String state;
 
+    private String tempBookName;
+    private String tempAuthor;
+    private String tempGenre;
+    private String tempDescription;
+    private String tempFileId;
+    private String tempPhotoId;
+
 }
