@@ -20,34 +20,35 @@ public class CallBackQueryHandler extends BaseHandler {
         String baseStateStr = curUser.getBaseState();
         BaseState baseState = BaseState.valueOf(baseStateStr);
 
+        String data = callbackQuery.data();
+
         if (Objects.equals(baseState, BaseState.MAIN_MENU_STATE)) {
-            mainState();
+            mainState(data);
+
         }else if(Objects.equals(baseState, BaseState.ADD_BOOK_STATE)){
-            addBookState();
+            addBookState(data);
+
         }else if(Objects.equals(baseState, BaseState.MY_FAVOURITE_BOOKS_STATE)){
-            myFavouriteBooksState();
+            myFavouriteBooksState(data);
         }
-
-
     }
 
-    private void mainState(){
-        String stateStr = curUser.getState();
-        MainMenuState state = MainMenuState.valueOf(stateStr);
+    private void mainState(String data){
+        MainMenuState curState = MainMenuState.valueOf(data);
         CallbackQuery callbackQuery = update.callbackQuery();
 
-        switch (state){
+        switch (curState){
             case ADD_BOOK -> {
-                String data = callbackQuery.data();
-                mainMenu(data);
+                String dataAddBook = callbackQuery.data();
+                mainMenu(dataAddBook);
             }
             case SEARCH_BOOK -> {
-                String data = callbackQuery.data();
-                searchBookMenu(data);
+                String dataSearchBook = callbackQuery.data();
+                searchBookMenu(dataSearchBook);
             }
             case MY_FAVOURITE_BOOKS -> {
-                String data = callbackQuery.data();
-                myFavouriteBooks(data);
+                String dataMyFavouriteBook = callbackQuery.data();
+                myFavouriteBooks(dataMyFavouriteBook);
             }
             default -> {
                 SendMessage sendMessage = new SendMessage(curUser.getId(), "Anything is wrong");
@@ -67,10 +68,10 @@ public class CallBackQueryHandler extends BaseHandler {
 
     }
 
-    private void addBookState() {
+    private void addBookState(String data) {
     }
 
-    private void myFavouriteBooksState() {
+    private void myFavouriteBooksState(String data) {
 
     }
 
