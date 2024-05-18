@@ -32,6 +32,7 @@ public class BookService implements BaseService {
 
         books.add(book);
         bookWriterAndLoader.write(books);
+        return;
     }
 
     public Book load(Long Id){

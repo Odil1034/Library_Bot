@@ -16,6 +16,16 @@ import static uz.pdp.maven.bot.maker.MessageMaker.welcomeMessage;
 
 public class MessageHandler extends BaseHandler {
 
+    private final BookService bookService;
+
+    public MessageHandler(BookService bookService) {
+        this.bookService = bookService;
+    }
+
+    public MessageHandler() {
+        this.bookService = new BookService();
+    }
+
     @Override
     public void handle(Update update) {
         Message message = update.message();
