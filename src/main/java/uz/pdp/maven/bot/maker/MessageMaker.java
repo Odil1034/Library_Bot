@@ -8,7 +8,6 @@ import com.pengrad.telegrambot.model.request.ReplyKeyboardMarkup;
 import com.pengrad.telegrambot.request.SendMessage;
 import org.jetbrains.annotations.NotNull;
 import uz.pdp.maven.backend.models.myUser.MyUser;
-import uz.pdp.maven.bot.states.child.addBookState.AddBookState;
 
 public class MessageMaker {
 
@@ -58,7 +57,11 @@ public class MessageMaker {
                 },
                 {
                         new InlineKeyboardButton("By Genre").callbackData("BY_GENRE"),
-                        new InlineKeyboardButton("Skip").callbackData("SKIP")
+                        new InlineKeyboardButton("All Books").callbackData("ALL_BOOKS")
+                },
+                {
+                        new InlineKeyboardButton("Back").callbackData("BACK"),
+                        new InlineKeyboardButton("Back to Main Menu").callbackData("BACK_TO_MAIN_MENU")
                 }
         };
 
@@ -84,8 +87,7 @@ public class MessageMaker {
                         new InlineKeyboardButton("Select Genre ").callbackData("SELECT_GENRE")
                 },
                 {
-                        new InlineKeyboardButton("Back").callbackData("BACK"),
-                        new InlineKeyboardButton("Back to Main Menu").callbackData("BACK_TO_MAIN_MENU")
+                        new InlineKeyboardButton("Back").callbackData("BACK")
                 }
         };
         InlineKeyboardMarkup keyboardMarkup = new InlineKeyboardMarkup(buttons);
@@ -94,11 +96,12 @@ public class MessageMaker {
         return sendMessage;
     }
 
-    public void myFavouriteBookMenu(MyUser curUser) {
+    public SendMessage myFavouriteBookMenu(MyUser curUser) {
         SendMessage sendMessage = new SendMessage(curUser.getId(), "Your favourite books: ");
 
         InlineKeyboardButton[][] buttons = {
                 {
+
                 }
         };
 
@@ -106,7 +109,7 @@ public class MessageMaker {
 
         sendMessage.replyMarkup(keyboardMarkup);
 
-
+        return sendMessage;
     }
 
     public SendMessage enterBookNameMenu(MyUser curUser) {

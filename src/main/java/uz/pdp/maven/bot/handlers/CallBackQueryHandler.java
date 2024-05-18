@@ -28,89 +28,46 @@ public class CallBackQueryHandler extends BaseHandler {
             mainState(data);
         } else if (Objects.equals(baseState, BaseState.ADD_BOOK_STATE)) {
             addBookState(data);
-
         } else if (Objects.equals(baseState, BaseState.MY_FAVOURITE_BOOKS_STATE)) {
             myFavouriteBooksState(data);
         }
+
     }
 
     private void mainState(String data) {
         MainMenuState curState = MainMenuState.valueOf(data); // search or add book
-        CallbackQuery callbackQuery = update.callbackQuery();
-        SendMessage sendMessage = new SendMessage(curUser.getId(),"a");
         switch (curState) {
             case ADD_BOOK -> {
-                String addBookStr = callbackQuery.data();
-                AddBookState addBookState = AddBookState.valueOf(addBookStr);
-
-                String state = null;
-                if(addBookState.equals(AddBookState.BOOK_NAME)){
-                    sendMessage = messageMaker.enterBookNameMenu(curUser);
-                    state = AddBookState.BOOK_NAME.name();
-                }else if(addBookState.equals(AddBookState.ENTER_PHOTO_OF_BOOK)){
-                    sendMessage = messageMaker.enterPhotoOfBookMenu(curUser);
-                    state = AddBookState.ENTER_PHOTO_OF_BOOK.name();
-                }else if(addBookState.equals(AddBookState.ENTER_AUTHOR)){
-                    sendMessage = messageMaker.enterAuthorMenu(curUser);
-                    state = AddBookState.ENTER_AUTHOR.name();
-                }else if(addBookState.equals(AddBookState.ENTER_DESCRIPTION)){
-                    sendMessage = messageMaker.enterDescriptionMenu(curUser);
-                    state = AddBookState.ENTER_DESCRIPTION.name();
-                }else if(addBookState.equals(AddBookState.SELECT_GENRE)){
-                    sendMessage = messageMaker.enterSelectGenreMenu(curUser);
-                    state = AddBookState.SELECT_GENRE.name();
-                }else if(addBookState.equals(AddBookState.UPLOAD_FILE)){
-                    sendMessage = messageMaker.enterUploadFileMenu(curUser);
-                    state = AddBookState.UPLOAD_FILE.name();
-                }
-                curUser.setBaseState(MainMenuState.ADD_BOOK.name());
-                curUser.setState(state);
+                addBookState(data);
+                curUser.setState(MainMenuState.ADD_BOOK.name());
             }
             case SEARCH_BOOK -> {
-                String dataSearchBook = callbackQuery.data();
-                searchBookMenu(dataSearchBook);
+                searchBookState(data);
+                curUser.setState(MainMenuState.SEARCH_BOOK.name());
             }
             case MY_FAVOURITE_BOOKS -> {
-                String dataMyFavouriteBook = callbackQuery.data();
-                myFavouriteBooks(dataMyFavouriteBook);
+                myFavouriteBooksState(data);
+                curUser.setState(MainMenuState.MY_FAVOURITE_BOOKS.name());
             }
             default -> {
-                sendMessage = new SendMessage(curUser.getId(), "Anything is wrong");
+                bot.execute(new SendMessage(curUser.getId(), "Anything is wrong"));
             }
         }
-
-//        addBookState(addBookStr);
-        if (sendMessage != null) {
-            bot.execute(sendMessage);
-        } else {
-            SendMessage sendMessage1 = new SendMessage(curUser.getId(),"SendMessage object is null");
-            bot.execute(sendMessage1);
-        }
     }
 
-    private void myFavouriteBooks(String data) {
-    }
-
-    private void searchBookMenu(String data) {
-
+    private void searchBookState(String data) {
+        SendMessage sendMessage = messageMaker.searchBookMenu(curUser);
+        bot.execute(sendMessage);
     }
 
     private void addBookState(String data) {
-
         SendMessage sendMessage = messageMaker.addBookMenu(curUser);
-        CallbackQuery callbackQuery = update.callbackQuery();
-
-        String dataStr = callbackQuery.data();
-        curUser.setBaseState(BaseState.ADD_BOOK_STATE.name());
-        curUser.setState(dataStr);
-        userService.save(curUser);
         bot.execute(sendMessage);
-
     }
 
     private void myFavouriteBooksState(String data) {
-        messageMaker.myFavouriteBookMenu(curUser);
-
+        SendMessage sendMessage = messageMaker.myFavouriteBookMenu(curUser);
+        bot.execute(sendMessage);
     }
 
 }
