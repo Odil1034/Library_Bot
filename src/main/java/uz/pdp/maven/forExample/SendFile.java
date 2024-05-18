@@ -1,4 +1,4 @@
-package uz.pdp.maven;
+package uz.pdp.maven.forExample;
 
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.request.SendDocument;
