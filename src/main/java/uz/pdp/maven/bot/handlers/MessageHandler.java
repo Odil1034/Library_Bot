@@ -1,9 +1,6 @@
 package uz.pdp.maven.bot.handlers;
 
-import com.pengrad.telegrambot.model.Contact;
-import com.pengrad.telegrambot.model.Message;
-import com.pengrad.telegrambot.model.Update;
-import com.pengrad.telegrambot.model.User;
+import com.pengrad.telegrambot.model.*;
 import com.pengrad.telegrambot.request.SendMessage;
 import uz.pdp.maven.backend.models.book.Book;
 import uz.pdp.maven.backend.models.myUser.MyUser;
@@ -87,7 +84,6 @@ public class MessageHandler extends BaseHandler {
 
     private void handleMyFavouriteBook(MyUser curUser) {
     }
-
     private void handleAddBook(MyUser curUser, String text) {
         AddBookState addBookState = AddBookState.valueOf(curUser.getState());
         switch (addBookState) {
@@ -99,11 +95,12 @@ public class MessageHandler extends BaseHandler {
             case ENTER_BOOK_AUTHOR:
                 curUser.setState(AddBookState.ENTER_BOOK_GENRE.name());
                 curUser.setTempAuthor(text);
-                bot.execute(new SendMessage(curUser.getId(), "Please enter the genre:"));
+                SendMessage genreMessage = messageMaker.enterSelectGenreMenu(curUser);
+                bot.execute(genreMessage);
                 break;
             case ENTER_BOOK_GENRE:
-                curUser.setState(AddBookState.ENTER_BOOK_DESCRIPTION.name());
                 curUser.setTempGenre(text);
+                curUser.setState(AddBookState.ENTER_BOOK_DESCRIPTION.name());
                 bot.execute(new SendMessage(curUser.getId(), "Please enter the description:"));
                 break;
             case ENTER_BOOK_DESCRIPTION:

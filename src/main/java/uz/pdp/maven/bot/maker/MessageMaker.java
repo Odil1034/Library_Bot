@@ -5,7 +5,10 @@ import com.pengrad.telegrambot.model.request.InlineKeyboardButton;
 import com.pengrad.telegrambot.model.request.InlineKeyboardMarkup;
 import com.pengrad.telegrambot.model.request.KeyboardButton;
 import com.pengrad.telegrambot.model.request.ReplyKeyboardMarkup;
+import com.pengrad.telegrambot.request.BaseRequest;
+import com.pengrad.telegrambot.request.DeleteMessage;
 import com.pengrad.telegrambot.request.SendMessage;
+import com.pengrad.telegrambot.response.BaseResponse;
 import org.jetbrains.annotations.NotNull;
 import uz.pdp.maven.backend.models.myUser.MyUser;
 
@@ -80,37 +83,27 @@ public class MessageMaker {
         return new SendMessage(curUser.getId(), "Enter Book name: ");
     }
 
+    public DeleteMessage deleteMessage(Long chatId, Integer messageId) {
+        return new DeleteMessage(chatId, messageId);
+    }
     public SendMessage enterSelectGenreMenu(MyUser curUser) {
         SendMessage sendMessage = new SendMessage(curUser.getId(), "Select Genre: ");
-        InlineKeyboardButton[][] button = {
-                { new InlineKeyboardButton("BADIIY ADABIYOT").callbackData("BADIIY_ADABIYOT") },
-                { new InlineKeyboardButton("SHE'RIYAT").callbackData("SHE'RIYAT") },
-                { new InlineKeyboardButton("DASTURLASH").callbackData("DASTURLASH") },
-                { new InlineKeyboardButton("ILMIY").callbackData("ILMIY") },
-                { new InlineKeyboardButton("DINIY").callbackData("DINIY") },
-                { new InlineKeyboardButton("SARGUZASHT").callbackData("SARGUZASHT") },
-                { new InlineKeyboardButton("BOSHQALAR").callbackData("BOSHQALAR") },
-                { new InlineKeyboardButton("Back").callbackData("BACK"),
-                        new InlineKeyboardButton("Main Menu").callbackData("BACK_MAIN_MENU") }
+        KeyboardButton[][] buttons = {
+                { new KeyboardButton("BADIIY ADABIYOT") },
+                { new KeyboardButton("SHE'RIYAT") },
+                { new KeyboardButton("DASTURLASH") },
+                { new KeyboardButton("ILMIY") },
+                { new KeyboardButton("DINIY") },
+                { new KeyboardButton("SARGUZASHT") },
+                { new KeyboardButton("BOSHQALAR") },
+                { new KeyboardButton("Back"), new KeyboardButton("Main Menu") }
         };
-        InlineKeyboardMarkup keyboardMarkup = new InlineKeyboardMarkup(button);
-        return sendMessage.replyMarkup(keyboardMarkup);
+        ReplyKeyboardMarkup keyboardMarkup = new ReplyKeyboardMarkup(buttons)
+                .oneTimeKeyboard(true)
+                .resizeKeyboard(true);
+        sendMessage.replyMarkup(keyboardMarkup);
+        return sendMessage;
     }
 
-    public SendMessage enterPhotoOfBookMenu(MyUser curUser) {
-        return new SendMessage(curUser.getId(), "Please upload the book photo or send the photo ID:");
-    }
-
-    public SendMessage enterAuthorMenu(MyUser curUser) {
-        return new SendMessage(curUser.getId(), "Please enter the author's name:");
-    }
-
-    public SendMessage enterDescriptionMenu(MyUser curUser) {
-        return new SendMessage(curUser.getId(), "Please enter the book description:");
-    }
-
-    public SendMessage enterUploadFileMenu(MyUser curUser) {
-        return new SendMessage(curUser.getId(), "Please upload the book file or send the file ID:");
-    }
 }
 
