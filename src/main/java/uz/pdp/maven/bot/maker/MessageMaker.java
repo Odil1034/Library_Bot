@@ -8,6 +8,7 @@ import com.pengrad.telegrambot.model.request.ReplyKeyboardMarkup;
 import com.pengrad.telegrambot.request.SendMessage;
 import org.jetbrains.annotations.NotNull;
 import uz.pdp.maven.backend.models.myUser.MyUser;
+import uz.pdp.maven.bot.states.child.addBookState.AddBookState;
 
 public class MessageMaker {
 
@@ -68,14 +69,98 @@ public class MessageMaker {
     }
 
     public SendMessage addBookMenu(MyUser curUser) {
-        SendMessage sendMessage = new SendMessage(curUser.getId(), "Add Book Menu");
+        SendMessage sendMessage = new SendMessage(curUser.getId(), "Addition Book Info");
         InlineKeyboardButton[][] buttons = {
+                new InlineKeyboardButton[]{
+                        new InlineKeyboardButton("Enter Book Name ").callbackData("ENTER_BOOK_NAME")
+                },
+                new InlineKeyboardButton[]{
+                        new InlineKeyboardButton("Enter Book Author ").callbackData("ENTER_BOOK_AUTHOR")
+                },
+                new InlineKeyboardButton[]{
+                        new InlineKeyboardButton("Enter Description ").callbackData("ENTER_DESCRIPTION")
+                },
+                new InlineKeyboardButton[]{
+                        new InlineKeyboardButton("Select Genre ").callbackData("SELECT_GENRE")
+                },
                 {
-                        new InlineKeyboardButton("Enter Book Name: ").callbackData("ENTER_BOOK_NAME")
+                        new InlineKeyboardButton("Back").callbackData("BACK"),
+                        new InlineKeyboardButton("Back to Main Menu").callbackData("BACK_TO_MAIN_MENU")
                 }
         };
         InlineKeyboardMarkup keyboardMarkup = new InlineKeyboardMarkup(buttons);
+
         sendMessage.replyMarkup(keyboardMarkup);
         return sendMessage;
+    }
+
+    public void myFavouriteBookMenu(MyUser curUser) {
+        SendMessage sendMessage = new SendMessage(curUser.getId(), "Your favourite books: ");
+
+        InlineKeyboardButton[][] buttons = {
+                {
+                }
+        };
+
+        InlineKeyboardMarkup keyboardMarkup = new InlineKeyboardMarkup(buttons);
+
+        sendMessage.replyMarkup(keyboardMarkup);
+
+
+    }
+
+    public SendMessage enterBookNameMenu(MyUser curUser) {
+        return new SendMessage(curUser.getId(), "Enter Book name: ");
+    }
+
+    public SendMessage enterSelectGenreMenu(MyUser curUser) {
+        SendMessage sendMessage = new SendMessage(curUser.getId(), "Select Genre: ");
+
+        InlineKeyboardButton[][] button = {
+                new InlineKeyboardButton[]{
+                        new InlineKeyboardButton("BADIIY ADABIYOT").callbackData("BADIIY_ADABIYOT"),
+                }, new InlineKeyboardButton[]{
+                new InlineKeyboardButton("SHE'RIYAT").callbackData("SHE'RIYAT"),
+        },
+                new InlineKeyboardButton[]{
+                        new InlineKeyboardButton("DASTURLASH").callbackData("DASTURLASH"),
+                },
+                new InlineKeyboardButton[]{
+                        new InlineKeyboardButton("ILMIY").callbackData("ILMIY"),
+                },
+                new InlineKeyboardButton[]{
+                        new InlineKeyboardButton("DINIY").callbackData("DINIY"),
+                },
+                new InlineKeyboardButton[]{
+                        new InlineKeyboardButton("SARGUZASHT").callbackData("SARGUZASHT"),
+                },
+                new InlineKeyboardButton[]{
+                        new InlineKeyboardButton("BOSHQALAR").callbackData("BOSHQALAR"),
+                },
+                new InlineKeyboardButton[]{
+                        new InlineKeyboardButton("Back").callbackData("BACK"),
+                        new InlineKeyboardButton("Main Menu").callbackData("BACK_MAIN_MENU"),
+                }
+        };
+
+        InlineKeyboardMarkup keyboardMarkup = new InlineKeyboardMarkup(button);
+        return sendMessage.replyMarkup(keyboardMarkup);
+
+    }
+
+    public SendMessage enterPhotoOfBookMenu(MyUser curUser) {
+        return null;
+    }
+
+    public SendMessage enterAuthorMenu(MyUser curUser) {
+        return null;
+    }
+
+    public SendMessage enterDescriptionMenu(MyUser curUser) {
+        return null;
+    }
+
+    public SendMessage enterUploadFileMenu(MyUser curUser) {
+        return null;
     }
 }
