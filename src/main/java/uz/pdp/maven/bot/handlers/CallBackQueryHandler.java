@@ -12,6 +12,11 @@ public class CallBackQueryHandler extends BaseHandler {
         CallbackQuery callbackQuery = update.callbackQuery();
         User from = callbackQuery.from();
         MyUser curUser = getUserOrCreate(from);
+        String data = callbackQuery.data();
+        if (data != null) {
+
+        }
+
 
     }
 }
