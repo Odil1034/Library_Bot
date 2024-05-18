@@ -5,6 +5,9 @@ import com.pengrad.telegrambot.model.Message;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.model.User;
 import com.pengrad.telegrambot.request.SendMessage;
+import uz.pdp.maven.backend.models.book.Book;
+import uz.pdp.maven.backend.models.myUser.MyUser;
+import uz.pdp.maven.backend.service.bookService.BookService;
 import uz.pdp.maven.bot.states.base.BaseState;
 
 import java.util.Objects;
@@ -26,26 +29,24 @@ public class MessageHandler extends BaseHandler {
                 handleStartCommand(from);
             }
         } else {
-            String baseState = curUser.getBaseState();
-            BaseState curBaseState = BaseState.valueOf(baseState);
             if (message.contact() != null) {
                 handleContactMessage(message.contact());
-            } else if (text.equals("Search Book")) {
-                handleSearchBook();
-            } else if (text.equals("Add Book")) {
-                handleAddBook();
-            } else if (Objects.equals(text, "My favourite Books")){
-
             }
-            else {
+            String baseState = curUser.getBaseState();
+            BaseState curBaseState = BaseState.valueOf(baseState);
+            if (Objects.equals(curBaseState, BaseState.MAIN_MENU_STATE)) {
+                handleMainMenu(curUser);
+            } else if (Objects.equals(curBaseState, BaseState.ADD_BOOK_STATE)) {
+                handleAddBook(curUser);
+            } else if (Objects.equals(curBaseState, BaseState.SEARCH_BOOK_STATE)) {
+                handleSearchBook(curUser);
+            } else if (Objects.equals(curBaseState, BaseState.MY_FAVOURITE_BOOKS_STATE)) {
+                handleMyFavouriteBook(curUser);
+            } else {
                 SendMessage sendMessage = new SendMessage(curUser.getId(), "Unexpected option");
                 bot.execute(sendMessage);
             }
         }
-    }
-
-    private void handleAddBook() {
-
     }
 
     private void handleStartCommand(User from) {
@@ -56,14 +57,47 @@ public class MessageHandler extends BaseHandler {
                 || curUser.getPhoneNumber().isEmpty()
                 || curUser.getPhoneNumber().isBlank()) {
             enterPhoneNumber();
-//            curUser.setPhoneNumber();
+
             curUser.setBaseState(BaseState.MAIN_MENU_STATE.name());
             userService.save(curUser);
         } else {
-            mainMenu();
+            handleMainMenu(curUser);
+
             curUser.setBaseState(BaseState.MAIN_MENU_STATE.name());
             userService.save(curUser);
         }
+    }
+
+    private void handleMyFavouriteBook(MyUser curUser) {
+        Message message = update.message();
+
+    }
+
+    private void handleAddBook(MyUser curUser) {
+
+        Message message = update.message();
+        String text = message.text();
+        System.out.println(text);
+        /*if (text != null) {
+            if(text.equals("Add Book")){
+
+            }
+        }else {
+
+        }*/
+
+        /*Book.builder()
+                .name()
+                .author()
+                .genre()
+                .description()
+                .fileId()
+                .photoId()
+                .Id()
+                .userId(curUser.getId())
+                .isComplete(true)
+                .build();*/
+
     }
 
     private void handleContactMessage(Contact contact) {
@@ -79,40 +113,15 @@ public class MessageHandler extends BaseHandler {
         bot.execute(sendMessage);
     }
 
-    public void mainMenu() {
+    public void handleMainMenu(MyUser curUser) {
         SendMessage sendMessage = messageMaker.mainMenu(curUser);
         bot.execute(sendMessage);
     }
 
-    private void handleSearchBook() {
-        if (Objects.equals(curUser.getBaseState(), BaseState.MAIN_MENU_STATE.name())) {
-            SendMessage sendMessage = messageMaker.searchBookMenu(curUser);
+    private void handleSearchBook(MyUser curUser) {
+        if (Objects.equals(this.curUser.getBaseState(), BaseState.MAIN_MENU_STATE.name())) {
+            SendMessage sendMessage = messageMaker.searchBookMenu(this.curUser);
             bot.execute(sendMessage);
         }
     }
-
-    /*private void handleSearchBookOptions(String text) {
-        if (Objects.equals(curUser.getBaseState(), BaseState.MAIN_MENU_STATE.name())) {
-            SendMessage responseMessage;
-
-            switch (text) {
-                case "By Author":
-                    responseMessage = new SendMessage(curUser.getId(), "You choose to search by Author.");
-                    break;
-                case "By Name":
-                    responseMessage = new SendMessage(curUser.getId(), "You choose to search by Name.");
-                    break;
-                case "By Genre":
-                    responseMessage = new SendMessage(curUser.getId(), "You choose to search by Genre.");
-                    break;
-                case "Skip":
-                    responseMessage = new SendMessage(curUser.getId(), "You choose to Skip.");
-                    break;
-                default:
-                    responseMessage = new SendMessage(curUser.getId(), "Invalid option. Please choose again.");
-            }
-            bot.execute(messageMaker.searchBookMenu(curUser));
-            bot.execute(responseMessage);
-        }
-    }*/
 }
