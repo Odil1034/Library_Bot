@@ -5,11 +5,10 @@ import com.pengrad.telegrambot.model.request.InlineKeyboardButton;
 import com.pengrad.telegrambot.model.request.InlineKeyboardMarkup;
 import com.pengrad.telegrambot.model.request.KeyboardButton;
 import com.pengrad.telegrambot.model.request.ReplyKeyboardMarkup;
-import com.pengrad.telegrambot.request.BaseRequest;
 import com.pengrad.telegrambot.request.DeleteMessage;
 import com.pengrad.telegrambot.request.SendMessage;
-import com.pengrad.telegrambot.response.BaseResponse;
 import org.jetbrains.annotations.NotNull;
+import uz.pdp.maven.backend.models.book.Book;
 import uz.pdp.maven.backend.models.myUser.MyUser;
 
 public class MessageMaker {
@@ -22,7 +21,9 @@ public class MessageMaker {
     public SendMessage enterPhoneNumber(@NotNull MyUser curUser) {
         SendMessage sendMessage = new SendMessage(curUser.getId(), "Enter Phone Number");
         KeyboardButton[][] buttons = {
-                { new KeyboardButton("Send My Phone Number").requestContact(true) }
+                {
+                    new KeyboardButton("Send My Phone Number").requestContact(true)
+                }
         };
         ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup(buttons).oneTimeKeyboard(true).resizeKeyboard(true);
         sendMessage.replyMarkup(replyKeyboardMarkup);
@@ -86,6 +87,7 @@ public class MessageMaker {
     public DeleteMessage deleteMessage(Long chatId, Integer messageId) {
         return new DeleteMessage(chatId, messageId);
     }
+
     public SendMessage enterSelectGenreMenu(MyUser curUser) {
         SendMessage sendMessage = new SendMessage(curUser.getId(), "Select Genre: ");
         KeyboardButton[][] buttons = {
@@ -105,5 +107,29 @@ public class MessageMaker {
         return sendMessage;
     }
 
+    public SendMessage enterBookDescription(MyUser curUser) {
+        return new SendMessage(curUser.getId(), "Enter Book Description: ");
+    }
+
+    public SendMessage enterBookFile(MyUser curUser) {
+        return new SendMessage(curUser.getId(), "Please upload the Book File 😊😊😊");
+    }
+
+    public SendMessage enterBookAuthor(MyUser curUser) {
+        return new SendMessage(curUser.getId(), "Enter Book Author: ");
+    }
+
+    public SendMessage bookIsAddedMessage(MyUser curUser, Book newBuilderBook) {
+        return new SendMessage(curUser.getId(), getBookInfo(newBuilderBook));
+    }
+
+    private String getBookInfo(Book book) {
+        return " Added Book Info \n" +
+                "\nName : " + book.getName() +
+                "\nAuthor: " + book.getGenre() +
+                "\nGenre: " + book.getGenre() +
+                "\nDescription: " + book.getDescription()
+                + "\n\nBook has been successfully added  ✅✅✅";
+    }
 }
 

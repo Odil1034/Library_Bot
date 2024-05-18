@@ -1,32 +1,11 @@
 [
   {
-    "Id": 1712225965,
-    "username": "Gayrat_Shirinboyev",
-    "firstname": "G\u0027ayrat",
-    "lastname": "Shirinboyev 👑",
-    "phoneNumber": "+998979341277",
-    "baseState": "ADD_BOOK_STATE",
-    "state": "ENTER_BOOK_NAME",
-    "tempBookName": "java",
-    "tempAuthor": "gayrat",
-    "tempGenre": "Back",
-    "tempDescription": "BOSHQALAR",
-    "tempFileId": "d",
-    "tempPhotoId": "AgACAgIAAxkBAAMkZke0sGukua_lBMM-mP3WPYvKbAYAAm7hMRtoiEFK3mpSv9QoWv4BAAMCAAN4AAM1BA"
-  },
-  {
     "Id": 1040000390,
     "username": "Odil1034",
     "firstname": "Odiljon",
     "lastname": "Baxriddinov",
     "phoneNumber": "+998974351034",
     "baseState": "MAIN_MENU_STATE",
-    "state": "MAIN_MENU_STATE",
-    "tempBookName": null,
-    "tempAuthor": null,
-    "tempGenre": null,
-    "tempDescription": null,
-    "tempFileId": null,
-    "tempPhotoId": null
+    "state": null
   }
 ]
