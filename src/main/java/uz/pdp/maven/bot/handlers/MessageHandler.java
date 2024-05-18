@@ -29,7 +29,7 @@ public class MessageHandler extends BaseHandler {
                 handleStartCommand(from);
             }
         } else {
-            if (message.contact() != null) {
+            if (message.contact() == null) {
                 handleContactMessage(message.contact());
             }
             String baseState = curUser.getBaseState();
