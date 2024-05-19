@@ -119,6 +119,10 @@ public class MessageMaker {
         return new SendMessage(curUser.getId(), "Enter Book Author: ");
     }
 
+    public SendMessage enterBookPhoto(MyUser curUser) {
+        return new SendMessage(curUser.getId(), "Enter Book Photo: ");
+    }
+
     public SendMessage bookIsAddedMessage(MyUser curUser, Book newBuilderBook) {
         return new SendMessage(curUser.getId(), getBookInfo(newBuilderBook));
     }
