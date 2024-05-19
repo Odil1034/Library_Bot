@@ -6,6 +6,15 @@
     "lastname": "Baxriddinov",
     "phoneNumber": "+998974351034",
     "baseState": "MAIN_MENU_STATE",
-    "state": null
+    "state": "ENTER_BOOK_AUTHOR"
+  },
+  {
+    "Id": 5980239060,
+    "username": "JavaBackend_AI",
+    "firstname": "G\u0027ayrat Shirinboyev 👑",
+    "lastname": null,
+    "phoneNumber": "+998973956707",
+    "baseState": "MAIN_MENU_STATE",
+    "state": "ENTER_BOOK_AUTHOR"
   }
 ]
