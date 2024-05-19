@@ -8,14 +8,4 @@ public enum MyFavouriteBooksState implements State {
     SELECT_FILE,
     DOWNLOAD;
 
-    private AddBookState prevState;
-
-    MyFavouriteBooksState(AddBookState prevState) {
-        this.prevState = prevState;
-    }
-
-    MyFavouriteBooksState() {
-        this.prevState = null;
-    }
-
 }

@@ -7,4 +7,14 @@ public enum MainMenuState implements State {
     ADD_BOOK,
     SEARCH_BOOK,
     MY_FAVOURITE_BOOKS;
+
+    private MainMenuState prevState;
+
+    MainMenuState(MainMenuState prevState) {
+        this.prevState = prevState;
+    }
+
+    MainMenuState() {
+        this.prevState = null;
+    }
 }

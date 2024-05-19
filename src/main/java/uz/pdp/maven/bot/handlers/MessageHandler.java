@@ -36,9 +36,8 @@ public class MessageHandler extends BaseHandler {
                     case ADD_BOOK_STATE -> handleAddBook(curUser);
                     case SEARCH_BOOK_STATE -> handleSearchBook(curUser);
                     case MY_FAVOURITE_BOOKS_STATE -> handleMyFavouriteBook(curUser);
-                    default -> anyThingIsWrongMessage();
+                    default -> bot.execute(new SendMessage(curUser.getId(), "Unexpected option"));
                 }
-
             }
         } else if (message.photo() != null) {
             if (Objects.equals(baseState, BaseState.ADD_BOOK_STATE)) {

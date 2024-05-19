@@ -55,8 +55,6 @@ public abstract class BaseHandler implements PathConstants {
         bot.execute(deleteMessage);
     }
 
-    public void anyThingIsWrongMessage() {
-        bot.execute(new SendMessage(curUser.getId(), "Anything is wrong ❌❌❌"));
-    }
+
 
 }

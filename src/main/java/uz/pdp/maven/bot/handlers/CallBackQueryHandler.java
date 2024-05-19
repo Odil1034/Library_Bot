@@ -53,7 +53,6 @@ public class CallBackQueryHandler extends BaseHandler {
             }
             case ADD_BOOK -> {
                 curUser.setBaseState(BaseState.ADD_BOOK_STATE.name());
-                userService.save(curUser);
                 sendMessage = messageMaker.addBookMenu(curUser);
                 bot.execute(sendMessage);
                 addBookState();
@@ -72,7 +71,7 @@ public class CallBackQueryHandler extends BaseHandler {
             }
             default -> bot.execute(new SendMessage(curUser.getId(), "Anything is wrong"));
         }
-
+        userService.save(curUser);
     }
 
     private void searchBookState() {
@@ -80,13 +79,10 @@ public class CallBackQueryHandler extends BaseHandler {
     }
 
     private void addBookState() {
-        if(!Objects.equals(curUser.getBaseState(), BaseState.ADD_BOOK_STATE)){
-            anyThingIsWrongMessage();
-        }
+
         if(curUser.getState() == null){
             CallbackQuery callbackQuery = update.callbackQuery();
             String data = callbackQuery.data();
-
             curUser.setState(data);
             userService.save(curUser);
         }
@@ -129,5 +125,9 @@ public class CallBackQueryHandler extends BaseHandler {
     private void myFavouriteBooksState() {
         SendMessage sendMessage = messageMaker.myFavouriteBookMenu(curUser);
         bot.execute(sendMessage);
+    }
+
+    public void anyThingIsWrongMessage() {
+        bot.execute(new SendMessage(curUser.getId(), "Anything is wrong ❌❌❌"));
     }
 }
