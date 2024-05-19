@@ -40,7 +40,7 @@ public class CallBackQueryHandler extends BaseHandler {
     private void mainState(String data) {
         String state = curUser.getState();
 
-        if(state!=null){
+        if (state != null) {
             if (state.equals(MainMenuState.ADD_BOOK.name())) {
                 curUser.setBaseState(BaseState.ADD_BOOK_STATE.name());
                 addBookState(data);
@@ -56,7 +56,7 @@ public class CallBackQueryHandler extends BaseHandler {
             } else {
                 System.out.println("State is incorrect value");
             }
-        }else {
+        } else {
             MainMenuState curState = MainMenuState.valueOf(data); // search or add book
             SendMessage sendMessage;
             switch (curState) {
@@ -65,6 +65,7 @@ public class CallBackQueryHandler extends BaseHandler {
                     sendMessage = messageMaker.addBookMenu(curUser);
                     bot.execute(sendMessage);
 
+                    curUser.setBaseState(BaseState.ADD_BOOK_STATE.name());
                     curUser.setState(data);
                     userService.save(curUser);
                 }
@@ -72,6 +73,7 @@ public class CallBackQueryHandler extends BaseHandler {
                     sendMessage = messageMaker.searchBookMenu(curUser);
                     bot.execute(sendMessage);
 
+                    curUser.setBaseState(BaseState.SEARCH_BOOK_STATE.name());
                     curUser.setState(data);
                     userService.save(curUser);
                 }
@@ -79,6 +81,7 @@ public class CallBackQueryHandler extends BaseHandler {
                     sendMessage = messageMaker.myFavouriteBookMenu(curUser);
                     bot.execute(sendMessage);
 
+                    curUser.setBaseState(BaseState.MY_FAVOURITE_BOOKS_STATE.name());
                     curUser.setState(data);
                     userService.save(curUser);
                 }
@@ -117,29 +120,36 @@ public class CallBackQueryHandler extends BaseHandler {
     private void addBookState(String data) {
 
         AddBookState curState = AddBookState.valueOf(data);
+        SendMessage sendMessage = null;
 
         switch (curState) {
             case ENTER_BOOK_NAME -> {
+                sendMessage = messageMaker.enterBookNameMenu(curUser);
                 curUser.setState(AddBookState.ENTER_BOOK_NAME.name());
                 userService.save(curUser);
             }
             case ENTER_BOOK_AUTHOR -> {
+                sendMessage =  messageMaker.enterBookAuthor(curUser);
                 curUser.setState(AddBookState.ENTER_BOOK_AUTHOR.name());
                 userService.save(curUser);
             }
             case ENTER_BOOK_GENRE -> {
+                sendMessage = messageMaker.enterSelectGenreMenu(curUser);
                 curUser.setState(AddBookState.ENTER_BOOK_GENRE.name());
                 userService.save(curUser);
             }
             case ENTER_BOOK_DESCRIPTION -> {
+                sendMessage = messageMaker.enterBookDescription(curUser);
                 curUser.setState(AddBookState.ENTER_BOOK_DESCRIPTION.name());
                 userService.save(curUser);
             }
             case ENTER_BOOK_PHOTO_ID -> {
+                sendMessage = messageMaker.enterBookPhoto(curUser);
                 curUser.setState(AddBookState.ENTER_BOOK_PHOTO_ID.name());
                 userService.save(curUser);
             }
             case ENTER_BOOK_FILE_ID -> {
+                sendMessage = messageMaker.enterBookFile(curUser);
                 curUser.setState(AddBookState.ENTER_BOOK_FILE_ID.name());
                 userService.save(curUser);
             }
@@ -147,7 +157,7 @@ public class CallBackQueryHandler extends BaseHandler {
                 System.out.println("Incorrect value State");
             }
         }
-
+        bot.execute(sendMessage);
     }
 
     private void myFavouriteBooksState(String data) {
