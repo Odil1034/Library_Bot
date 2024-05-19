@@ -7,5 +7,14 @@
     "phoneNumber": "+998974351034",
     "baseState": "MAIN_MENU_STATE",
     "state": "ADD_BOOK"
+  },
+  {
+    "Id": 1712225965,
+    "username": "Gayrat_Shirinboyev",
+    "firstname": "G\u0027ayrat",
+    "lastname": "Shirinboyev 👑",
+    "phoneNumber": "+998979341277",
+    "baseState": "ADD_BOOK_STATE",
+    "state": "ENTER_BOOK_AUTHOR"
   }
 ]
