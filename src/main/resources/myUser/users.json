@@ -6,6 +6,6 @@
     "lastname": "Baxriddinov",
     "phoneNumber": "+998974351034",
     "baseState": "MAIN_MENU_STATE",
-    "state": "ENTER_BOOK_AUTHOR"
+    "state": "ADD_BOOK"
   }
 ]
