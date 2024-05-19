@@ -52,29 +52,27 @@ public class CallBackQueryHandler extends BaseHandler {
                 deleteMessage(message.messageId());
             }
             case ADD_BOOK -> {
+                curUser.setBaseState(BaseState.ADD_BOOK_STATE.name());
+                userService.save(curUser);
                 sendMessage = messageMaker.addBookMenu(curUser);
                 bot.execute(sendMessage);
                 addBookState();
-                curUser.setBaseState(BaseState.ADD_BOOK_STATE.name());
-                userService.save(curUser);
-
             }
             case SEARCH_BOOK -> {
                 curUser.setBaseState(BaseState.SEARCH_BOOK_STATE.name());
-                userService.save(curUser);
                 sendMessage = messageMaker.searchBookMenu(curUser);
                 bot.execute(sendMessage);
                 searchBookState();
             }
             case MY_FAVOURITE_BOOKS -> {
                 curUser.setBaseState(BaseState.MY_FAVOURITE_BOOKS_STATE.name());
-                userService.save(curUser);
                 sendMessage = messageMaker.myFavouriteBookMenu(curUser);
                 bot.execute(sendMessage);
                 myFavouriteBooksState();
             }
             default -> bot.execute(new SendMessage(curUser.getId(), "Anything is wrong"));
         }
+
     }
 
     private void searchBookState() {
@@ -82,22 +80,16 @@ public class CallBackQueryHandler extends BaseHandler {
     }
 
     private void addBookState() {
-        if(!Objects.equals(curUser.getBaseState(), BaseState.ADD_BOOK_STATE)
-                || Objects.equals(curUser.getState(), MainMenuState.ADD_BOOK)){
-            curUser.setBaseState(BaseState.ADD_BOOK_STATE.name());
-            CallbackQuery callbackQuery = update.callbackQuery();
-            String data = callbackQuery.data();
-
-            curUser.setState(data);
-            userService.save(curUser);
-        }/*
+        if(!Objects.equals(curUser.getBaseState(), BaseState.ADD_BOOK_STATE)){
+            anyThingIsWrongMessage();
+        }
         if(curUser.getState() == null){
             CallbackQuery callbackQuery = update.callbackQuery();
             String data = callbackQuery.data();
 
             curUser.setState(data);
             userService.save(curUser);
-        }*/
+        }
 
         String stateStr = curUser.getState();
         AddBookState curState = AddBookState.valueOf(stateStr);
