@@ -42,12 +42,16 @@ public class CallBackQueryHandler extends BaseHandler {
 
         if(state!=null){
             if (state.equals(MainMenuState.ADD_BOOK.name())) {
+                curUser.setBaseState(BaseState.ADD_BOOK_STATE.name());
                 addBookState(data);
             } else if (state.equals(MainMenuState.SEARCH_BOOK.name())) {
+                curUser.setBaseState(BaseState.SEARCH_BOOK_STATE.name());
                 searchBookState(data);
             } else if (state.equals(MainMenuState.MY_FAVOURITE_BOOKS.name())) {
+                curUser.setBaseState(BaseState.MY_FAVOURITE_BOOKS_STATE.name());
                 myFavouriteBooksState(data);
             } else if (state.equals(MainMenuState.MAIN_MENU.name())) {
+                curUser.setBaseState(BaseState.MAIN_MENU_STATE.name());
                 mainState(data);
             } else {
                 System.out.println("State is incorrect value");
@@ -112,32 +116,35 @@ public class CallBackQueryHandler extends BaseHandler {
 
     private void addBookState(String data) {
 
-        curUser.setBaseState(BaseState.ADD_BOOK_STATE.name());
         AddBookState curState = AddBookState.valueOf(data);
 
         switch (curState) {
             case ENTER_BOOK_NAME -> {
-                curUser.setBaseState(BaseState.ADD_BOOK_STATE.name());
-                curUser.setState(AddBookState.ENTER_BOOK_AUTHOR.name());
+                curUser.setState(AddBookState.ENTER_BOOK_NAME.name());
                 userService.save(curUser);
             }
             case ENTER_BOOK_AUTHOR -> {
-
+                curUser.setState(AddBookState.ENTER_BOOK_AUTHOR.name());
+                userService.save(curUser);
             }
             case ENTER_BOOK_GENRE -> {
-
+                curUser.setState(AddBookState.ENTER_BOOK_GENRE.name());
+                userService.save(curUser);
             }
             case ENTER_BOOK_DESCRIPTION -> {
-
+                curUser.setState(AddBookState.ENTER_BOOK_DESCRIPTION.name());
+                userService.save(curUser);
             }
             case ENTER_BOOK_PHOTO_ID -> {
-
+                curUser.setState(AddBookState.ENTER_BOOK_PHOTO_ID.name());
+                userService.save(curUser);
             }
             case ENTER_BOOK_FILE_ID -> {
-
+                curUser.setState(AddBookState.ENTER_BOOK_FILE_ID.name());
+                userService.save(curUser);
             }
             default -> {
-
+                System.out.println("Incorrect value State");
             }
         }
 
