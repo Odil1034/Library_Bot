@@ -92,52 +92,52 @@ public class MessageHandler extends BaseHandler {
         if (state != null) {
             curState = AddBookState.valueOf(state);
             BookBuilder newBook = builder();
-            while (!checkBookIsValid(newBook.build())) {
-                switch (curState) {
-                    case AddBookState.ENTER_BOOK_NAME -> {
-                        curUser.setState(AddBookState.ENTER_BOOK_AUTHOR.name());
-                        SendMessage bookNameMessage = messageMaker.enterBookNameMenu(curUser);
-                        newBook.name(getText());
-                        userService.save(curUser);
-                        bot.execute(bookNameMessage);
+
+            switch (curState) {
+                case AddBookState.ENTER_BOOK_NAME -> {
+                    curUser.setState(AddBookState.ENTER_BOOK_AUTHOR.name());
+                    userService.save(curUser);
+                    SendMessage bookNameMessage = messageMaker.enterBookNameMenu(curUser);
+                    newBook.name(getText());
+                    bot.execute(bookNameMessage);
+                }
+                case ENTER_BOOK_AUTHOR -> {
+                    curUser.setState(AddBookState.ENTER_BOOK_GENRE.name());
+                    SendMessage bookAuthorMessage = messageMaker.enterBookAuthor(curUser);
+                    newBook.author(getText());
+                    userService.save(curUser);
+                    bot.execute(bookAuthorMessage);
+                }
+                case ENTER_BOOK_GENRE -> {
+                    curUser.setState(AddBookState.ENTER_BOOK_DESCRIPTION.name());
+                    SendMessage sendMessage = messageMaker.enterSelectGenreMenu(curUser);
+                    userService.save(curUser);
+                    newBook.genre(getGenre());
+                    bot.execute(sendMessage);
+                }
+                case ENTER_BOOK_DESCRIPTION -> {
+                    curUser.setState(AddBookState.ENTER_BOOK_PHOTO_ID.name());
+                    SendMessage sendMessage = messageMaker.enterBookDescription(curUser);
+                    newBook.description(getText());
+                    userService.save(curUser);
+                    bot.execute(sendMessage);
+                }
+                case ENTER_BOOK_PHOTO_ID -> {
+                    PhotoSize[] photo = update.message().photo();
+                    for (PhotoSize photoSize : photo) {
+                        newBook.photoId(photoSize.fileId());
                     }
-                    case ENTER_BOOK_AUTHOR -> {
-                        curUser.setState(AddBookState.ENTER_BOOK_GENRE.name());
-                        SendMessage bookAuthorMessage = messageMaker.enterBookAuthor(curUser);
-                        newBook.author(getText());
-                        userService.save(curUser);
-                        bot.execute(bookAuthorMessage);
-                    }
-                    case ENTER_BOOK_GENRE -> {
-                        curUser.setState(AddBookState.ENTER_BOOK_DESCRIPTION.name());
-                        SendMessage sendMessage = messageMaker.enterSelectGenreMenu(curUser);
-                        userService.save(curUser);
-                        newBook.genre(getGenre());
-                        bot.execute(sendMessage);
-                    }
-                    case ENTER_BOOK_DESCRIPTION -> {
-                        curUser.setState(AddBookState.ENTER_BOOK_PHOTO_ID.name());
-                        SendMessage sendMessage = messageMaker.enterBookDescription(curUser);
-                        newBook.description(getText());
-                        userService.save(curUser);
-                        bot.execute(sendMessage);
-                    }
-                    case ENTER_BOOK_PHOTO_ID -> {
-                        PhotoSize[] photo = update.message().photo();
-                        for (PhotoSize photoSize : photo) {
-                            newBook.photoId(photoSize.fileId());
-                        }
-                    }
-                    case ENTER_BOOK_FILE_ID -> {
-                        curUser.setState(null);
-                        SendMessage sendMessage = messageMaker.enterBookFile(curUser);
-                        newBook.fileId(update.message().document().fileId());
-                        userService.save(curUser);
-                        bot.execute(sendMessage);
-                    }
-                    default -> {
-                        return;
-                    }
+                }
+                case ENTER_BOOK_FILE_ID -> {
+                    curUser.setState(null);
+                    SendMessage sendMessage = messageMaker.enterBookFile(curUser);
+                    newBook.fileId(update.message().document().fileId());
+                    userService.save(curUser);
+                    bot.execute(sendMessage);
+                }
+                default -> {
+                    System.out.println("Xatolik");
+                    return;
                 }
             }
             Book newBuilderBook = newBook.isComplete(true).build();
