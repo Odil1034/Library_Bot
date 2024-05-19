@@ -10,4 +10,12 @@ public enum SearchBookState implements State {
     DOWNLOAD,
     ADD_MY_FAVOURITE_BOOKS;
 
+    private AddBookState prevState;
+    SearchBookState(AddBookState prevState) {
+        this.prevState = prevState;
+    }
+    SearchBookState() {
+        this.prevState = null;
+    }
+
 }
