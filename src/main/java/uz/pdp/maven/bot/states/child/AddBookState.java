@@ -1,4 +1,4 @@
-package uz.pdp.maven.bot.states.child.addBookState;
+package uz.pdp.maven.bot.states.child;
 
 
 import lombok.Getter;

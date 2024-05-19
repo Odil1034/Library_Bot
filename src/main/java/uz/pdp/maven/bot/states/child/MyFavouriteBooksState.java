@@ -1,4 +1,4 @@
-package uz.pdp.maven.bot.states.child.myFavouriteBooksState;
+package uz.pdp.maven.bot.states.child;
 
 import uz.pdp.maven.bot.states.State;
 

@@ -4,10 +4,9 @@ import com.pengrad.telegrambot.model.*;
 import com.pengrad.telegrambot.request.SendMessage;
 import uz.pdp.maven.backend.models.book.Book;
 import uz.pdp.maven.backend.models.myUser.MyUser;
-import uz.pdp.maven.backend.service.bookService.BookService;
 import uz.pdp.maven.backend.types.bookTypes.Genre;
 import uz.pdp.maven.bot.states.base.BaseState;
-import uz.pdp.maven.bot.states.child.addBookState.AddBookState;
+import uz.pdp.maven.bot.states.child.AddBookState;
 
 import java.util.Objects;
 

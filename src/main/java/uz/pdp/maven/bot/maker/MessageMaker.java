@@ -22,7 +22,7 @@ public class MessageMaker {
         SendMessage sendMessage = new SendMessage(curUser.getId(), "Enter Phone Number");
         KeyboardButton[][] buttons = {
                 {
-                    new KeyboardButton("Send My Phone Number").requestContact(true)
+                        new KeyboardButton("Send My Phone Number").requestContact(true)
                 }
         };
         ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup(buttons).oneTimeKeyboard(true).resizeKeyboard(true);
@@ -33,9 +33,9 @@ public class MessageMaker {
     public SendMessage mainMenu(MyUser curUser) {
         SendMessage sendMessage = new SendMessage(curUser.getId(), "Choose Menu");
         InlineKeyboardButton[][] buttons = {
-                { new InlineKeyboardButton("Add Book").callbackData("ADD_BOOK") },
-                { new InlineKeyboardButton("Search Book").callbackData("SEARCH_BOOK") },
-                { new InlineKeyboardButton("My Favourite Books").callbackData("MY_FAVOURITE_BOOKS") }
+                {new InlineKeyboardButton("Add Book").callbackData("ADD_BOOK"),
+                 new InlineKeyboardButton("Search Book").callbackData("SEARCH_BOOK")},
+                {new InlineKeyboardButton("My Favourite Books").callbackData("MY_FAVOURITE_BOOKS")}
         };
         InlineKeyboardMarkup keyboardMarkup = new InlineKeyboardMarkup(buttons);
         sendMessage.replyMarkup(keyboardMarkup);
@@ -45,12 +45,12 @@ public class MessageMaker {
     public SendMessage searchBookMenu(MyUser curUser) {
         SendMessage sendMessage = new SendMessage(curUser.getId(), "Search Book");
         InlineKeyboardButton[][] buttons = {
-                { new InlineKeyboardButton("By Author").callbackData("BY_AUTHOR"),
-                        new InlineKeyboardButton("By Name").callbackData("BY_NAME") },
-                { new InlineKeyboardButton("By Genre").callbackData("BY_GENRE"),
-                        new InlineKeyboardButton("All Books").callbackData("ALL_BOOKS") },
-                { new InlineKeyboardButton("Back").callbackData("BACK"),
-                        new InlineKeyboardButton("Back to Main Menu").callbackData("BACK_TO_MAIN_MENU") }
+                {new InlineKeyboardButton("By Author").callbackData("BY_AUTHOR"),
+                        new InlineKeyboardButton("By Name").callbackData("BY_NAME")},
+                {new InlineKeyboardButton("By Genre").callbackData("BY_GENRE"),
+                        new InlineKeyboardButton("All Books").callbackData("ALL_BOOKS")},
+                {new InlineKeyboardButton("Back").callbackData("BACK"),
+                        new InlineKeyboardButton("Back to Main Menu").callbackData("BACK_TO_MAIN_MENU")}
         };
         InlineKeyboardMarkup keyboardMarkup = new InlineKeyboardMarkup(buttons);
         sendMessage.replyMarkup(keyboardMarkup);
@@ -60,11 +60,11 @@ public class MessageMaker {
     public SendMessage addBookMenu(MyUser curUser) {
         SendMessage sendMessage = new SendMessage(curUser.getId(), "Addition Book Info");
         InlineKeyboardButton[][] buttons = {
-                { new InlineKeyboardButton("Enter Book Name").callbackData("ENTER_BOOK_NAME") },
-                { new InlineKeyboardButton("Enter Book Author").callbackData("ENTER_BOOK_AUTHOR") },
-                { new InlineKeyboardButton("Enter Description").callbackData("ENTER_DESCRIPTION") },
-                { new InlineKeyboardButton("Select Genre").callbackData("SELECT_GENRE") },
-                { new InlineKeyboardButton("Back").callbackData("BACK") }
+                {new InlineKeyboardButton("Enter Book Name").callbackData("ENTER_BOOK_NAME")},
+                {new InlineKeyboardButton("Enter Book Author").callbackData("ENTER_BOOK_AUTHOR")},
+                {new InlineKeyboardButton("Enter Description").callbackData("ENTER_DESCRIPTION")},
+                {new InlineKeyboardButton("Select Genre").callbackData("SELECT_GENRE")},
+                {new InlineKeyboardButton("Back").callbackData("BACK")}
         };
         InlineKeyboardMarkup keyboardMarkup = new InlineKeyboardMarkup(buttons);
         sendMessage.replyMarkup(keyboardMarkup);
@@ -91,14 +91,14 @@ public class MessageMaker {
     public SendMessage enterSelectGenreMenu(MyUser curUser) {
         SendMessage sendMessage = new SendMessage(curUser.getId(), "Select Genre: ");
         KeyboardButton[][] buttons = {
-                { new KeyboardButton("BADIIY ADABIYOT") },
-                { new KeyboardButton("SHE'RIYAT") },
-                { new KeyboardButton("DASTURLASH") },
-                { new KeyboardButton("ILMIY") },
-                { new KeyboardButton("DINIY") },
-                { new KeyboardButton("SARGUZASHT") },
-                { new KeyboardButton("BOSHQALAR") },
-                { new KeyboardButton("Back"), new KeyboardButton("Main Menu") }
+                {new KeyboardButton("BADIIY ADABIYOT")},
+                {new KeyboardButton("SHE'RIYAT")},
+                {new KeyboardButton("DASTURLASH")},
+                {new KeyboardButton("ILMIY")},
+                {new KeyboardButton("DINIY")},
+                {new KeyboardButton("SARGUZASHT")},
+                {new KeyboardButton("BOSHQALAR")},
+                {new KeyboardButton("Back"), new KeyboardButton("Main Menu")}
         };
         ReplyKeyboardMarkup keyboardMarkup = new ReplyKeyboardMarkup(buttons)
                 .oneTimeKeyboard(true)

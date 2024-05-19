@@ -1,4 +1,4 @@
-package uz.pdp.maven.bot.states.child.searchBookState;
+package uz.pdp.maven.bot.states.child;
 
 import uz.pdp.maven.bot.states.State;
 
