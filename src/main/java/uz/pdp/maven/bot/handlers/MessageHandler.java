@@ -89,6 +89,7 @@ public class MessageHandler extends BaseHandler {
 
         String state = curUser.getState();
         AddBookState curState;
+
         if (state != null) {
             curState = AddBookState.valueOf(state);
             BookBuilder newBook = builder();
@@ -152,6 +153,8 @@ public class MessageHandler extends BaseHandler {
                 handleAddBook(curUser);
             }
             handleMainMenu(curUser);
+        }else {
+
         }
     }
 
