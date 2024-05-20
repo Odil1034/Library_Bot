@@ -6,6 +6,7 @@ import uz.pdp.maven.backend.models.myUser.MyUser;
 import uz.pdp.maven.bot.states.base.BaseState;
 import uz.pdp.maven.bot.states.child.AddBookState;
 import uz.pdp.maven.bot.states.child.MainMenuState;
+import uz.pdp.maven.bot.states.child.RegistrationState;
 
 import java.util.Objects;
 
@@ -39,7 +40,9 @@ public class CallBackQueryHandler extends BaseHandler {
             curUser.setState(update.callbackQuery().data());
             userService.save(curUser);
         }
-
+        if(curUser.getState().equals(RegistrationState.REGISTERED.name())){
+            changeStates(BaseState.MAIN_MENU_STATE, MainMenuState.MAIN_MENU.name());
+        }
         String stateStr = curUser.getState();
         MainMenuState state = MainMenuState.valueOf(stateStr);
         Message message = update.callbackQuery().message();
@@ -85,10 +88,9 @@ public class CallBackQueryHandler extends BaseHandler {
         SendMessage sendMessage;
         switch (curState) {
             case ENTER_BOOK_NAME -> {
-                curUser.setState(AddBookState.ENTER_BOOK_NAME.name());
-                sendMessage = messageMaker.enterBookNameMenu(curUser);
-                bot.execute(sendMessage);
-                deleteMessage(message.messageId());
+                SendMessage bookNameMessage = messageMaker.enterBookNameMenu(curUser);
+                bot.execute(bookNameMessage);
+                changeState(AddBookState.ENTER_BOOK_NAME.name());
             }
             default -> anyThingIsWrongMessage();
         }

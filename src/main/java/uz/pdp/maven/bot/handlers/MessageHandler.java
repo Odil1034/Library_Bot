@@ -61,12 +61,11 @@ public class MessageHandler extends BaseHandler {
                 curUser.getPhoneNumber().isEmpty() ||
                 curUser.getPhoneNumber().isBlank()) {
             enterPhoneNumber();
-            changeStates(BaseState.REGISTRATION_STATE, RegistrationState.REGISTER.name());
+            changeStates(BaseState.REGISTRATION_STATE, RegistrationState.REGISTERED.name());
         } else {
             handleMainMenu(curUser);
-            changeBaseState(BaseState.MAIN_MENU_STATE);
+            changeStates(BaseState.REGISTRATION_STATE, RegistrationState.REGISTERED.name());
         }
-        changeState(null);
     }
 
     private void handleMyFavouriteBook(MyUser curUser) {
@@ -81,48 +80,50 @@ public class MessageHandler extends BaseHandler {
         if (state != null) {
             curState = AddBookState.valueOf(state);
             Book newBookBuilder = builder().build();
-            ;
 
             switch (curState) {
                 case AddBookState.ENTER_BOOK_NAME -> {
-                    SendMessage bookNameMessage = messageMaker.enterBookNameMenu(curUser);
-                    bot.execute(bookNameMessage);
                     newBookBuilder.setName(getText());
+                    System.out.println("Name: " + newBookBuilder.getName());
                     changeState(AddBookState.ENTER_BOOK_AUTHOR.name());
                 }
                 case ENTER_BOOK_AUTHOR -> {
-                    curUser.setState(AddBookState.ENTER_BOOK_GENRE.name());
                     SendMessage bookAuthorMessage = messageMaker.enterBookAuthor(curUser);
-                    newBookBuilder.setAuthor(getText());
-                    userService.save(curUser);
                     bot.execute(bookAuthorMessage);
+                    newBookBuilder.setAuthor(getText());
+                    System.out.println("Author: " + newBookBuilder.getAuthor());
+                    changeState(AddBookState.ENTER_BOOK_GENRE.name());
                 }
                 case ENTER_BOOK_GENRE -> {
-                    curUser.setState(AddBookState.ENTER_BOOK_DESCRIPTION.name());
                     SendMessage sendMessage = messageMaker.enterSelectGenreMenu(curUser);
-                    userService.save(curUser);
-                    newBookBuilder.setGenre(getGenre());
                     bot.execute(sendMessage);
+                    newBookBuilder.setGenre(getGenre());
+                    System.out.println("Genre: " + newBookBuilder.getGenre());
+                    changeState(AddBookState.ENTER_BOOK_DESCRIPTION.name());
                 }
                 case ENTER_BOOK_DESCRIPTION -> {
-                    curUser.setState(AddBookState.ENTER_BOOK_PHOTO_ID.name());
                     SendMessage sendMessage = messageMaker.enterBookDescription(curUser);
-                    newBookBuilder.setDescription(getText());
-                    userService.save(curUser);
                     bot.execute(sendMessage);
+                    newBookBuilder.setDescription(getText());
+                    System.out.println("Description: "+ newBookBuilder.getDescription());
+                    changeState(AddBookState.ENTER_BOOK_PHOTO_ID.name());
                 }
                 case ENTER_BOOK_PHOTO_ID -> {
+                    SendMessage sendMessage = messageMaker.enterBookPhoto(curUser);
+                    bot.execute(sendMessage);
                     PhotoSize[] photo = update.message().photo();
                     for (PhotoSize photoSize : photo) {
                         newBookBuilder.setPhotoId(photoSize.fileId());
                     }
+                    System.out.println("Photo Id: " + newBookBuilder.getFileId());
+                    changeState(AddBookState.ENTER_BOOK_FILE_ID.name());
                 }
                 case ENTER_BOOK_FILE_ID -> {
-                    curUser.setState(null);
                     SendMessage sendMessage = messageMaker.enterBookFile(curUser);
-                    newBookBuilder.setFileId(update.message().document().fileId());
-                    userService.save(curUser);
                     bot.execute(sendMessage);
+                    newBookBuilder.setFileId(update.message().document().fileId());
+                    System.out.println("File Id: " + newBookBuilder.getFileId());
+                    changeState(null);
                 }
                 default -> {
                     System.out.println("Xatolik");
@@ -143,7 +144,7 @@ public class MessageHandler extends BaseHandler {
 //                        .Id()
                         .build();
                 changeStates(BaseState.MAIN_MENU_STATE, null);
-            }else {
+            } else {
                 newBook.isComplete(false);
             }
 
@@ -182,15 +183,13 @@ public class MessageHandler extends BaseHandler {
     }
 
     private String getText() {
-        Message message = update.message();
-        return message.text();
+        return update.message().text();
     }
 
     private void handleContactMessage(Contact contact) {
         String phoneNumber = contact.phoneNumber();
         curUser.setPhoneNumber(phoneNumber);
-        curUser.setBaseState(BaseState.MAIN_MENU_STATE.name());
-        userService.save(curUser);
+        changeBaseState(BaseState.MAIN_MENU_STATE);
         handleMainMenu(curUser);
     }
 
@@ -200,14 +199,19 @@ public class MessageHandler extends BaseHandler {
     }
 
     public void handleMainMenu(MyUser curUser) {
-        SendMessage sendMessage = messageMaker.mainMenu(curUser);
-        bot.execute(sendMessage);
+        if(curUser.getState().equals(RegistrationState.REGISTERED.name())){
+            SendMessage sendMessage = messageMaker.mainMenu(curUser);
+            bot.execute(sendMessage);
+        }else {
+            new SendMessage(curUser.getId(),
+                    "Siz registratsiyadan o'tmagansiz " +
+                            "\nRegistratsiyadan o'tish uchun telefon raqamingizni kiriting: ");
+            enterPhoneNumber();
+        }
     }
 
     private void handleSearchBook(MyUser curUser) {
-        if (Objects.equals(this.curUser.getBaseState(), BaseState.MAIN_MENU_STATE.name())) {
-            SendMessage sendMessage = messageMaker.searchBookMenu(this.curUser);
-            bot.execute(sendMessage);
-        }
+        SendMessage sendMessage = messageMaker.searchBookMenu(curUser);
+        bot.execute(sendMessage);
     }
 }
