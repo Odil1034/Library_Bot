@@ -2,14 +2,11 @@ package uz.pdp.maven.bot.handlers;
 
 import com.pengrad.telegrambot.model.*;
 import com.pengrad.telegrambot.request.SendMessage;
-import uz.pdp.maven.backend.models.myUser.MyUser;
 import uz.pdp.maven.bot.states.base.BaseState;
 import uz.pdp.maven.bot.states.child.AddBookState;
 import uz.pdp.maven.bot.states.child.MainMenuState;
 
 import java.util.Objects;
-
-import static uz.pdp.maven.bot.states.child.MainMenuState.SEARCH_BOOK;
 
 public class CallBackQueryHandler extends BaseHandler {
 
@@ -35,43 +32,41 @@ public class CallBackQueryHandler extends BaseHandler {
 
     private void mainState() {
 
+        changeStates(BaseState.MAIN_MENU_STATE,null);
         if (curUser.getState() == null) {
             curUser.setState(update.callbackQuery().data());
-            userService.save(curUser);
         }
 
-        String stateStr = curUser.getState();
+        String stateStr = curUser.getState(); // add Book
         MainMenuState state = MainMenuState.valueOf(stateStr);
         Message message = update.callbackQuery().message();
         SendMessage sendMessage;
         switch (state) {
             case MAIN_MENU -> {
-                curUser.setState(MainMenuState.MAIN_MENU.name());
                 sendMessage = messageMaker.mainMenu(curUser);
                 bot.execute(sendMessage);
+                changeStates(BaseState.MAIN_MENU_STATE, null);
                 deleteMessage(message.messageId());
             }
             case ADD_BOOK -> {
-                curUser.setBaseState(BaseState.ADD_BOOK_STATE.name());
-                sendMessage = messageMaker.addBookMenu(curUser);
+                sendMessage = messageMaker.enterBookNameMenu(curUser);
                 bot.execute(sendMessage);
                 addBookState();
             }
             case SEARCH_BOOK -> {
-                curUser.setBaseState(BaseState.SEARCH_BOOK_STATE.name());
                 sendMessage = messageMaker.searchBookMenu(curUser);
                 bot.execute(sendMessage);
+                changeStates(BaseState.SEARCH_BOOK_STATE, null);
                 searchBookState();
             }
             case MY_FAVOURITE_BOOKS -> {
-                curUser.setBaseState(BaseState.MY_FAVOURITE_BOOKS_STATE.name());
                 sendMessage = messageMaker.myFavouriteBookMenu(curUser);
                 bot.execute(sendMessage);
+                changeStates(BaseState.MY_FAVOURITE_BOOKS_STATE, null);
                 myFavouriteBooksState();
             }
             default -> bot.execute(new SendMessage(curUser.getId(), "Anything is wrong"));
         }
-        userService.save(curUser);
     }
 
     private void searchBookState() {
@@ -80,46 +75,12 @@ public class CallBackQueryHandler extends BaseHandler {
 
     private void addBookState() {
 
-        if(curUser.getState() == null){
-            CallbackQuery callbackQuery = update.callbackQuery();
-            String data = callbackQuery.data();
-            curUser.setState(data);
-            userService.save(curUser);
+        changeStates(BaseState.ADD_BOOK_STATE, null);
+        if (curUser.getState() == null) {
+            curUser.setState(update.callbackQuery().data());
         }
+        changeState(AddBookState.ENTER_BOOK_NAME.name());
 
-        String stateStr = curUser.getState();
-        AddBookState curState = AddBookState.valueOf(stateStr);
-        Message message = update.callbackQuery().message();
-        SendMessage sendMessage;
-        switch (curState) {
-            case ENTER_BOOK_NAME -> {
-                curUser.setState(AddBookState.ENTER_BOOK_NAME.name());
-                sendMessage = messageMaker.enterBookNameMenu(curUser);
-                bot.execute(sendMessage);
-                deleteMessage(message.messageId());
-            }
-            case ENTER_BOOK_AUTHOR -> {
-                System.out.println("Enter Book Author");
-                deleteMessage(message.messageId());
-            }
-            case ENTER_BOOK_GENRE -> {
-                System.out.println("Enter Book Genre");
-                deleteMessage(message.messageId());
-            }
-            case ENTER_BOOK_DESCRIPTION -> {
-                System.out.println("Enter Book Description");
-                deleteMessage(message.messageId());
-            }
-            case ENTER_BOOK_PHOTO_ID -> {
-                System.out.println("Enter Book Photo");
-                deleteMessage(message.messageId());
-            }
-            case ENTER_BOOK_FILE_ID -> {
-                System.out.println("Enter Book File");
-                deleteMessage(message.messageId());
-            }
-            default -> anyThingIsWrongMessage();
-        }
     }
 
     private void myFavouriteBooksState() {
