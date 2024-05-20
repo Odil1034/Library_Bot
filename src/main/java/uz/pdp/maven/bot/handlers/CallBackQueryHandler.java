@@ -46,25 +46,19 @@ public class CallBackQueryHandler extends BaseHandler {
         SendMessage sendMessage;
         switch (state) {
             case MAIN_MENU -> {
-                curUser.setState(MainMenuState.MAIN_MENU.name());
+                changeStates(BaseState.MAIN_MENU_STATE, null);
                 sendMessage = messageMaker.mainMenu(curUser);
                 bot.execute(sendMessage);
                 deleteMessage(message.messageId());
             }
-            case ADD_BOOK -> {
-                curUser.setBaseState(BaseState.ADD_BOOK_STATE.name());
-                sendMessage = messageMaker.addBookMenu(curUser);
-                bot.execute(sendMessage);
-                addBookState();
-            }
+            case ADD_BOOK -> addBookState();
+
             case SEARCH_BOOK -> {
-                curUser.setBaseState(BaseState.SEARCH_BOOK_STATE.name());
                 sendMessage = messageMaker.searchBookMenu(curUser);
                 bot.execute(sendMessage);
                 searchBookState();
             }
             case MY_FAVOURITE_BOOKS -> {
-                curUser.setBaseState(BaseState.MY_FAVOURITE_BOOKS_STATE.name());
                 sendMessage = messageMaker.myFavouriteBookMenu(curUser);
                 bot.execute(sendMessage);
                 myFavouriteBooksState();
@@ -75,16 +69,14 @@ public class CallBackQueryHandler extends BaseHandler {
     }
 
     private void searchBookState() {
-
+        changeStates(BaseState.SEARCH_BOOK_STATE, null);
     }
 
     private void addBookState() {
+        changeStates(BaseState.ADD_BOOK_STATE, null);
 
         if(curUser.getState() == null){
-            CallbackQuery callbackQuery = update.callbackQuery();
-            String data = callbackQuery.data();
-            curUser.setState(data);
-            userService.save(curUser);
+            changeState(AddBookState.ENTER_BOOK_NAME.name());
         }
 
         String stateStr = curUser.getState();
@@ -98,33 +90,13 @@ public class CallBackQueryHandler extends BaseHandler {
                 bot.execute(sendMessage);
                 deleteMessage(message.messageId());
             }
-            case ENTER_BOOK_AUTHOR -> {
-                System.out.println("Enter Book Author");
-                deleteMessage(message.messageId());
-            }
-            case ENTER_BOOK_GENRE -> {
-                System.out.println("Enter Book Genre");
-                deleteMessage(message.messageId());
-            }
-            case ENTER_BOOK_DESCRIPTION -> {
-                System.out.println("Enter Book Description");
-                deleteMessage(message.messageId());
-            }
-            case ENTER_BOOK_PHOTO_ID -> {
-                System.out.println("Enter Book Photo");
-                deleteMessage(message.messageId());
-            }
-            case ENTER_BOOK_FILE_ID -> {
-                System.out.println("Enter Book File");
-                deleteMessage(message.messageId());
-            }
             default -> anyThingIsWrongMessage();
         }
     }
 
     private void myFavouriteBooksState() {
-        SendMessage sendMessage = messageMaker.myFavouriteBookMenu(curUser);
-        bot.execute(sendMessage);
+        changeStates(BaseState.MY_FAVOURITE_BOOKS_STATE, null);
+        System.out.println("myFavouriteBooksState is run");
     }
 
     public void anyThingIsWrongMessage() {

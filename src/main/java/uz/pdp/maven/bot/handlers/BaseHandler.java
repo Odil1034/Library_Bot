@@ -55,6 +55,20 @@ public abstract class BaseHandler implements PathConstants {
         bot.execute(deleteMessage);
     }
 
+    public void changeStates(BaseState changeBaseState, String childState){
+        curUser.setBaseState(changeBaseState.name());
+        curUser.setState(childState);
+        userService.save(curUser);
+    }
+
+    public void changeState(String childState){
+        curUser.setState(childState);
+        userService.save(curUser);
+    }
+    public void changeBaseState(BaseState baseState){
+        curUser.setBaseState(baseState.name());
+        userService.save(curUser);
+    }
 
 
 }

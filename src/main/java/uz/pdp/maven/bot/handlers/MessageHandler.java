@@ -7,6 +7,7 @@ import uz.pdp.maven.backend.models.myUser.MyUser;
 import uz.pdp.maven.backend.types.bookTypes.Genre;
 import uz.pdp.maven.bot.states.base.BaseState;
 import uz.pdp.maven.bot.states.child.AddBookState;
+import uz.pdp.maven.bot.states.child.RegistrationState;
 
 import java.util.Objects;
 
@@ -60,14 +61,12 @@ public class MessageHandler extends BaseHandler {
                 curUser.getPhoneNumber().isEmpty() ||
                 curUser.getPhoneNumber().isBlank()) {
             enterPhoneNumber();
-            curUser.setBaseState(BaseState.REGISTRATION_STATE.name());
-            userService.save(curUser);
+            changeStates(BaseState.REGISTRATION_STATE, RegistrationState.REGISTER.name());
         } else {
             handleMainMenu(curUser);
-
-            curUser.setBaseState(BaseState.MAIN_MENU_STATE.name());
-            userService.save(curUser);
+            changeBaseState(BaseState.MAIN_MENU_STATE);
         }
+        changeState(null);
     }
 
     private void handleMyFavouriteBook(MyUser curUser) {
@@ -81,20 +80,20 @@ public class MessageHandler extends BaseHandler {
 
         if (state != null) {
             curState = AddBookState.valueOf(state);
-            BookBuilder newBook = builder();
+            Book newBookBuilder = builder().build();
+            ;
 
             switch (curState) {
                 case AddBookState.ENTER_BOOK_NAME -> {
-                    curUser.setState(AddBookState.ENTER_BOOK_AUTHOR.name());
-                    userService.save(curUser);
                     SendMessage bookNameMessage = messageMaker.enterBookNameMenu(curUser);
-                    newBook.name(getText());
                     bot.execute(bookNameMessage);
+                    newBookBuilder.setName(getText());
+                    changeState(AddBookState.ENTER_BOOK_AUTHOR.name());
                 }
                 case ENTER_BOOK_AUTHOR -> {
                     curUser.setState(AddBookState.ENTER_BOOK_GENRE.name());
                     SendMessage bookAuthorMessage = messageMaker.enterBookAuthor(curUser);
-                    newBook.author(getText());
+                    newBookBuilder.setAuthor(getText());
                     userService.save(curUser);
                     bot.execute(bookAuthorMessage);
                 }
@@ -102,26 +101,26 @@ public class MessageHandler extends BaseHandler {
                     curUser.setState(AddBookState.ENTER_BOOK_DESCRIPTION.name());
                     SendMessage sendMessage = messageMaker.enterSelectGenreMenu(curUser);
                     userService.save(curUser);
-                    newBook.genre(getGenre());
+                    newBookBuilder.setGenre(getGenre());
                     bot.execute(sendMessage);
                 }
                 case ENTER_BOOK_DESCRIPTION -> {
                     curUser.setState(AddBookState.ENTER_BOOK_PHOTO_ID.name());
                     SendMessage sendMessage = messageMaker.enterBookDescription(curUser);
-                    newBook.description(getText());
+                    newBookBuilder.setDescription(getText());
                     userService.save(curUser);
                     bot.execute(sendMessage);
                 }
                 case ENTER_BOOK_PHOTO_ID -> {
                     PhotoSize[] photo = update.message().photo();
                     for (PhotoSize photoSize : photo) {
-                        newBook.photoId(photoSize.fileId());
+                        newBookBuilder.setPhotoId(photoSize.fileId());
                     }
                 }
                 case ENTER_BOOK_FILE_ID -> {
                     curUser.setState(null);
                     SendMessage sendMessage = messageMaker.enterBookFile(curUser);
-                    newBook.fileId(update.message().document().fileId());
+                    newBookBuilder.setFileId(update.message().document().fileId());
                     userService.save(curUser);
                     bot.execute(sendMessage);
                 }
@@ -130,33 +129,45 @@ public class MessageHandler extends BaseHandler {
                     return;
                 }
             }
-            Book newBuilderBook = newBook.isComplete(true).build();
-            curUser.setBaseState(BaseState.MAIN_MENU_STATE.name());
-            userService.save(curUser);
 
-            if (newBuilderBook.isComplete()) {
-                SendMessage bookIsAddedMessage = messageMaker.bookIsAddedMessage(curUser, newBuilderBook);
-                bookService.save(newBuilderBook);
+            BookBuilder newBook = Book.builder();
+            if (!checkBookIsValid(newBookBuilder)) {
+                newBook.name(newBookBuilder.getName())
+                        .author(newBookBuilder.getAuthor())
+                        .genre(newBookBuilder.getGenre())
+                        .userId(curUser.getId())
+                        .photoId(newBookBuilder.getPhotoId())
+                        .description(newBookBuilder.getDescription())
+                        .fileId(newBookBuilder.getFileId())
+                        .isComplete(true)
+//                        .Id()
+                        .build();
+                changeStates(BaseState.MAIN_MENU_STATE, null);
+            }else {
+                newBook.isComplete(false);
+            }
+
+            if (Objects.equals(newBook.build().isComplete(), true)) {
+                SendMessage bookIsAddedMessage = messageMaker.bookIsAddedMessage(curUser, newBook.build());
+                bookService.save(newBook.build());
                 bot.execute(bookIsAddedMessage);
             } else {
                 handleAddBook(curUser);
             }
             handleMainMenu(curUser);
-        }else {
+        } else {
 
         }
     }
 
 
     private boolean checkBookIsValid(Book book) {
-        return book.getName() != null
-                && book.getDescription() != null
-                && !Objects.isNull(book.getGenre())
+        return !(Objects.isNull(book.getGenre())
                 && checkStrIsBlankNullAndEmpty(book.getFileId())
                 && checkStrIsBlankNullAndEmpty(book.getAuthor())
                 && checkStrIsBlankNullAndEmpty(book.getName())
                 && checkStrIsBlankNullAndEmpty(book.getPhotoId())
-                && checkStrIsBlankNullAndEmpty(book.getDescription());
+                && checkStrIsBlankNullAndEmpty(book.getDescription()));
     }
 
     public boolean checkStrIsBlankNullAndEmpty(String str) {

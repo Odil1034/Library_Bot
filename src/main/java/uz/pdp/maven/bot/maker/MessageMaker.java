@@ -10,6 +10,7 @@ import com.pengrad.telegrambot.request.SendMessage;
 import org.jetbrains.annotations.NotNull;
 import uz.pdp.maven.backend.models.book.Book;
 import uz.pdp.maven.backend.models.myUser.MyUser;
+import uz.pdp.maven.backend.types.bookTypes.Genre;
 
 public class MessageMaker {
 
@@ -90,19 +91,40 @@ public class MessageMaker {
 
     public SendMessage enterSelectGenreMenu(MyUser curUser) {
         SendMessage sendMessage = new SendMessage(curUser.getId(), "Select Genre: ");
-        KeyboardButton[][] buttons = {
-                {new KeyboardButton("BADIIY ADABIYOT")},
-                {new KeyboardButton("SHE'RIYAT")},
-                {new KeyboardButton("DASTURLASH")},
-                {new KeyboardButton("ILMIY")},
-                {new KeyboardButton("DINIY")},
-                {new KeyboardButton("SARGUZASHT")},
-                {new KeyboardButton("BOSHQALAR")},
-                {new KeyboardButton("Back"), new KeyboardButton("Main Menu")}
+        InlineKeyboardButton[][] buttons = {
+                new InlineKeyboardButton[]
+                {
+                    new InlineKeyboardButton(Genre.BADIIY_ADABIYOTLAR.name())
+                },
+                new InlineKeyboardButton[]
+                {
+                    new InlineKeyboardButton(Genre.SHERIYAT.name())
+                },
+                new InlineKeyboardButton[]
+                {
+                    new InlineKeyboardButton(Genre.DASTURLASH.name())
+                },
+                new InlineKeyboardButton[]
+                {
+                        new InlineKeyboardButton(Genre.ILMIY.name())
+                },
+                new InlineKeyboardButton[]
+                {
+                    new InlineKeyboardButton(Genre.DINIY.name())
+                },
+                new InlineKeyboardButton[]
+                {
+                    new InlineKeyboardButton(Genre.SARGUZASHT.name())
+                },
+                new InlineKeyboardButton[]
+                {
+                    new InlineKeyboardButton(Genre.BOSHQALAR.name())
+                },
+                {
+                    new InlineKeyboardButton("Back"), new InlineKeyboardButton("Main Menu")
+                }
         };
-        ReplyKeyboardMarkup keyboardMarkup = new ReplyKeyboardMarkup(buttons)
-                .oneTimeKeyboard(true)
-                .resizeKeyboard(true);
+        InlineKeyboardMarkup keyboardMarkup = new InlineKeyboardMarkup(buttons);
         sendMessage.replyMarkup(keyboardMarkup);
         return sendMessage;
     }
