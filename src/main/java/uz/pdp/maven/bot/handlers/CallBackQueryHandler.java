@@ -10,6 +10,7 @@ import uz.pdp.maven.bot.states.child.RegistrationState;
 
 import java.util.Objects;
 
+import static uz.pdp.maven.bot.states.child.MainMenuState.MAIN_MENU;
 import static uz.pdp.maven.bot.states.child.MainMenuState.SEARCH_BOOK;
 
 public class CallBackQueryHandler extends BaseHandler {
@@ -25,7 +26,9 @@ public class CallBackQueryHandler extends BaseHandler {
         String baseStateStr = curUser.getBaseState();
         BaseState baseState = BaseState.valueOf(baseStateStr);
 
-        if (Objects.equals(baseState, BaseState.MAIN_MENU_STATE)) {
+        if (Objects.equals(baseState, BaseState.REGISTRATION_STATE)) {
+            registrationState();
+        } else if (Objects.equals(baseState, BaseState.MAIN_MENU_STATE)) {
             mainState();
         } else if (Objects.equals(baseState, BaseState.ADD_BOOK_STATE)) {
             addBookState();
@@ -34,17 +37,23 @@ public class CallBackQueryHandler extends BaseHandler {
         }
     }
 
-    private void mainState() {
-
-        if (curUser.getState() == null) {
-            curUser.setState(update.callbackQuery().data());
+    private void registrationState() {
+        if (curUser.getState().equals(RegistrationState.SEND_PHONE_NUMBER.name())) {
             userService.save(curUser);
+        } else if (curUser.getState().equals(RegistrationState.REGISTER.name())) {
+            if (Objects.equals(curUser.getState(), ("GO_MAIN_MENU"))) {
+                changeStates(BaseState.MAIN_MENU_STATE, MAIN_MENU.name());
+            }
         }
-        if(!checkStrIsBlankNullAndEmpty(curUser.getPhoneNumber())
-                && curUser.getState().equals(RegistrationState.NOT_REGISTERED.name())){
-            changeStates(BaseState.MAIN_MENU_STATE, MainMenuState.MAIN_MENU.name());
-        }
+    }
 
+    private void mainState() {
+        if (curUser.getState() == null) {
+            String curState = update.callbackQuery().data();
+            curUser.setState(curState);
+            userService.save(curUser);
+            return;
+        }
         String stateStr = curUser.getState();
         MainMenuState state = MainMenuState.valueOf(stateStr);
         Message message = update.callbackQuery().message();
@@ -80,7 +89,7 @@ public class CallBackQueryHandler extends BaseHandler {
     private void addBookState() {
         changeStates(BaseState.ADD_BOOK_STATE, null);
 
-        if(curUser.getState() == null){
+        if (curUser.getState() == null) {
             changeState(AddBookState.ENTER_BOOK_NAME.name());
         }
 
@@ -91,6 +100,9 @@ public class CallBackQueryHandler extends BaseHandler {
                 SendMessage bookNameMessage = messageMaker.enterBookNameMenu(curUser);
                 bot.execute(bookNameMessage);
                 changeState(AddBookState.ENTER_BOOK_NAME.name());
+            }
+            case SELECT_BOOK_GENRE -> {
+                messageMaker.deleteMessage(curUser.getId(), update.callbackQuery().message().messageId());
             }
             default -> anyThingIsWrongMessage();
         }

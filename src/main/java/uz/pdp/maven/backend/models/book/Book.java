@@ -14,6 +14,7 @@ import java.util.Objects;
 
 public class Book {
 
+    private String Id;
     private String name;
     private String author;
     private Genre genre;

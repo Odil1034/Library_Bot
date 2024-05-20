@@ -22,7 +22,8 @@ public class MessageMaker {
     }
 
     public SendMessage enterPhoneNumber(@NotNull MyUser curUser) {
-        SendMessage sendMessage = new SendMessage(curUser.getId(), "REGISTRATION STATE \nEnter Phone Number");
+        SendMessage sendMessage = new SendMessage(curUser.getId(),
+                "REGISTRATION \n\nSend phone number to register ");
         KeyboardButton[][] buttons = {
                 {
                         new KeyboardButton("Send My Phone Number").requestContact(true)
@@ -63,20 +64,6 @@ public class MessageMaker {
         return sendMessage;
     }
 
-    public SendMessage addBookMenu(MyUser curUser) {
-        SendMessage sendMessage = new SendMessage(curUser.getId(), "Addition Book Info");
-        InlineKeyboardButton[][] buttons = {
-                {new InlineKeyboardButton("Enter Book Name").callbackData("ENTER_BOOK_NAME")},
-                {new InlineKeyboardButton("Enter Book Author").callbackData("ENTER_BOOK_AUTHOR")},
-                {new InlineKeyboardButton("Enter Description").callbackData("ENTER_DESCRIPTION")},
-                {new InlineKeyboardButton("Select Genre").callbackData("SELECT_GENRE")},
-                {new InlineKeyboardButton("Back").callbackData("BACK")}
-        };
-        InlineKeyboardMarkup keyboardMarkup = new InlineKeyboardMarkup(buttons);
-        sendMessage.replyMarkup(keyboardMarkup);
-        return sendMessage;
-    }
-
     public SendMessage myFavouriteBookMenu(MyUser curUser) {
         SendMessage sendMessage = new SendMessage(curUser.getId(), "Your favourite books: ");
         InlineKeyboardButton[][] buttons = {
@@ -97,27 +84,13 @@ public class MessageMaker {
     public SendMessage enterSelectGenreMenu(MyUser curUser) {
         SendMessage sendMessage = new SendMessage(curUser.getId(), "Select Genre: ");
         KeyboardButton[][] buttons = {
-                        {
-                                new KeyboardButton(Genre.BADIIY_ADABIYOTLAR.name())
-                        },
-                        {
-                                new KeyboardButton(Genre.SHERIYAT.name())
-                        },
-                        {
-                                new KeyboardButton(Genre.DASTURLASH.name())
-                        },
-                        {
-                                new KeyboardButton(Genre.ILMIY.name())
-                        },
-                        {
-                                new KeyboardButton(Genre.DINIY.name())
-                        },
-                        {
-                                new KeyboardButton(Genre.SARGUZASHT.name())
-                        },
-                        {
-                                new KeyboardButton(Genre.BOSHQALAR.name())
-                        },
+                        {new KeyboardButton(Genre.BADIIY_ADABIYOTLAR.name())},
+                        {new KeyboardButton(Genre.SHERIYAT.name())},
+                        {new KeyboardButton(Genre.DASTURLASH.name())},
+                        {new KeyboardButton(Genre.ILMIY.name())},
+                        {new KeyboardButton(Genre.DINIY.name())},
+                        {new KeyboardButton(Genre.SARGUZASHT.name())},
+                        {new KeyboardButton(Genre.BOSHQALAR.name())},
                 {
                         new KeyboardButton("Back"), new KeyboardButton("Main Menu")
                 }
@@ -154,6 +127,21 @@ public class MessageMaker {
 
     public SendMessage enterBookPhoto(MyUser curUser) {
         return new SendMessage(curUser.getId(), "Enter Book Photo: ");
+    }
+
+    public SendMessage handRegistrationMenu(MyUser curUser) {
+        SendMessage sendMessage = new SendMessage(curUser.getId(),
+                "Congratulations, you are successfully registration ✅✅✅");
+
+        InlineKeyboardButton[][] buttons = {
+                {
+                    new InlineKeyboardButton("MAIN MENU").callbackData("GO_MAIN_MENU")
+                }
+        };
+        InlineKeyboardMarkup keyboardMarkup = new InlineKeyboardMarkup(buttons);
+
+        sendMessage.replyMarkup(keyboardMarkup);
+        return sendMessage;
     }
 }
 
