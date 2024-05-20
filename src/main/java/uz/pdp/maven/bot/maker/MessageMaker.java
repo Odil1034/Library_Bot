@@ -96,40 +96,33 @@ public class MessageMaker {
 
     public SendMessage enterSelectGenreMenu(MyUser curUser) {
         SendMessage sendMessage = new SendMessage(curUser.getId(), "Select Genre: ");
-        InlineKeyboardButton[][] buttons = {
-                new InlineKeyboardButton[]
+        KeyboardButton[][] buttons = {
                         {
-                                new InlineKeyboardButton(Genre.BADIIY_ADABIYOTLAR.name())
+                                new KeyboardButton(Genre.BADIIY_ADABIYOTLAR.name())
                         },
-                new InlineKeyboardButton[]
                         {
-                                new InlineKeyboardButton(Genre.SHERIYAT.name())
+                                new KeyboardButton(Genre.SHERIYAT.name())
                         },
-                new InlineKeyboardButton[]
                         {
-                                new InlineKeyboardButton(Genre.DASTURLASH.name())
+                                new KeyboardButton(Genre.DASTURLASH.name())
                         },
-                new InlineKeyboardButton[]
                         {
-                                new InlineKeyboardButton(Genre.ILMIY.name())
+                                new KeyboardButton(Genre.ILMIY.name())
                         },
-                new InlineKeyboardButton[]
                         {
-                                new InlineKeyboardButton(Genre.DINIY.name())
+                                new KeyboardButton(Genre.DINIY.name())
                         },
-                new InlineKeyboardButton[]
                         {
-                                new InlineKeyboardButton(Genre.SARGUZASHT.name())
+                                new KeyboardButton(Genre.SARGUZASHT.name())
                         },
-                new InlineKeyboardButton[]
                         {
-                                new InlineKeyboardButton(Genre.BOSHQALAR.name())
+                                new KeyboardButton(Genre.BOSHQALAR.name())
                         },
                 {
-                        new InlineKeyboardButton("Back"), new InlineKeyboardButton("Main Menu")
+                        new KeyboardButton("Back"), new KeyboardButton("Main Menu")
                 }
         };
-        InlineKeyboardMarkup keyboardMarkup = new InlineKeyboardMarkup(buttons);
+        ReplyKeyboardMarkup keyboardMarkup = new ReplyKeyboardMarkup(buttons);
         sendMessage.replyMarkup(keyboardMarkup);
         return sendMessage;
     }

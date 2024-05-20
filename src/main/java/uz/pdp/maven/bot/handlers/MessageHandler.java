@@ -104,16 +104,17 @@ public class MessageHandler extends BaseHandler {
                 case ENTER_BOOK_AUTHOR -> {
                     newBookBuilder.setAuthor(getText());
                     System.out.println("Author: " + newBookBuilder.getAuthor());
-
                     changeState(AddBookState.SELECT_BOOK_GENRE.name());
+                    SendMessage sendMessage = messageMaker.enterSelectGenreMenu(curUser);
+                    bot.execute(sendMessage);
                     return;
                 }
                 case SELECT_BOOK_GENRE -> {
+                    SendMessage sendMessage = messageMaker.enterBookDescription(curUser);
+                    bot.execute(sendMessage);
                     newBookBuilder.setGenre(getGenre());
                     System.out.println("Genre: " + newBookBuilder.getGenre());
                     changeState(AddBookState.ENTER_BOOK_DESCRIPTION.name());
-                    SendMessage sendMessage = messageMaker.enterBookDescription(curUser);
-                    bot.execute(sendMessage);
                     return;
                 }
                 case ENTER_BOOK_DESCRIPTION -> {
@@ -126,10 +127,10 @@ public class MessageHandler extends BaseHandler {
                 }
                 case ENTER_BOOK_PHOTO_ID -> {
                     PhotoSize[] photo = update.message().photo();
-                    for (PhotoSize photoSize : photo) {
-                        newBookBuilder.setPhotoId(photoSize.fileId());
-                    }
-                    System.out.println("Photo Id: " + newBookBuilder.getFileId());
+                    String photoIdStr = photo[0].fileId();
+                    newBookBuilder.setPhotoId(photoIdStr);
+
+                    System.out.println("Photo Id: " + newBookBuilder.getPhotoId());
                     changeState(AddBookState.ENTER_BOOK_FILE_ID.name());
                     SendMessage sendMessage = messageMaker.enterBookFile(curUser);
                     bot.execute(sendMessage);
@@ -147,7 +148,7 @@ public class MessageHandler extends BaseHandler {
             }
 
             BookBuilder newBook = Book.builder();
-            if (!checkBookIsValid(newBookBuilder)) {
+            if (checkBookIsValid(newBookBuilder)) {
                 newBook.name(newBookBuilder.getName())
                         .author(newBookBuilder.getAuthor())
                         .genre(newBookBuilder.getGenre())
@@ -156,7 +157,7 @@ public class MessageHandler extends BaseHandler {
                         .description(newBookBuilder.getDescription())
                         .fileId(newBookBuilder.getFileId())
                         .isComplete(true)
-//                        .Id()
+                        .Id(newBookBuilder.getId())
                         .build();
                 changeStates(BaseState.MAIN_MENU_STATE, null);
             } else {
@@ -185,8 +186,6 @@ public class MessageHandler extends BaseHandler {
     }
 
     private Genre getGenre() {
-        SendMessage sendMessage = messageMaker.enterSelectGenreMenu(curUser);
-        bot.execute(sendMessage);
         String genreStr = update.message().text();
         return Genre.valueOf(genreStr);
     }
@@ -211,13 +210,13 @@ public class MessageHandler extends BaseHandler {
         if (curUser.getBaseState().equals(BaseState.MAIN_MENU_STATE.name())) {
             SendMessage sendMessage = messageMaker.mainMenu(curUser);
             bot.execute(sendMessage);
-        } else if (curUser.getState().equals(RegistrationState.NOT_REGISTERED.name())) {
-            new SendMessage(curUser.getId(),
-                    "Siz registratsiyadan o'tmagansiz " +
-                            "\nRegistratsiyadan o'tish uchun telefon raqamingizni kiriting: ");
-            enterPhoneNumber();
-        } else {
-            System.out.println("Nimadir xato");
+        } else if (curUser.getState() != null) {
+            if (curUser.getState().equals(RegistrationState.NOT_REGISTERED.name())) {
+                new SendMessage(curUser.getId(),
+                        "Siz registratsiyadan o'tmagansiz " +
+                                "\nRegistratsiyadan o'tish uchun telefon raqamingizni kiriting: ");
+                enterPhoneNumber();
+            }
         }
     }
 

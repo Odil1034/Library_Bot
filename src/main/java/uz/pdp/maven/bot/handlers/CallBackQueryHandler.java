@@ -92,10 +92,6 @@ public class CallBackQueryHandler extends BaseHandler {
                 bot.execute(bookNameMessage);
                 changeState(AddBookState.ENTER_BOOK_NAME.name());
             }
-            case SELECT_BOOK_GENRE -> {
-                SendMessage sendMessage = messageMaker.enterSelectGenreMenu(curUser);
-                bot.execute(sendMessage);
-            }
             default -> anyThingIsWrongMessage();
         }
     }
