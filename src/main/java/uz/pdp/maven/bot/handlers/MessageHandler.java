@@ -28,7 +28,6 @@ public class MessageHandler extends BaseHandler {
         BaseState baseState = BaseState.valueOf(baseStateStr);
 
         if (text != null) {
-
             if (curUser.getPhoneNumber() == null
                     && curUser.getBaseState().equals(BaseState.REGISTRATION_STATE.name())
                     && curUser.getState() == null
@@ -56,7 +55,10 @@ public class MessageHandler extends BaseHandler {
             }
         } else if (message.contact() != null) {
             handleContactMessage(message.contact());
-        }
+        }/*
+        if (checkStrIsBlankNullAndEmpty(text)) {
+            incorrectValueMes(text);
+        }*/
     }
 
     private void handleNotStart(MyUser curUser) {
@@ -90,36 +92,52 @@ public class MessageHandler extends BaseHandler {
 
         if (state != null) {
             curState = AddBookState.valueOf(state);
-            Book newBookBuilder = builder().build();
-
+            String name = null;
+            String author  = null;
+            String description  = null;
+            String photoId;
+            String fileId;
+            Genre genre = null;
+            if(name == null) {
+                name = getStrInfoOfBook();
+            }
+            if(author == null){
+                author = getStrInfoOfBook();
+            }if(description == null){
+                description = getStrInfoOfBook();
+            }
             switch (curState) {
                 case AddBookState.ENTER_BOOK_NAME -> {
-                    newBookBuilder.setName(getText());
-                    System.out.println("Name: " + newBookBuilder.getName());
+
+                    System.out.println("Name: " + name);
                     changeState(AddBookState.ENTER_BOOK_AUTHOR.name());
                     SendMessage bookAuthorMessage = messageMaker.enterBookAuthor(curUser);
                     bot.execute(bookAuthorMessage);
                     return;
                 }
                 case ENTER_BOOK_AUTHOR -> {
-                    newBookBuilder.setAuthor(getText());
-                    System.out.println("Author: " + newBookBuilder.getAuthor());
+                    if (checkStrIsBlankNullAndEmpty(getText())) {
+                        author = getText();
+                    }
+                    System.out.println("Author: " + author);
                     changeState(AddBookState.SELECT_BOOK_GENRE.name());
                     SendMessage sendMessage = messageMaker.enterSelectGenreMenu(curUser);
                     bot.execute(sendMessage);
                     return;
                 }
                 case SELECT_BOOK_GENRE -> {
+                    genre = getGenre();
+                    System.out.println("Genre: " + genre);
+                    changeState(AddBookState.ENTER_BOOK_DESCRIPTION.name());
                     SendMessage sendMessage = messageMaker.enterBookDescription(curUser);
                     bot.execute(sendMessage);
-                    newBookBuilder.setGenre(getGenre());
-                    System.out.println("Genre: " + newBookBuilder.getGenre());
-                    changeState(AddBookState.ENTER_BOOK_DESCRIPTION.name());
                     return;
                 }
                 case ENTER_BOOK_DESCRIPTION -> {
-                    newBookBuilder.setDescription(getText());
-                    System.out.println("Description: " + newBookBuilder.getDescription());
+                    if (checkStrIsBlankNullAndEmpty(getText())) {
+                        description = getText();
+                    }
+                    System.out.println("Description: " + description);
                     changeState(AddBookState.ENTER_BOOK_PHOTO_ID.name());
                     SendMessage sendMessage = messageMaker.enterBookPhoto(curUser);
                     bot.execute(sendMessage);
@@ -127,18 +145,16 @@ public class MessageHandler extends BaseHandler {
                 }
                 case ENTER_BOOK_PHOTO_ID -> {
                     PhotoSize[] photo = update.message().photo();
-                    String photoIdStr = photo[0].fileId();
-                    newBookBuilder.setPhotoId(photoIdStr);
-
-                    System.out.println("Photo Id: " + newBookBuilder.getPhotoId());
+                    photoId = photo[0].fileId();
+                    System.out.println("Photo Id: " + photoId);
                     changeState(AddBookState.ENTER_BOOK_FILE_ID.name());
                     SendMessage sendMessage = messageMaker.enterBookFile(curUser);
                     bot.execute(sendMessage);
                     return;
                 }
                 case ENTER_BOOK_FILE_ID -> {
-                    newBookBuilder.setFileId(update.message().document().fileId());
-                    System.out.println("File Id: " + newBookBuilder.getFileId());
+                    fileId = update.message().document().fileId();
+                    System.out.println("File Id: " + fileId);
                     changeState(null);
                 }
                 default -> {
@@ -147,26 +163,25 @@ public class MessageHandler extends BaseHandler {
                 }
             }
 
-            BookBuilder newBook = Book.builder();
-            if (checkBookIsValid(newBookBuilder)) {
-                newBook.name(newBookBuilder.getName())
-                        .author(newBookBuilder.getAuthor())
-                        .genre(newBookBuilder.getGenre())
-                        .userId(curUser.getId())
-                        .photoId(newBookBuilder.getPhotoId())
-                        .description(newBookBuilder.getDescription())
-                        .fileId(newBookBuilder.getFileId())
-                        .isComplete(true)
-                        .Id(newBookBuilder.getId())
-                        .build();
+            Book newBook = builder()
+                    .name(name)
+                    .author(author)
+                    .description(description)
+                    .genre(genre)
+                    .photoId(update.message().photo()[0].fileId())
+                    .userId(curUser.getId())
+                    .fileId(fileId)
+                    .isComplete(false)
+                    .build();
+
+            if (checkBookIsValid(newBook)) {
+                newBook.setComplete(true);
                 changeStates(BaseState.MAIN_MENU_STATE, null);
-            } else {
-                newBook.isComplete(false);
             }
 
-            if (Objects.equals(newBook.build().isComplete(), true)) {
-                SendMessage bookIsAddedMessage = messageMaker.bookIsAddedMessage(curUser, newBook.build());
-                bookService.save(newBook.build());
+            if (Objects.equals(newBook.isComplete(), true)) {
+                bookService.save(newBook);
+                SendMessage bookIsAddedMessage = messageMaker.bookIsAddedMessage(curUser, newBook);
                 bot.execute(bookIsAddedMessage);
             } else {
                 handleAddBook(curUser);
@@ -175,14 +190,18 @@ public class MessageHandler extends BaseHandler {
         }
     }
 
+    private String getStrInfoOfBook() {
+        return !checkStrIsBlankNullAndEmpty(getText()) ? getText() : null;
+    }
+
 
     private boolean checkBookIsValid(Book book) {
-        return !(Objects.isNull(book.getGenre())
-                && checkStrIsBlankNullAndEmpty(book.getFileId())
+        return !(checkStrIsBlankNullAndEmpty(book.getName())
                 && checkStrIsBlankNullAndEmpty(book.getAuthor())
-                && checkStrIsBlankNullAndEmpty(book.getName())
+                && checkStrIsBlankNullAndEmpty(book.getDescription())
+                && Objects.isNull(book.getGenre())
                 && checkStrIsBlankNullAndEmpty(book.getPhotoId())
-                && checkStrIsBlankNullAndEmpty(book.getDescription()));
+                && checkStrIsBlankNullAndEmpty(book.getFileId()));
     }
 
     private Genre getGenre() {
@@ -191,7 +210,8 @@ public class MessageHandler extends BaseHandler {
     }
 
     private String getText() {
-        return update.message().text();
+        String text = update.message().text();
+        return text;
     }
 
     private void handleContactMessage(Contact contact) {
