@@ -75,7 +75,7 @@ public class MessageHandler extends BaseHandler {
     }
 
     private void handleMyFavouriteBook(MyUser curUser) {
-
+        // My favourite Book Is Not write
     }
 
     private void handleAddBook(MyUser curUser) {
@@ -89,8 +89,8 @@ public class MessageHandler extends BaseHandler {
             switch (curState) {
                 case AddBookState.ENTER_BOOK_NAME -> {
                     String name = getText();
-                    System.out.println("Name: " + name);
                     newBook.setName(name);
+                    System.out.println("Name: " + newBook.getName());
                     bookService.save(newBook);
                     changeState(AddBookState.ENTER_BOOK_AUTHOR.name());
                     SendMessage bookAuthorMessage = messageMaker.enterBookAuthor(curUser);
@@ -99,7 +99,7 @@ public class MessageHandler extends BaseHandler {
                 }
                 case ENTER_BOOK_AUTHOR -> {
                     String author = getText();
-                    System.out.println("Author: " + author);
+                    System.out.println("Author: " + newBook.getAuthor());
                     newBook.setAuthor(author);
                     bookService.save(newBook);
                     changeState(AddBookState.SELECT_BOOK_GENRE.name());
@@ -109,7 +109,7 @@ public class MessageHandler extends BaseHandler {
                 }
                 case SELECT_BOOK_GENRE -> {
                     Genre genre = getGenre();
-                    System.out.println("Genre: " + genre);
+                    System.out.println("Genre: " + newBook.getGenre().toString());
                     newBook.setGenre(genre);
                     bookService.save(newBook);
                     changeState(AddBookState.ENTER_BOOK_DESCRIPTION.name());
@@ -119,7 +119,7 @@ public class MessageHandler extends BaseHandler {
                 }
                 case ENTER_BOOK_DESCRIPTION -> {
                     String description = getText();
-                    System.out.println("Description: " + description);
+                    System.out.println("Description: " + newBook.getDescription());
                     newBook.setDescription(description);
                     bookService.save(newBook);
                     changeState(AddBookState.ENTER_BOOK_PHOTO_ID.name());
@@ -129,7 +129,7 @@ public class MessageHandler extends BaseHandler {
                 }
                 case ENTER_BOOK_PHOTO_ID -> {
                     String photoId = update.message().photo()[0].fileId();
-                    System.out.println("Photo Id: " + photoId);
+                    System.out.println("Photo Id: " + newBook.getPhotoId());
                     newBook.setPhotoId(photoId);
                     bookService.save(newBook);
                     changeState(AddBookState.ENTER_BOOK_FILE_ID.name());
@@ -139,7 +139,7 @@ public class MessageHandler extends BaseHandler {
                 }
                 case ENTER_BOOK_FILE_ID -> {
                     String fileId = update.message().document().fileId();
-                    System.out.println("File Id: " + fileId);
+                    System.out.println("File Id: " + newBook.getFileId());
                     newBook.setFileId(fileId);
                     bookService.save(newBook);
                     changeState(null);
@@ -149,7 +149,6 @@ public class MessageHandler extends BaseHandler {
                     return;
                 }
             }
-
 
             if (checkBookIsValid(newBook)) {
                 newBook.setComplete(true);

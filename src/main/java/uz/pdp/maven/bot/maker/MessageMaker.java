@@ -77,10 +77,6 @@ public class MessageMaker {
         return new SendMessage(curUser.getId(), "Enter Book name: ");
     }
 
-    public DeleteMessage deleteMessage(Long chatId, Integer messageId) {
-        return new DeleteMessage(chatId, messageId);
-    }
-
     public SendMessage enterSelectGenreMenu(MyUser curUser) {
         SendMessage sendMessage = new SendMessage(curUser.getId(), "Select Genre: ");
         KeyboardButton[][] buttons = {
@@ -119,7 +115,7 @@ public class MessageMaker {
     private String getBookInfo(Book book) {
         return " Added Book Info \n" +
                 "\nName : " + book.getName() +
-                "\nAuthor: " + book.getGenre() +
+                "\nAuthor: " + book.getAuthor() +
                 "\nGenre: " + book.getGenre() +
                 "\nDescription: " + book.getDescription()
                 + "\n\nBook has been successfully added  ✅✅✅";

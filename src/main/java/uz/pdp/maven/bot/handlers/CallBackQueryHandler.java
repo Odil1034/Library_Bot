@@ -2,7 +2,6 @@ package uz.pdp.maven.bot.handlers;
 
 import com.pengrad.telegrambot.model.*;
 import com.pengrad.telegrambot.request.SendMessage;
-import uz.pdp.maven.backend.models.myUser.MyUser;
 import uz.pdp.maven.bot.states.base.BaseState;
 import uz.pdp.maven.bot.states.child.AddBookState;
 import uz.pdp.maven.bot.states.child.MainMenuState;
@@ -11,7 +10,6 @@ import uz.pdp.maven.bot.states.child.RegistrationState;
 import java.util.Objects;
 
 import static uz.pdp.maven.bot.states.child.MainMenuState.MAIN_MENU;
-import static uz.pdp.maven.bot.states.child.MainMenuState.SEARCH_BOOK;
 
 public class CallBackQueryHandler extends BaseHandler {
 
@@ -41,7 +39,8 @@ public class CallBackQueryHandler extends BaseHandler {
         if (curUser.getState().equals(RegistrationState.SEND_PHONE_NUMBER.name())) {
             userService.save(curUser);
         } else if (curUser.getState().equals(RegistrationState.REGISTER.name())) {
-            if (Objects.equals(curUser.getState(), ("GO_MAIN_MENU"))) {
+            String data = update.callbackQuery().data();
+            if (data.equals("GO_MAIN_MENU")) {
                 changeStates(BaseState.MAIN_MENU_STATE, MAIN_MENU.name());
             }
         }
@@ -50,36 +49,35 @@ public class CallBackQueryHandler extends BaseHandler {
     private void mainState() {
         if (curUser.getState() == null) {
             String curState = update.callbackQuery().data();
-            curUser.setState(curState);
-            userService.save(curUser);
-            return;
-        }
-        String stateStr = curUser.getState();
-        MainMenuState state = MainMenuState.valueOf(stateStr);
-        Message message = update.callbackQuery().message();
-        SendMessage sendMessage;
-        switch (state) {
-            case MAIN_MENU -> {
-                changeStates(BaseState.MAIN_MENU_STATE, null);
-                sendMessage = messageMaker.mainMenu(curUser);
-                bot.execute(sendMessage);
-                deleteMessage(message.messageId());
-            }
-            case ADD_BOOK -> addBookState();
+            if(curState!=null) changeState(curState);
+        } else {
+            String stateStr = curUser.getState();
+            MainMenuState state = MainMenuState.valueOf(stateStr);
+            Message message = update.callbackQuery().message();
+            SendMessage sendMessage;
+            switch (state) {
+                case MAIN_MENU -> {
+                    changeStates(BaseState.MAIN_MENU_STATE, null);
+                    sendMessage = messageMaker.mainMenu(curUser);
+                    bot.execute(sendMessage);
+                    deleteMessage(message.messageId());
+                }
+                case ADD_BOOK -> addBookState();
 
-            case SEARCH_BOOK -> {
-                sendMessage = messageMaker.searchBookMenu(curUser);
-                bot.execute(sendMessage);
-                searchBookState();
+                case SEARCH_BOOK -> {
+                    sendMessage = messageMaker.searchBookMenu(curUser);
+                    bot.execute(sendMessage);
+                    searchBookState();
+                }
+                case MY_FAVOURITE_BOOKS -> {
+                    sendMessage = messageMaker.myFavouriteBookMenu(curUser);
+                    bot.execute(sendMessage);
+                    myFavouriteBooksState();
+                }
+                default -> bot.execute(new SendMessage(curUser.getId(), "Anything is wrong"));
             }
-            case MY_FAVOURITE_BOOKS -> {
-                sendMessage = messageMaker.myFavouriteBookMenu(curUser);
-                bot.execute(sendMessage);
-                myFavouriteBooksState();
-            }
-            default -> bot.execute(new SendMessage(curUser.getId(), "Anything is wrong"));
+            userService.save(curUser);
         }
-        userService.save(curUser);
     }
 
     private void searchBookState() {
@@ -101,9 +99,7 @@ public class CallBackQueryHandler extends BaseHandler {
                 bot.execute(bookNameMessage);
                 changeState(AddBookState.ENTER_BOOK_NAME.name());
             }
-            case SELECT_BOOK_GENRE -> {
-                messageMaker.deleteMessage(curUser.getId(), update.callbackQuery().message().messageId());
-            }
+            case SELECT_BOOK_GENRE -> System.out.println("Select Book Genre Call Back");
             default -> anyThingIsWrongMessage();
         }
     }
