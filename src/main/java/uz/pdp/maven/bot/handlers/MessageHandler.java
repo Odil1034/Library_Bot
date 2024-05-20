@@ -90,20 +90,28 @@ public class MessageHandler extends BaseHandler {
         String state = curUser.getState();
         AddBookState curState;
 
+
+        String photoId1 = update.message().photo()[0].fileId();
+
         if (state != null) {
             curState = AddBookState.valueOf(state);
-            String name = "";
-            String author = "";
-            String description = "";
-            if(curUser.getState().equals(AddBookState.ENTER_BOOK_NAME) && name.isEmpty()){
-                name = getText();
-            }else if(curUser.getState().equals())
+            String name = null;
+            String author  = null;
+            String description  = null;
             String photoId;
             String fileId;
-            Genre genre;
+            Genre genre = null;
+            if(name == null) {
+                name = getStrInfoOfBook();
+            }
+            if(author == null){
+                author = getStrInfoOfBook();
+            }if(description == null){
+                description = getStrInfoOfBook();
+            }
             switch (curState) {
                 case AddBookState.ENTER_BOOK_NAME -> {
-                    name = getText();
+
                     System.out.println("Name: " + name);
                     changeState(AddBookState.ENTER_BOOK_AUTHOR.name());
                     SendMessage bookAuthorMessage = messageMaker.enterBookAuthor(curUser);
@@ -111,7 +119,9 @@ public class MessageHandler extends BaseHandler {
                     return;
                 }
                 case ENTER_BOOK_AUTHOR -> {
-                    author = getText();
+                    if (checkStrIsBlankNullAndEmpty(getText())) {
+                        author = getText();
+                    }
                     System.out.println("Author: " + author);
                     changeState(AddBookState.SELECT_BOOK_GENRE.name());
                     SendMessage sendMessage = messageMaker.enterSelectGenreMenu(curUser);
@@ -127,7 +137,9 @@ public class MessageHandler extends BaseHandler {
                     return;
                 }
                 case ENTER_BOOK_DESCRIPTION -> {
-                    description = getText();
+                    if (checkStrIsBlankNullAndEmpty(getText())) {
+                        description = getText();
+                    }
                     System.out.println("Description: " + description);
                     changeState(AddBookState.ENTER_BOOK_PHOTO_ID.name());
                     SendMessage sendMessage = messageMaker.enterBookPhoto(curUser);
@@ -158,22 +170,11 @@ public class MessageHandler extends BaseHandler {
                     .author(author)
                     .description(description)
                     .genre(genre)
-                    .photoId(photoId)
+                    .photoId(photoId1)
                     .userId(curUser.getId())
                     .fileId(fileId)
                     .isComplete(false)
                     .build();
-
-            System.out.println(
-                    "\n\n=".repeat(30) + "\nNew Book Info\n " + "=".repeat(30) +
-                            "\nName : " + newBook.getName() +
-                            "\nAuthor : " + newBook.getAuthor() +
-                            "\nGenre: : " + newBook.getGenre() +
-                            "\nDescription : " + newBook.getDescription() +
-                            "\nPhoto Id : " + newBook.getPhotoId() +
-                            "\nFile Id : " + newBook.getFileId() +
-                            "\nisComplete : " + newBook.isComplete() +
-                            "\nuserId : " + newBook.getUserId());
 
             if (checkBookIsValid(newBook)) {
                 newBook.setComplete(true);
@@ -191,13 +192,18 @@ public class MessageHandler extends BaseHandler {
         }
     }
 
+    private String getStrInfoOfBook() {
+        return !checkStrIsBlankNullAndEmpty(getText()) ? getText() : null;
+    }
+
+
     private boolean checkBookIsValid(Book book) {
         return !(checkStrIsBlankNullAndEmpty(book.getName())
-                || checkStrIsBlankNullAndEmpty(book.getAuthor())
-                || checkStrIsBlankNullAndEmpty(book.getDescription())
-                || Objects.isNull(book.getGenre())
-                || checkStrIsBlankNullAndEmpty(book.getPhotoId())
-                || checkStrIsBlankNullAndEmpty(book.getFileId()));
+                && checkStrIsBlankNullAndEmpty(book.getAuthor())
+                && checkStrIsBlankNullAndEmpty(book.getDescription())
+                && Objects.isNull(book.getGenre())
+                && checkStrIsBlankNullAndEmpty(book.getPhotoId())
+                && checkStrIsBlankNullAndEmpty(book.getFileId()));
     }
 
     private Genre getGenre() {

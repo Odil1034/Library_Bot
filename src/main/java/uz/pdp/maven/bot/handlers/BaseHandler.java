@@ -70,7 +70,7 @@ public abstract class BaseHandler implements PathConstants {
         userService.save(curUser);
     }
     public boolean checkStrIsBlankNullAndEmpty(String str) {
-        return (str == null || str.isEmpty() || str.isBlank());
+        return str == null || str.isEmpty() || str.isBlank();
     }
 
     public String incorrectValueMes(String value){
