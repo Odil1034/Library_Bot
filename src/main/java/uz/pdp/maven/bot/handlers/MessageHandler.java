@@ -90,6 +90,9 @@ public class MessageHandler extends BaseHandler {
         String state = curUser.getState();
         AddBookState curState;
 
+
+        String photoId1 = update.message().photo()[0].fileId();
+
         if (state != null) {
             curState = AddBookState.valueOf(state);
             String name = null;
@@ -144,8 +147,7 @@ public class MessageHandler extends BaseHandler {
                     return;
                 }
                 case ENTER_BOOK_PHOTO_ID -> {
-                    PhotoSize[] photo = update.message().photo();
-                    photoId = photo[0].fileId();
+                    photoId = update.message().photo()[0].fileId();
                     System.out.println("Photo Id: " + photoId);
                     changeState(AddBookState.ENTER_BOOK_FILE_ID.name());
                     SendMessage sendMessage = messageMaker.enterBookFile(curUser);
@@ -168,7 +170,7 @@ public class MessageHandler extends BaseHandler {
                     .author(author)
                     .description(description)
                     .genre(genre)
-                    .photoId(update.message().photo()[0].fileId())
+                    .photoId(photoId1)
                     .userId(curUser.getId())
                     .fileId(fileId)
                     .isComplete(false)
