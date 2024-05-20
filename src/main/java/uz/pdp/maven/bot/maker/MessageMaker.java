@@ -22,7 +22,7 @@ public class MessageMaker {
     }
 
     public SendMessage enterPhoneNumber(@NotNull MyUser curUser) {
-        SendMessage sendMessage = new SendMessage(curUser.getId(), "Enter Phone Number");
+        SendMessage sendMessage = new SendMessage(curUser.getId(), "REGISTRATION STATE \nEnter Phone Number");
         KeyboardButton[][] buttons = {
                 {
                         new KeyboardButton("Send My Phone Number").requestContact(true)

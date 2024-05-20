@@ -69,6 +69,8 @@ public abstract class BaseHandler implements PathConstants {
         curUser.setBaseState(baseState.name());
         userService.save(curUser);
     }
-
+    public boolean checkStrIsBlankNullAndEmpty(String str) {
+        return str == null || str.isEmpty() || str.isBlank();
+    }
 
 }

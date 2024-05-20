@@ -40,9 +40,11 @@ public class CallBackQueryHandler extends BaseHandler {
             curUser.setState(update.callbackQuery().data());
             userService.save(curUser);
         }
-        if(curUser.getState().equals(RegistrationState.REGISTERED.name())){
+        if(!checkStrIsBlankNullAndEmpty(curUser.getPhoneNumber())
+                && curUser.getState().equals(RegistrationState.NOT_REGISTERED.name())){
             changeStates(BaseState.MAIN_MENU_STATE, MainMenuState.MAIN_MENU.name());
         }
+
         String stateStr = curUser.getState();
         MainMenuState state = MainMenuState.valueOf(stateStr);
         Message message = update.callbackQuery().message();
@@ -84,13 +86,15 @@ public class CallBackQueryHandler extends BaseHandler {
 
         String stateStr = curUser.getState();
         AddBookState curState = AddBookState.valueOf(stateStr);
-        Message message = update.callbackQuery().message();
-        SendMessage sendMessage;
         switch (curState) {
             case ENTER_BOOK_NAME -> {
                 SendMessage bookNameMessage = messageMaker.enterBookNameMenu(curUser);
                 bot.execute(bookNameMessage);
                 changeState(AddBookState.ENTER_BOOK_NAME.name());
+            }
+            case SELECT_BOOK_GENRE -> {
+                SendMessage sendMessage = messageMaker.enterSelectGenreMenu(curUser);
+                bot.execute(sendMessage);
             }
             default -> anyThingIsWrongMessage();
         }

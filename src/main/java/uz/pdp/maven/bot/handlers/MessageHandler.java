@@ -28,7 +28,13 @@ public class MessageHandler extends BaseHandler {
         BaseState baseState = BaseState.valueOf(baseStateStr);
 
         if (text != null) {
-            if (Objects.equals(text, "/start")) {
+
+            if (curUser.getPhoneNumber() == null
+                    && curUser.getBaseState().equals(BaseState.REGISTRATION_STATE.name())
+                    && curUser.getState() == null
+                    && !Objects.equals(text, "/start")) {
+                handleNotStart(curUser);
+            } else if (Objects.equals(text, "/start")) {
                 handleStartCommand(from);
             } else {
                 switch (baseState) {
@@ -53,18 +59,23 @@ public class MessageHandler extends BaseHandler {
         }
     }
 
+    private void handleNotStart(MyUser curUser) {
+        SendMessage sendMessage = welcomeMessage(update.message().from());
+        bot.execute(sendMessage);
+        bot.execute(new SendMessage(curUser.getId(), "Botni boshlash uchun /start tugmasini bosing"));
+        changeStates(BaseState.REGISTRATION_STATE, RegistrationState.NOT_REGISTERED.name());
+    }
+
     private void handleStartCommand(User from) {
         SendMessage welcome = welcomeMessage(from);
         bot.execute(welcome);
 
-        if (Objects.isNull(curUser.getPhoneNumber()) ||
-                curUser.getPhoneNumber().isEmpty() ||
-                curUser.getPhoneNumber().isBlank()) {
+        if (checkStrIsBlankNullAndEmpty(curUser.getPhoneNumber())) {
             enterPhoneNumber();
-            changeStates(BaseState.REGISTRATION_STATE, RegistrationState.REGISTERED.name());
+            changeStates(BaseState.REGISTRATION_STATE, RegistrationState.NOT_REGISTERED.name());
         } else {
+            changeStates(BaseState.MAIN_MENU_STATE, null);
             handleMainMenu(curUser);
-            changeStates(BaseState.REGISTRATION_STATE, RegistrationState.REGISTERED.name());
         }
     }
 
@@ -86,41 +97,45 @@ public class MessageHandler extends BaseHandler {
                     newBookBuilder.setName(getText());
                     System.out.println("Name: " + newBookBuilder.getName());
                     changeState(AddBookState.ENTER_BOOK_AUTHOR.name());
-                }
-                case ENTER_BOOK_AUTHOR -> {
                     SendMessage bookAuthorMessage = messageMaker.enterBookAuthor(curUser);
                     bot.execute(bookAuthorMessage);
+                    return;
+                }
+                case ENTER_BOOK_AUTHOR -> {
                     newBookBuilder.setAuthor(getText());
                     System.out.println("Author: " + newBookBuilder.getAuthor());
-                    changeState(AddBookState.ENTER_BOOK_GENRE.name());
+
+                    changeState(AddBookState.SELECT_BOOK_GENRE.name());
+                    return;
                 }
-                case ENTER_BOOK_GENRE -> {
-                    SendMessage sendMessage = messageMaker.enterSelectGenreMenu(curUser);
-                    bot.execute(sendMessage);
+                case SELECT_BOOK_GENRE -> {
                     newBookBuilder.setGenre(getGenre());
                     System.out.println("Genre: " + newBookBuilder.getGenre());
                     changeState(AddBookState.ENTER_BOOK_DESCRIPTION.name());
-                }
-                case ENTER_BOOK_DESCRIPTION -> {
                     SendMessage sendMessage = messageMaker.enterBookDescription(curUser);
                     bot.execute(sendMessage);
-                    newBookBuilder.setDescription(getText());
-                    System.out.println("Description: "+ newBookBuilder.getDescription());
-                    changeState(AddBookState.ENTER_BOOK_PHOTO_ID.name());
+                    return;
                 }
-                case ENTER_BOOK_PHOTO_ID -> {
+                case ENTER_BOOK_DESCRIPTION -> {
+                    newBookBuilder.setDescription(getText());
+                    System.out.println("Description: " + newBookBuilder.getDescription());
+                    changeState(AddBookState.ENTER_BOOK_PHOTO_ID.name());
                     SendMessage sendMessage = messageMaker.enterBookPhoto(curUser);
                     bot.execute(sendMessage);
+                    return;
+                }
+                case ENTER_BOOK_PHOTO_ID -> {
                     PhotoSize[] photo = update.message().photo();
                     for (PhotoSize photoSize : photo) {
                         newBookBuilder.setPhotoId(photoSize.fileId());
                     }
                     System.out.println("Photo Id: " + newBookBuilder.getFileId());
                     changeState(AddBookState.ENTER_BOOK_FILE_ID.name());
-                }
-                case ENTER_BOOK_FILE_ID -> {
                     SendMessage sendMessage = messageMaker.enterBookFile(curUser);
                     bot.execute(sendMessage);
+                    return;
+                }
+                case ENTER_BOOK_FILE_ID -> {
                     newBookBuilder.setFileId(update.message().document().fileId());
                     System.out.println("File Id: " + newBookBuilder.getFileId());
                     changeState(null);
@@ -156,8 +171,6 @@ public class MessageHandler extends BaseHandler {
                 handleAddBook(curUser);
             }
             handleMainMenu(curUser);
-        } else {
-
         }
     }
 
@@ -169,10 +182,6 @@ public class MessageHandler extends BaseHandler {
                 && checkStrIsBlankNullAndEmpty(book.getName())
                 && checkStrIsBlankNullAndEmpty(book.getPhotoId())
                 && checkStrIsBlankNullAndEmpty(book.getDescription()));
-    }
-
-    public boolean checkStrIsBlankNullAndEmpty(String str) {
-        return str == null || str.isEmpty() || str.isBlank();
     }
 
     private Genre getGenre() {
@@ -199,14 +208,16 @@ public class MessageHandler extends BaseHandler {
     }
 
     public void handleMainMenu(MyUser curUser) {
-        if(curUser.getState().equals(RegistrationState.REGISTERED.name())){
+        if (curUser.getBaseState().equals(BaseState.MAIN_MENU_STATE.name())) {
             SendMessage sendMessage = messageMaker.mainMenu(curUser);
             bot.execute(sendMessage);
-        }else {
+        } else if (curUser.getState().equals(RegistrationState.NOT_REGISTERED.name())) {
             new SendMessage(curUser.getId(),
                     "Siz registratsiyadan o'tmagansiz " +
                             "\nRegistratsiyadan o'tish uchun telefon raqamingizni kiriting: ");
             enterPhoneNumber();
+        } else {
+            System.out.println("Nimadir xato");
         }
     }
 
