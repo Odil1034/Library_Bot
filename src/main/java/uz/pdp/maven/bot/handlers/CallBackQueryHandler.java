@@ -48,11 +48,8 @@ public class CallBackQueryHandler extends BaseHandler {
                 changeStates(BaseState.MAIN_MENU_STATE, null);
                 deleteMessage(message.messageId());
             }
-            case ADD_BOOK -> {
-                sendMessage = messageMaker.enterBookNameMenu(curUser);
-                bot.execute(sendMessage);
-                addBookState();
-            }
+            case ADD_BOOK -> addBookState();
+
             case SEARCH_BOOK -> {
                 sendMessage = messageMaker.searchBookMenu(curUser);
                 bot.execute(sendMessage);
@@ -69,17 +66,14 @@ public class CallBackQueryHandler extends BaseHandler {
         }
     }
 
-    private void searchBookState() {
-
+    private void addBookState() {
+        SendMessage sendMessage;
+        sendMessage = messageMaker.enterBookNameMenu(curUser);
+        bot.execute(sendMessage);
+        changeStates(BaseState.ADD_BOOK_STATE, AddBookState.ENTER_BOOK_NAME.name());
     }
 
-    private void addBookState() {
-
-        changeStates(BaseState.ADD_BOOK_STATE, null);
-        if (curUser.getState() == null) {
-            curUser.setState(update.callbackQuery().data());
-        }
-        changeState(AddBookState.ENTER_BOOK_NAME.name());
+    private void searchBookState() {
 
     }
 
