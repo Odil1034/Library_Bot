@@ -73,85 +73,102 @@ public class MessageHandler extends BaseHandler {
 
     private void handleAddBook(MyUser curUser) {
 
-        changeState(AddBookState.ENTER_BOOK_NAME.name());
-        String stateStr = curUser.getState();
-        AddBookState curState = AddBookState.valueOf(stateStr);
-
-        Book addedBookInfo = builder().build();
-        SendMessage sendMessage;
-        if (curState.equals(AddBookState.ENTER_BOOK_NAME)) {
-            addedBookInfo.setName(getText());
-            bot.execute(new SendMessage(curUser.getId(), "Kitobning nomi muvaffaqiyatli qabul qilindi ✅✅✅"));
-            changeState(AddBookState.ENTER_BOOK_AUTHOR.name());
-            sendMessage = messageMaker.enterBookAuthor(curUser);
-            bot.execute(sendMessage);
-        }
-        if (Objects.equals(curUser.getState(),AddBookState.ENTER_BOOK_AUTHOR.name())) {
-            addedBookInfo.setAuthor(getText());
-            bot.execute(new SendMessage(curUser.getId(), "Kitobni muallifi muvaffaqiyatli qabul qilindi ✅✅✅"));
-            changeState(AddBookState.SELECT_GENRE.name());
-            sendMessage = messageMaker.enterSelectGenreMenu(curUser);
-            bot.execute(sendMessage);
-        }
-        if (Objects.equals(curUser.getState(),AddBookState.SELECT_GENRE.name())) {
-            addedBookInfo.setGenre(getGenre());
-            bot.execute(new SendMessage(curUser.getId(), "Kitobning janri tanlandi ✅✅✅"));
-            changeState(AddBookState.ENTER_BOOK_DESCRIPTION.name());
-            sendMessage = messageMaker.enterBookDescription(curUser);
-            bot.execute(sendMessage);
-        }
-        if (Objects.equals(curUser.getState(), AddBookState.ENTER_BOOK_DESCRIPTION.name())) {
-            sendMessage = messageMaker.enterBookPhoto(curUser);
-            bot.execute(sendMessage);
-            addedBookInfo.setDescription(getText());
-            bot.execute(new SendMessage(curUser.getId(), "Kitobga description qabul qilindi ✅✅✅"));
-            changeState(AddBookState.SELECT_GENRE.name());
-        }
-        if (Objects.equals(curUser.getState(), AddBookState.SELECT_GENRE.name())) {
-            PhotoSize[] photo = update.message().photo();
-            addedBookInfo.setPhotoId(photo[0].fileId());
-            bot.execute(new SendMessage(curUser.getId(), "Kitobning rasmi qabul qilindi ✅✅✅"));
-            sendMessage = messageMaker.enterBookFile(curUser);
-            bot.execute(sendMessage);
-            changeState(AddBookState.ENTER_BOOK_FILE.name());
-        }
-        if (Objects.equals(curUser.getState(), AddBookState.ENTER_BOOK_FILE.name())) {
-            addedBookInfo.setFileId(update.message().document().fileId());
-            bot.execute(new SendMessage(curUser.getId(), "Kitobning fayli qabul qilindi ✅✅✅"));
-            changeState(null);
-        }
-
-        Book newBook;
-        if (!checkBookIsValid(addedBookInfo)) {
-            newBook = builder()
-                    .name(addedBookInfo.getName())
-                    .author(addedBookInfo.getAuthor())
-                    .genre(addedBookInfo.getGenre())
-                    .description(addedBookInfo.getDescription())
-                    .photoId(addedBookInfo.getPhotoId())
-                    .fileId(addedBookInfo.getFileId())
-                    .userId(curUser.getId())
-//                        .Id(update.message())
-                    .isComplete(true)
-                    .build();
+        String state = curUser.getState();
+        AddBookState curState;
+        Message message = update.message();
+        /*if(Objects.equals(update.message().text(), "Back")
+                || Objects.equals(update.message().text(), "Main Menu")){
             changeStates(BaseState.MAIN_MENU_STATE, null);
+            return;
+        }*/
 
-            assert newBook != null;
-            if (newBook.isComplete()) {
-                SendMessage bookIsAddedMessage = messageMaker.bookIsAddedMessage(curUser, newBook);
-                bookService.save(newBook);
-                bot.execute(bookIsAddedMessage);
+        if (state != null) {
+            curState = AddBookState.valueOf(state);
+            Book addedBookInfo = builder().build();
+            SendMessage sendMessage;
+            if (curState == AddBookState.ENTER_BOOK_NAME) {
+
+                addedBookInfo.setName(getText());
+                bot.execute(new SendMessage(curUser.getId(), "Kitobning nomi muvaffaqiyatli qabul qilindi ✅✅✅"));
+                changeState(AddBookState.ENTER_BOOK_AUTHOR.name());
+                sendMessage = messageMaker.enterBookAuthor(curUser);
+                bot.execute(sendMessage);
+            } else if (curState == AddBookState.ENTER_BOOK_AUTHOR) {
+                addedBookInfo.setAuthor(getText());
+                bot.execute(new SendMessage(curUser.getId(), "Kitobni muallifi muvaffaqiyatli qabul qilindi ✅✅✅"));
+                deleteMessage(message.messageId());
+                deleteMessage(message.messageId());
+                changeState(AddBookState.SELECT_GENRE.name());
+                sendMessage = messageMaker.enterSelectGenreMenu(curUser);
+                bot.execute(sendMessage);
+            } else if (curState == AddBookState.SELECT_GENRE) {
+                addedBookInfo.setGenre(getGenre());
+                bot.execute(new SendMessage(curUser.getId(), "Kitobning janri tanlandi ✅✅✅"));
+                deleteMessage(message.messageId());
+                deleteMessage(message.messageId());
+                changeState(AddBookState.ENTER_BOOK_DESCRIPTION.name());
+                sendMessage = messageMaker.enterBookDescription(curUser);
+                bot.execute(sendMessage);
+            } else if (curState == AddBookState.ENTER_BOOK_DESCRIPTION) {
+                sendMessage = messageMaker.enterBookPhoto(curUser);
+                bot.execute(sendMessage);
+                addedBookInfo.setDescription(getText());
+                bot.execute(new SendMessage(curUser.getId(), "Kitobga description qabul qilindi ✅✅✅"));
+                deleteMessage(message.messageId());
+                deleteMessage(message.messageId());
+                changeState(AddBookState.ENTER_BOOK_PHOTO.name());
+            } else if (curState == AddBookState.ENTER_BOOK_PHOTO) {
+                sendMessage = messageMaker.enterBookPhoto(curUser);
+                bot.execute(sendMessage);
+                PhotoSize[] photo = update.message().photo();
+                for (PhotoSize photoSize : photo) {
+                    addedBookInfo.setPhotoId(photoSize.fileId());
+                }
+                bot.execute(new SendMessage(curUser.getId(), "Kitobning rasmi qabul qilindi ✅✅✅"));
+                deleteMessage(message.messageId());
+                deleteMessage(message.messageId());
+            } else if (curState == AddBookState.ENTER_BOOK_FILE) {
+                addedBookInfo.setFileId(update.message().document().fileId());
+                bot.execute(new SendMessage(curUser.getId(), "Kitobning fayli qabul qilindi ✅✅✅"));
+                deleteMessage(message.messageId());
+                deleteMessage(message.messageId());
+                changeState(null);
             } else {
-                handleAddBook(curUser);
+                System.out.println("Xatolik");
+                return;
             }
-            handleMainMenu(curUser);
-        }
 
+            Book newBook;
+            if (checkBookIsValid(addedBookInfo)) {
+                newBook = builder()
+                        .name(addedBookInfo.getName())
+                        .author(addedBookInfo.getAuthor())
+                        .genre(addedBookInfo.getGenre())
+                        .description(addedBookInfo.getDescription())
+                        .photoId(addedBookInfo.getPhotoId())
+                        .fileId(addedBookInfo.getFileId())
+                        .isComplete(true)
+                        .build();
+                changeStates(BaseState.MAIN_MENU_STATE, null);
+
+                assert newBook != null;
+                if (newBook.isComplete()) {
+                    SendMessage bookIsAddedMessage = messageMaker.bookIsAddedMessage(curUser, newBook);
+                    bookService.save(newBook);
+                    bot.execute(bookIsAddedMessage);
+                } else {
+                    handleAddBook(curUser);
+                }
+                handleMainMenu(curUser);
+            }
+        }
     }
 
 
     private boolean checkBookIsValid(Book book) {
-        return Objects.isNull(book.getGenre())
+        return book.getName() != null
+                && book.getDescription() != null
+                && !Objects.isNull(book.getGenre())
                 && checkStrIsBlankNullAndEmpty(book.getFileId())
                 && checkStrIsBlankNullAndEmpty(book.getAuthor())
                 && checkStrIsBlankNullAndEmpty(book.getName())
