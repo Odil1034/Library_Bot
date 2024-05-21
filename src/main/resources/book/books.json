@@ -1,17 +1,17 @@
 [
   {
-    "Id": null,
-    "name": "Saodat asri qissalari 2-kitob",
-    "author": "Ahmad Lutfiy Qozonchi",
-    "genre": "DINIY",
-    "description": "\"Saodat asri qissalari\" asari asli 6 jilddan iborat bo\u0027lib, nomidan ko\u0027rinib turganidek, saodat asridan, dinimiz tarixidagi ulkan voqealardan, xossatan, Payg\u0027ambarimizning (s.a.v) tug\u0027ilishlaridan to vafotlariga qadar muborak hayotlaridan hikoya qiladi. Asar 39 qismdan iborat.\"",
-    "photoId": "AgACAgIAAxkBAAINFWZNFsxzN_RoXxNo0Xf8JN8i450yAAJ03TEbqoJoSkZ3nRNMxofyAQADAgADcwADNQQ",
+    "Id": "87b6b582-5da7-4eb8-8660-218aa7283573",
+    "name": "Tushda kechgan umrlar",
+    "author": "O\u0027tkir Hoshimov",
+    "genre": "BADIIY_ADABIYOTLAR",
+    "description": "Asar haqida: Tushda kechgan umrlar“ — oʻzbek yozuvchisi Oʻtkir Hoshimov qalamiga mansub roman. Muallif asarni 1993-yil yozgan. Ilk bor „Sharq yulduzi“ jurnalida serialashtirilgan. Kitob oʻlaroq 1994-yil Toshkent shahrida „Sharq“ nashriyotida chop etilgan. Roman muallifning eng mashhur asarlaridan biridir.",
+    "photoId": "AgACAgIAAxkBAAIMXGZMKrMmhO_wOUn9RCDvCVLZ_2_uAALN4DEbqoJgSkrlNPUu6LEfAQADAgADcwADNQQ",
     "fileId": null,
     "userId": 1040000390,
     "isComplete": false
   },
   {
-    "Id": null,
+    "Id": "87b6b582-5da7-4eb8-8660-218aa7283573",
     "name": "Ufq",
     "author": "Said Ahmad",
     "genre": "BADIIY_ADABIYOTLAR",
@@ -22,7 +22,7 @@
     "isComplete": true
   },
   {
-    "Id": null,
+    "Id": "87b6b582-5da7-4eb8-8660-218aa7283573",
     "name": "Jimjitlik romani",
     "author": "Said Ahmad",
     "genre": "BADIIY_ADABIYOTLAR",
@@ -33,7 +33,7 @@
     "isComplete": true
   },
   {
-    "Id": null,
+    "Id": "87b6b582-5da7-4eb8-8660-218aa7283573",
     "name": "Shaytanat 1-kitob",
     "author": "Tohir Malik",
     "genre": "BADIIY_ADABIYOTLAR",
@@ -44,7 +44,7 @@
     "isComplete": true
   },
   {
-    "Id": null,
+    "Id": "87b6b582-5da7-4eb8-8660-218aa7283573",
     "name": "Shaytanat 2-kitob",
     "author": "Tohir Malik",
     "genre": "BADIIY_ADABIYOTLAR",
@@ -55,7 +55,7 @@
     "isComplete": true
   },
   {
-    "Id": null,
+    "Id": "87b6b582-5da7-4eb8-8660-218aa7283573",
     "name": "Shaytanat 3-kitob",
     "author": "Tohir Malik",
     "genre": "BADIIY_ADABIYOTLAR",
@@ -66,7 +66,7 @@
     "isComplete": true
   },
   {
-    "Id": null,
+    "Id": "87b6b582-5da7-4eb8-8660-218aa7283573",
     "name": "Shaytanat 4-kitob",
     "author": "Tohir Malik",
     "genre": "BADIIY_ADABIYOTLAR",
@@ -77,7 +77,7 @@
     "isComplete": true
   },
   {
-    "Id": null,
+    "Id": "87b6b582-5da7-4eb8-8660-218aa7283573",
     "name": "Shaytanat 5-kitob",
     "author": "Tohir Malik",
     "genre": "BADIIY_ADABIYOTLAR",
@@ -88,90 +88,13 @@
     "isComplete": true
   },
   {
-    "Id": null,
+    "Id": "87b6b582-5da7-4eb8-8660-218aa7283573",
     "name": "Tushda kechgan umrlar",
     "author": "O\u0027tkir Hoshimov",
     "genre": "BADIIY_ADABIYOTLAR",
     "description": "Asar haqida: Tushda kechgan umrlar“ — oʻzbek yozuvchisi Oʻtkir Hoshimov qalamiga mansub roman. Muallif asarni 1993-yil yozgan. Ilk bor „Sharq yulduzi“ jurnalida serialashtirilgan. Kitob oʻlaroq 1994-yil Toshkent shahrida „Sharq“ nashriyotida chop etilgan. Roman muallifning eng mashhur asarlaridan biridir.",
     "photoId": "AgACAgIAAxkBAAIMXGZMKrMmhO_wOUn9RCDvCVLZ_2_uAALN4DEbqoJgSkrlNPUu6LEfAQADAgADcwADNQQ",
     "fileId": "BQACAgIAAxkBAAIMXmZMKteZV6IPPL1NQyjMjeJzmNk9AALeSgACqoJgSkrBE3Nw5AEFNQQ",
-    "userId": 1040000390,
-    "isComplete": true
-  },
-  {
-    "Id": null,
-    "name": "She\u0027rlar va Dostonlar",
-    "author": "Abdulla Oripoc",
-    "genre": "SHERIYAT",
-    "description": "Olam - sir, olam - sinoat. Olam ichra olam bo\u0027lgan insonning o\u0027zi ham butun borlig\u0027i bilan sirlarning siridir. Bu ko\u0027hna dunyo nimalarni ko\u0027rmagan deysiz? Oddiy kunlarning birida oddiy ko\u0027chada odamlar e\u0027tiboridan chetda jimgina odimlab borayotgan oddiygina bir odam ham boshidan nimalarni o\u0027tkazmagan ekan? Ayni damda uning ko\u0027nglidan nimalar kechayotgan ekan? Bunisi boshqalarga qorong\u0027u. O\u0027zgalar buni qaydan ham bilasin...",
-    "photoId": "AgACAgIAAxkBAAIMc2ZMLs3Z6lMRr_6OvN_sLeGeG3dlAALW4DEbqoJgStc7xLAHptYyAQADAgADcwADNQQ",
-    "fileId": "BQACAgIAAxkBAAIMdWZMLu2Jy-yJ95DzbzRGzBQxFtnZAALuSgACqoJgSrRlF3C85P03NQQ",
-    "userId": 1040000390,
-    "isComplete": true
-  },
-  {
-    "Id": null,
-    "name": "Shamol ortidan yugurib",
-    "author": "Xolid Xusayniy",
-    "genre": "BADIIY_ADABIYOTLAR",
-    "description": "“Shamol ortidan yugurib” – 2005-yil AQSHda “Eng ko’p sotilgan kitob”, ikki yil davomida “Nyu-York Tayms”ning birinchi raqamli bestselleri va 2004-yilda “Exsclusive Books Boeke Prizde” mukofoti sohibi amerikalik afg’on yozuvchisi Xolid Husayniyning ilk romanidir. Bu kitob 2003-yil 29-mayda “Riverhead books” tomonidan nashr etilgan bo’lib, u Kobulning Vazir Akbar Xon tumanidan bo’lgan yosh bola – Amir va uning yaqin do’sti Hasan haqida hikoya qiladi. Bu voqea dahshatli hodisotlar fonida Afg’oniston monarxiyasining qulashi bilan Sovet harbiy aralashuvi, Pokiston va AQShga qochqinlarning ko’chishi va Tolibon rejimining ko’tarilishi bilan bog’liq. \nHolid Husayniyning bu romanida asosiy g’oya bu – vijdon azobi o’ziga tilab olgan o’limdan ham battaroq jazodir.\nAsarda yozuvchi “Inson qanchalar dahshat ichida bo’lmasin baribir u inson” degan g‘oya yotadi.",
-    "photoId": "AgACAgIAAxkBAAIMiWZMMEeF7XPMGBE236eNc3o9rUWBAALc4DEbqoJgSmIVOI-rhCR_AQADAgADcwADNQQ",
-    "fileId": "BQACAgIAAxkBAAIMi2ZMMF44PU3UUAL4i5YTDoQf2yzVAAL0SgACqoJgSsoX8wSvcjKyNQQ",
-    "userId": 1040000390,
-    "isComplete": true
-  },
-  {
-    "Id": null,
-    "name": "Kecha va Kunduz",
-    "author": "Cho\u0027lpon",
-    "genre": "BADIIY_ADABIYOTLAR",
-    "description": "Kecha va kunduz — Oʻzbek yozuvchisi Abdulhamid Choʻlpon tomonidan yozilgan roman. Bu asarga „Oʻtkan kunlar asari darajasida“ deb baho berilgan. U o‘zbek adabiyotidagi ilk roman — dilogiya bo‘lib, ikki kitobdan iborat. Birinchi qismi „Kecha“ 1933-1934 yillarda Moskvada yozilgan. Dastlabki boblari 1935-yilda Toshkentdagi adabiy jurnalning 1-sonida bosilgan, asar 1936-yilda to‘liq holda nashr etilgan. Asardagi voqealar ilk bahorda boshlanib, qish chillasida tugaydi. Cho‘lpon romaniga „Hamal keldi — amal keldi“ maqolini epigraf qilib olgan.\n\n„Kecha va kunduz“ romanining faqat „Kecha“ qismi mavjud. Olimlarning taxminicha, Cho‘lpon „Kunduz“ qismini ham rejalashtirgan yoki yozgan bo‘lishi ham mumkin. Dilogiyaning to‘liq emasligi olimlarga Cho‘lponning maqsadi haqida taxmin qilish imkoniyatini beradi.\n\nBaʼzi olimlar Cho‘lpon faqat „Kecha“ni yozgan, „Kunduz“ qismi borligi haqidagi mulohazalar sovet kuzatuvchilarini mamnun qilish uchun aytilgan deyishadi. Boshqalari esa Cho‘lpon „Kunduz“ni ham yozgan, lekin NKVD uni hibsga olishganda asar musodara qilinib, yo‘q qilingan deb hisoblashadi.",
-    "photoId": "AgACAgIAAxkBAAIMqWZMMyKQvubmo5NWUqfjVmSGb5sRAALx4DEbqoJgShmqS4TZTkNFAQADAgADcwADNQQ",
-    "fileId": "BQACAgIAAxkBAAIMq2ZMMzllI7qWLtnCjY1ecFR3WGtSAAIVSwACqoJgSq0mfjcfkNYoNQQ",
-    "userId": 1040000390,
-    "isComplete": true
-  },
-  {
-    "Id": null,
-    "name": "Iltijo",
-    "author": "Muhammad Yusuf",
-    "genre": "BADIIY_ADABIYOTLAR",
-    "description": "ILTIJO ​Oyi, men keldim… Eshityapsizmi, oyi, men yana keldim…\nQarang, oyi tag‘in ko‘klam kirdi. Esingizdami, har yili bahor kirishi bilan sizni dalaga olib chiqardim. Siz charaqlagan oftobni, tiniq osmonni, ko‘m-ko‘k maysalarni ko‘rib quvonardingiz. Esingizdami, nevaralaringiz terib kelgan boychechaklarni ko‘zingizga surtib, “omonliq-somonliq” qilardingiz…\nBugun… o‘zingizning ustingizdan boychechak o‘sib chiqibdi… Yo‘q, yo‘q, oyijon… Yig‘layotganim yo‘q. Bilaman, men yig‘lasam, siz bezovta bo‘lasiz. Hozir… hozir o‘tib ketadi. Mana, bo‘ldi…\nErtalab-chi, oyi, yomg‘ir yog‘di. Qattiq yomg‘ir yog‘di. Siz bahor yomg‘irini yaxshi ko‘rardingiz… Keyin oftob chiqib ketdi. Qarang, oftob charaqlab yotibdi… Esingizdami, siz menga oftob to‘g‘risida cho‘pchak aytib bergan edingiz. O‘sha oftob charaqlab yotibdi… Ko‘ryapsizmi…\nEsingizdami, oyi, siz ukamga alla aytardingiz. Men allaning ohangiga mast bo‘lib uxlab qolardim. O‘sha beshikda men ham yotganman. Allangizdan men ham orom olganman. Nima qilay, oyi, men alla aytishni bilmayman. Qabringizni silab qo‘ysam orom olasizmi… Mana, oyijon, mana… Yo‘q, yo‘q, yig‘layotganim yo‘q. Hozir, hozir o‘tib ketadi.\nEsingizdami, oyi, siz bir marta, atigi bir marta, o‘shandayam hazillashib: “Meniyam kitob qilib yozsang-chi, o‘g‘lim”, degandingiz. Men: “Sizning nimangizni kitob qilaman, oyi?” degan edim. Xafa bo‘lmang, men hazillashgan edim. Mana, o‘sha kitob. Yo‘q, uni men yozganim yo‘q. Uni siz yozgansiz. Men uni qog‘ozga tushirib, odamlarga tarqatdim, xolos. Men uni dunyodagi hamma onalar o‘qishini xohlayman. Bilaman, dunyodagi hamma onalar yaxshi. Shundoq bo‘lsayam, ularning hammasi Sizga o‘xshashini xohlayman…",
-    "photoId": "AgACAgIAAxkBAAIMt2ZMNQS9wqniJ17epKoQTxf6N61MAAL24DEbqoJgSv8_9axhK-YyAQADAgADcwADNQQ",
-    "fileId": "BQACAgIAAxkBAAIMuWZMNTaWd9ebVPmQN7qNU-w8F0A5AAInSwACqoJgSsfHFT7OQ_6bNQQ",
-    "userId": 1040000390,
-    "isComplete": true
-  },
-  {
-    "Id": null,
-    "name": "Andisha va g\u0027urur",
-    "author": "Jeyn Ostin",
-    "genre": "BADIIY_ADABIYOTLAR",
-    "description": "Jeyn Ostin «Andisha va g‘urur» («Gordost i predubejdeni ye») asarida qishloq dvoryanining qizi Elizabet Bennet bilan \no‘zining kelib chiqishi, boyligi ila mag‘rur boy pomeshchikning \no‘g‘li Fitsuilyam Darsi o‘rtasidagi sarguzashtlarni hikoya qila di. Asar 1813-yilda nashr qilinib, adabiyot dunyosida katta \nshov-shuvga sabab bo‘ldi. Ushbu asar haqida o‘sha paytdagi \n«Britaniya tanqidchisi» jurnali shunday yozgan edi: «Asar shu \npaytgacha o‘quvchilar hukmiga havola qilingan bu turdagi \nhamma romanlardan yuqori turadi». Umid qilamizki, mazkur \nasar hurmatli o‘zbek kitobxonlariga ham manzur bo‘ladi.",
-    "photoId": "AgACAgIAAxkBAAIMy2ZMN1S3dySCAV_T6laTisO47h4hAAII4TEbqoJgSp-FctitI9-SAQADAgADcwADNQQ",
-    "fileId": "BQACAgIAAxkBAAIMzWZMN3R-Y3wfvIuQ8_cmDhYbQsBbAAJOSwACqoJgSip2AQwptF4eNQQ",
-    "userId": 1040000390,
-    "isComplete": true
-  },
-  {
-    "Id": null,
-    "name": "Saodat asri qissalari 1-kitob",
-    "author": "Ahmad Lutfiy",
-    "genre": "DINIY",
-    "description": "\"Saodat asri qissalari\" asari asli 6 jilddan iborat bo\u0027lib, nomidan ko\u0027rinib turganidek, saodat asridan, dinimiz tarixidagi ulkan voqealardan, xossatan, Payg\u0027ambarimizning (s.a.v) tug\u0027ilishlaridan to vafotlariga qadar muborak hayotlaridan hikoya qiladi. Asar 39 qismdan iborat.",
-    "photoId": "AgACAgIAAxkBAAINAWZNE0FTmO4ZNinWSdawK1GsbOSLAAJ03TEbqoJoSkZ3nRNMxofyAQADAgADcwADNQQ",
-    "fileId": "BQACAgIAAxkBAAINA2ZNFOG0T9lDglkG1jN_rhmJH7tYAAKqVAACqoJoSsvB636wWVDPNQQ",
-    "userId": 1040000390,
-    "isComplete": true
-  },
-  {
-    "Id": null,
-    "name": "Saodat asri qissalari 2-kitob",
-    "author": "Ahmad Lutfiy Qozonchi",
-    "genre": "DINIY",
-    "description": "\"Saodat asri qissalari\" asari asli 6 jilddan iborat bo\u0027lib, nomidan ko\u0027rinib turganidek, saodat asridan, dinimiz tarixidagi ulkan voqealardan, xossatan, Payg\u0027ambarimizning (s.a.v) tug\u0027ilishlaridan to vafotlariga qadar muborak hayotlaridan hikoya qiladi. Asar 39 qismdan iborat.\"",
-    "photoId": "AgACAgIAAxkBAAINFWZNFsxzN_RoXxNo0Xf8JN8i450yAAJ03TEbqoJoSkZ3nRNMxofyAQADAgADcwADNQQ",
-    "fileId": "BQACAgIAAxkBAAINF2ZNFtZv88tZuHnuI7fVBuUg5Q3_AAK0VAACqoJoSuZyZ3YH6XerNQQ",
     "userId": 1040000390,
     "isComplete": true
   }

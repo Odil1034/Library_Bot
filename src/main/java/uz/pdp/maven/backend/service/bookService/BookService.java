@@ -5,6 +5,7 @@ import uz.pdp.maven.backend.service.BaseService;
 import uz.pdp.maven.backend.service.bookService.filter.Filter;
 import uz.pdp.maven.backend.utils.fileWriterAndLoader.FileWriterAndLoader;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -70,15 +71,12 @@ public class BookService implements BaseService {
             }
         }
         Book newBook = Book.builder()
+                .Id(UUID.randomUUID().toString())
                 .userId(userId)
                 .isComplete(false)
                 .build();
 
         save(newBook);
         return newBook;
-    }
-
-    public List<Book> getAllBooks() {
-        return bookWriterAndLoader.load(Book.class);
     }
 }

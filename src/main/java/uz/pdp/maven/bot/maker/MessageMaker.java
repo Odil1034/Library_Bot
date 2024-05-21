@@ -54,7 +54,7 @@ public class MessageMaker {
         SendMessage sendMessage = new SendMessage(curUser.getId(), "Search Book");
         InlineKeyboardButton[][] buttons = {
                 {new InlineKeyboardButton("By Name").callbackData("BY_NAME"),
-                        new InlineKeyboardButton("By Author").callbackData("BY_AUTHOR")},
+                    new InlineKeyboardButton("By Author").callbackData("BY_AUTHOR")},
                 {new InlineKeyboardButton("By Genre").callbackData("BY_GENRE"),
                         new InlineKeyboardButton("All Books").callbackData("ALL_BOOKS")},
                 {new InlineKeyboardButton("Back").callbackData("BACK"),
@@ -81,13 +81,13 @@ public class MessageMaker {
     public SendMessage enterSelectGenreMenu(MyUser curUser) {
         SendMessage sendMessage = new SendMessage(curUser.getId(), "Select Genre: ");
         KeyboardButton[][] buttons = {
-                {new KeyboardButton(Genre.BADIIY_ADABIYOTLAR.name())},
-                {new KeyboardButton(Genre.SHERIYAT.name())},
-                {new KeyboardButton(Genre.DASTURLASH.name())},
-                {new KeyboardButton(Genre.ILMIY.name())},
-                {new KeyboardButton(Genre.DINIY.name())},
-                {new KeyboardButton(Genre.SARGUZASHT.name())},
-                {new KeyboardButton(Genre.BOSHQALAR.name())},
+                        {new KeyboardButton(Genre.BADIIY_ADABIYOTLAR.name())},
+                        {new KeyboardButton(Genre.SHERIYAT.name())},
+                        {new KeyboardButton(Genre.DASTURLASH.name())},
+                        {new KeyboardButton(Genre.ILMIY.name())},
+                        {new KeyboardButton(Genre.DINIY.name())},
+                        {new KeyboardButton(Genre.SARGUZASHT.name())},
+                        {new KeyboardButton(Genre.BOSHQALAR.name())},
                 {
                         new KeyboardButton("Back"), new KeyboardButton("Main Menu")
                 }
@@ -114,15 +114,12 @@ public class MessageMaker {
     }
 
     private String getBookInfo(Book book) {
-
-        String addedBookMessage = " Added Book Info \n" +
+        return " Added Book Info \n" +
                 "\nName : " + book.getName() +
                 "\nAuthor: " + book.getAuthor() +
                 "\nGenre: " + book.getGenre() +
                 "\nDescription: " + book.getDescription()
                 + "\n\nBook has been successfully added  ✅✅✅";
-
-        return addedBookMessage;
     }
 
     public SendMessage enterBookPhoto(MyUser curUser) {
@@ -135,7 +132,7 @@ public class MessageMaker {
 
         InlineKeyboardButton[][] buttons = {
                 {
-                        new InlineKeyboardButton("MAIN MENU").callbackData("GO_MAIN_MENU")
+                    new InlineKeyboardButton("MAIN MENU").callbackData("GO_MAIN_MENU")
                 }
         };
         InlineKeyboardMarkup keyboardMarkup = new InlineKeyboardMarkup(buttons);

@@ -1,8 +1,8 @@
 package uz.pdp.maven.bot.handlers;
 
 import com.pengrad.telegrambot.model.*;
-import com.pengrad.telegrambot.model.request.InlineKeyboardButton;
 import com.pengrad.telegrambot.request.SendMessage;
+import org.jetbrains.annotations.NotNull;
 import uz.pdp.maven.backend.models.book.Book;
 import uz.pdp.maven.backend.models.myUser.MyUser;
 import uz.pdp.maven.backend.service.bookService.filter.Filter;
@@ -11,14 +11,11 @@ import uz.pdp.maven.bot.states.base.BaseState;
 import uz.pdp.maven.bot.states.child.AddBookState;
 import uz.pdp.maven.bot.states.child.MainMenuState;
 import uz.pdp.maven.bot.states.child.RegistrationState;
-import uz.pdp.maven.bot.states.child.SearchBookState;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.StringJoiner;
 
 import static uz.pdp.maven.bot.maker.MessageMaker.welcomeMessage;
-import static uz.pdp.maven.bot.states.child.SearchBookState.*;
 
 public class MessageHandler extends BaseHandler {
 
@@ -75,7 +72,7 @@ public class MessageHandler extends BaseHandler {
             handleRegistrationMenu();
             changeState(RegistrationState.SEND_PHONE_NUMBER.name());
         } else {
-            changeStates(BaseState.MAIN_MENU_STATE, null);
+            changeStates(BaseState.MAIN_MENU_STATE, MainMenuState.MAIN_MENU.name());
             handleMainMenu(curUser);
         }
     }
@@ -209,49 +206,36 @@ public class MessageHandler extends BaseHandler {
     public void handleMainMenu(MyUser curUser) {
         SendMessage sendMessage = messageMaker.mainMenu(curUser);
         bot.execute(sendMessage);
-        changeState(MainMenuState.MAIN_MENU.name());
+
     }
 
     private void handleSearchBook(MyUser curUser) {
-        String stateStr = curUser.getState();
-        SearchBookState state = valueOf(stateStr);
+        String curState = curUser.getState();
 
-        switch (state) {
-            case SEARCH_BY -> handleSearchBy(curUser);
-            case BOOK_LIST -> handleBookList(curUser);
-            case SELECT_FILE -> handleSelectFile(curUser);
-            case DOWNLOAD -> handleDownload(curUser);
-            case ADD_MY_FAVOURITE_BOOKS -> handleAddToMyFavouriteBooks();
-            default -> System.out.println("Search Book da yo'q state");
+        SendMessage searchResult;
+
+        if(curState.equals("BY_NAME")){
+            String name = getText();
+            Filter<Book> bookFilterByName = (book) -> book.getName().contains(name);
+            searchResult = getBookListStrByFilter(bookFilterByName);
+            bot.execute(searchResult);
+        }else if(curState.equals("BY_AUTHOR")){
+            String author = getText();
+            Filter<Book> bookFilterByAuthor = (book) -> book.getAuthor().contains(author);
+            searchResult = getBookListStrByFilter(bookFilterByAuthor);
+            bot.execute(searchResult);
+        }else if(curState.equals("BY_GENRE")){
 
         }
-}
-
-    private void handleSearchBy(MyUser curUser) {
-
-
-
-        String name = getText();
-        Filter<Book> bookFilterByName = (book) -> book.getName().contains(name);
-        List<Book> books = bookService.getBooksByFilter(bookFilterByName);
-        StringJoiner stringJoiner = showBookList(books);
-        bot.execute(new SendMessage(curUser.getId(), stringJoiner.toString()));
-
     }
 
-    private void handleBookList(MyUser curUser) {
-
-    }
-
-    private void handleSelectFile(MyUser curUser) {
-
-    }
-
-    private void handleDownload(MyUser curUser) {
-
-    }
-
-    private void handleAddToMyFavouriteBooks() {
-
+    private @NotNull SendMessage getBookListStrByFilter(Filter<Book> bookFilter) {
+        StringBuilder searchResultStr = new StringBuilder();
+        List<Book> books = bookService.getBooksByFilter(bookFilter);
+        for (int i = 0; i < books.size(); i++) {
+            Book book = books.get(i);
+            searchResultStr.append("SEARCH RESULT\n").append(i + 1).append(".   ").append(book.getName()).append("    ").append(book.getAuthor()).append("   ").append(book.getDescription());
+        }
+        return new SendMessage(curUser.getId(), searchResultStr.toString());
     }
 }

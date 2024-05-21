@@ -7,7 +7,6 @@ import uz.pdp.maven.backend.types.bookTypes.Genre;
 import uz.pdp.maven.forExample.SendFile;
 
 import java.util.Objects;
-import java.util.UUID;
 
 @Data
 @AllArgsConstructor
@@ -24,9 +23,5 @@ public class Book {
     private String fileId;
     private Long userId;
     private boolean isComplete;
-
-    public Book() {
-        Id = UUID.randomUUID().toString();
-    }
 
 }
