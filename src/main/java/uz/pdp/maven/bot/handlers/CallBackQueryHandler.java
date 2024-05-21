@@ -50,37 +50,36 @@ public class CallBackQueryHandler extends BaseHandler {
     }
 
     private void mainState() {
-        if (curUser.getState() == null) {
-            String curState = update.callbackQuery().data();
-            if (curState != null) changeState(curState);
-        } else {
-            String stateStr = curUser.getState();
-            MainMenuState state = MainMenuState.valueOf(stateStr);
-            Message message = update.callbackQuery().message();
-            SendMessage sendMessage;
-            switch (state) {
-                case MAIN_MENU -> {
-                    changeStates(BaseState.MAIN_MENU_STATE, null);
-                    sendMessage = messageMaker.mainMenu(curUser);
-                    bot.execute(sendMessage);
-                    deleteMessage(message.messageId());
-                }
-                case ADD_BOOK -> addBookState();
-
-                case SEARCH_BOOK -> {
-                    sendMessage = messageMaker.searchBookMenu(curUser);
-                    bot.execute(sendMessage);
-                    searchBookState();
-                }
-                case MY_FAVOURITE_BOOKS -> {
-                    sendMessage = messageMaker.myFavouriteBookMenu(curUser);
-                    bot.execute(sendMessage);
-                    myFavouriteBooksState();
-                }
-                default -> bot.execute(new SendMessage(curUser.getId(), "Anything is wrong"));
-            }
-            userService.save(curUser);
+        String stateStr;
+        if(curUser.getState() == null){
+            stateStr = MAIN_MENU.name();
+        }else {
+            stateStr = update.callbackQuery().data();
         }
+
+        MainMenuState state = MainMenuState.valueOf(stateStr);
+        Message message = update.callbackQuery().message();
+        SendMessage sendMessage;
+        switch (state) {
+            case MAIN_MENU -> {
+                sendMessage = messageMaker.mainMenu(curUser);
+                bot.execute(sendMessage);
+            }
+            case ADD_BOOK -> addBookState();
+
+            case SEARCH_BOOK -> {
+                sendMessage = messageMaker.searchBookMenu(curUser);
+                bot.execute(sendMessage);
+                searchBookState();
+            }
+            case MY_FAVOURITE_BOOKS -> {
+                sendMessage = messageMaker.myFavouriteBookMenu(curUser);
+                bot.execute(sendMessage);
+                myFavouriteBooksState();
+            }
+            default -> bot.execute(new SendMessage(curUser.getId(), "Anything is wrong"));
+        }
+        userService.save(curUser);
     }
 
     private void searchBookState() {
@@ -91,10 +90,10 @@ public class CallBackQueryHandler extends BaseHandler {
         CallbackQuery callbackQuery = update.callbackQuery();
         String data = callbackQuery.data();
 
-        if(data.equals("BY_NAME")){
+        if (data.equals("BY_NAME")) {
             bot.execute(new SendMessage(curUser.getId(), "Enter name: "));
             changeState(SearchBookState.SEARCH_BY.name());
-        }else if(data.equals("BY_AUTHOR")){
+        } else if (data.equals("BY_AUTHOR")) {
             bot.execute(new SendMessage(curUser.getId(), "Enter name: "));
             changeState(SearchBookState.SEARCH_BY.name());
         } else if (data.equals("BY_GENRE")) {
@@ -105,7 +104,7 @@ public class CallBackQueryHandler extends BaseHandler {
             bot.execute(new SendMessage(curUser.getId(), "Enter name: "));
             changeState(SearchBookState.SEARCH_BY.name());
 
-        } else if(data.equals("BACK_TO_MAIN_MENU")){
+        } else if (data.equals("BACK_TO_MAIN_MENU")) {
             changeStates(BaseState.MAIN_MENU_STATE, null);
         }
 
