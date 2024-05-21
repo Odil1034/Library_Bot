@@ -3,14 +3,11 @@ package uz.pdp.maven.bot.handlers;
 import com.pengrad.telegrambot.model.*;
 import com.pengrad.telegrambot.request.SendMessage;
 import uz.pdp.maven.bot.states.base.BaseState;
-import uz.pdp.maven.bot.states.child.AddBookState;
-import uz.pdp.maven.bot.states.child.MainMenuState;
-import uz.pdp.maven.bot.states.child.RegistrationState;
-import uz.pdp.maven.bot.states.child.SearchBookState;
+import uz.pdp.maven.bot.states.child.*;
 
 import java.util.Objects;
 
-import static uz.pdp.maven.bot.states.child.MainMenuState.MAIN_MENU;
+import static uz.pdp.maven.bot.states.child.MainMenuState.*;
 
 public class CallBackQueryHandler extends BaseHandler {
 
@@ -43,43 +40,33 @@ public class CallBackQueryHandler extends BaseHandler {
             userService.save(curUser);
         } else if (curUser.getState().equals(RegistrationState.REGISTER.name())) {
             String data = update.callbackQuery().data();
-            if (data.equals("GO_MAIN_MENU")) {
-                changeStates(BaseState.MAIN_MENU_STATE, MAIN_MENU.name());
+            if (data.equals(MAIN_MENU.name())) {
+                changeStates(BaseState.MAIN_MENU_STATE, null);
             }
         }
     }
 
     private void mainState() {
-        String stateStr;
-        if(curUser.getState() == null){
-            stateStr = MAIN_MENU.name();
-        }else {
-            stateStr = update.callbackQuery().data();
+
+        if (Objects.equals(curUser.getState(), MAIN_MENU.name())) {
+            mainMenuState();
+        } else if (Objects.equals(curUser.getState(), ADD_BOOK.name())) {
+            addBookState();
+        } else if (Objects.equals(curUser.getState(), SEARCH_BOOK.name())) {
+            addBookState();
+        }  else if (Objects.equals(curUser.getState(), MY_FAVOURITE_BOOKS.name())) {
+            addBookState();
         }
 
-        MainMenuState state = MainMenuState.valueOf(stateStr);
-        Message message = update.callbackQuery().message();
-        SendMessage sendMessage;
-        switch (state) {
-            case MAIN_MENU -> {
-                sendMessage = messageMaker.mainMenu(curUser);
-                bot.execute(sendMessage);
-            }
-            case ADD_BOOK -> addBookState();
+    }
 
-            case SEARCH_BOOK -> {
-                sendMessage = messageMaker.searchBookMenu(curUser);
-                bot.execute(sendMessage);
-                searchBookState();
-            }
-            case MY_FAVOURITE_BOOKS -> {
-                sendMessage = messageMaker.myFavouriteBookMenu(curUser);
-                bot.execute(sendMessage);
-                myFavouriteBooksState();
-            }
-            default -> bot.execute(new SendMessage(curUser.getId(), "Anything is wrong"));
+    private void mainMenuState() {
+        String stateStr = curUser.getState();
+        MainMenuState state = valueOf(stateStr);
+        CallbackQuery callbackQuery = update.callbackQuery();
+        switch (state){
+
         }
-        userService.save(curUser);
     }
 
     private void searchBookState() {

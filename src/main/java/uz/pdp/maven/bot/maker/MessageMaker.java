@@ -5,13 +5,11 @@ import com.pengrad.telegrambot.model.request.InlineKeyboardButton;
 import com.pengrad.telegrambot.model.request.InlineKeyboardMarkup;
 import com.pengrad.telegrambot.model.request.KeyboardButton;
 import com.pengrad.telegrambot.model.request.ReplyKeyboardMarkup;
-import com.pengrad.telegrambot.request.DeleteMessage;
 import com.pengrad.telegrambot.request.SendMessage;
 import org.jetbrains.annotations.NotNull;
 import uz.pdp.maven.backend.models.book.Book;
 import uz.pdp.maven.backend.models.myUser.MyUser;
 import uz.pdp.maven.backend.types.bookTypes.Genre;
-import uz.pdp.maven.bot.states.child.SearchBookState;
 
 import static uz.pdp.maven.bot.states.child.MainMenuState.*;
 
@@ -39,10 +37,11 @@ public class MessageMaker {
         SendMessage sendMessage = new SendMessage(curUser.getId(), "Choose Menu");
         InlineKeyboardButton[][] buttons = {
                 {
-                        new InlineKeyboardButton("Add Book").callbackData(ADD_BOOK.name()),
-                        new InlineKeyboardButton("Search Book").callbackData(SEARCH_BOOK.name())},
+                        new InlineKeyboardButton("Add Book").callbackData("ADD_BOOK"),
+                        new InlineKeyboardButton("Search Book").callbackData("SEARCH_BOOK")
+                },
                 {
-                        new InlineKeyboardButton("My Favourite Books").callbackData(MY_FAVOURITE_BOOKS.name())
+                        new InlineKeyboardButton("My Favourite Books").callbackData("MY_FAVOURITE_BOOKS")
                 }
         };
         InlineKeyboardMarkup keyboardMarkup = new InlineKeyboardMarkup(buttons);
@@ -54,7 +53,7 @@ public class MessageMaker {
         SendMessage sendMessage = new SendMessage(curUser.getId(), "Search Book");
         InlineKeyboardButton[][] buttons = {
                 {new InlineKeyboardButton("By Name").callbackData("BY_NAME"),
-                    new InlineKeyboardButton("By Author").callbackData("BY_AUTHOR")},
+                        new InlineKeyboardButton("By Author").callbackData("BY_AUTHOR")},
                 {new InlineKeyboardButton("By Genre").callbackData("BY_GENRE"),
                         new InlineKeyboardButton("All Books").callbackData("ALL_BOOKS")},
                 {new InlineKeyboardButton("Back").callbackData("BACK"),
@@ -68,6 +67,9 @@ public class MessageMaker {
     public SendMessage myFavouriteBookMenu(MyUser curUser) {
         SendMessage sendMessage = new SendMessage(curUser.getId(), "Your favourite books: ");
         InlineKeyboardButton[][] buttons = {
+                {
+
+                }
         };
         InlineKeyboardMarkup keyboardMarkup = new InlineKeyboardMarkup(buttons);
         sendMessage.replyMarkup(keyboardMarkup);
@@ -81,15 +83,15 @@ public class MessageMaker {
     public SendMessage enterSelectGenreMenu(MyUser curUser) {
         SendMessage sendMessage = new SendMessage(curUser.getId(), "Select Genre: ");
         KeyboardButton[][] buttons = {
-                        {new KeyboardButton(Genre.BADIIY_ADABIYOTLAR.name())},
-                        {new KeyboardButton(Genre.SHERIYAT.name())},
-                        {new KeyboardButton(Genre.DASTURLASH.name())},
-                        {new KeyboardButton(Genre.ILMIY.name())},
-                        {new KeyboardButton(Genre.DINIY.name())},
-                        {new KeyboardButton(Genre.SARGUZASHT.name())},
-                        {new KeyboardButton(Genre.BOSHQALAR.name())},
+                {new KeyboardButton(Genre.BADIIY_ADABIYOTLAR.name())},
+                {new KeyboardButton(Genre.SHERIYAT.name())},
+                {new KeyboardButton(Genre.DASTURLASH.name())},
+                {new KeyboardButton(Genre.ILMIY.name())},
+                {new KeyboardButton(Genre.DINIY.name())},
+                {new KeyboardButton(Genre.SARGUZASHT.name())},
+                {new KeyboardButton(Genre.BOSHQALAR.name())},
                 {
-                        new KeyboardButton("Back"), new KeyboardButton("Main Menu")
+                        new KeyboardButton("BACK"), new KeyboardButton("MAIN_MENU")
                 }
         };
         ReplyKeyboardMarkup keyboardMarkup = new ReplyKeyboardMarkup(buttons);
@@ -132,7 +134,7 @@ public class MessageMaker {
 
         InlineKeyboardButton[][] buttons = {
                 {
-                    new InlineKeyboardButton("MAIN MENU").callbackData("GO_MAIN_MENU")
+                        new InlineKeyboardButton("MAIN MENU").callbackData(MAIN_MENU.name())
                 }
         };
         InlineKeyboardMarkup keyboardMarkup = new InlineKeyboardMarkup(buttons);
