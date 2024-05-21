@@ -11,6 +11,7 @@ import org.jetbrains.annotations.NotNull;
 import uz.pdp.maven.backend.models.book.Book;
 import uz.pdp.maven.backend.models.myUser.MyUser;
 import uz.pdp.maven.backend.types.bookTypes.Genre;
+import uz.pdp.maven.bot.states.child.SearchBookState;
 
 import static uz.pdp.maven.bot.states.child.MainMenuState.*;
 
@@ -52,8 +53,8 @@ public class MessageMaker {
     public SendMessage searchBookMenu(MyUser curUser) {
         SendMessage sendMessage = new SendMessage(curUser.getId(), "Search Book");
         InlineKeyboardButton[][] buttons = {
-                {new InlineKeyboardButton("By Author").callbackData("BY_AUTHOR"),
-                        new InlineKeyboardButton("By Name").callbackData("BY_NAME")},
+                {new InlineKeyboardButton("By Name").callbackData("BY_NAME"),
+                    new InlineKeyboardButton("By Author").callbackData("BY_AUTHOR")},
                 {new InlineKeyboardButton("By Genre").callbackData("BY_GENRE"),
                         new InlineKeyboardButton("All Books").callbackData("ALL_BOOKS")},
                 {new InlineKeyboardButton("Back").callbackData("BACK"),

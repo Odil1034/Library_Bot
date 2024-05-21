@@ -1,10 +1,12 @@
 package uz.pdp.maven.backend.service.bookService;
 
 import uz.pdp.maven.backend.models.book.Book;
-import uz.pdp.maven.backend.models.myUser.MyUser;
 import uz.pdp.maven.backend.service.BaseService;
+import uz.pdp.maven.backend.service.bookService.filter.Filter;
 import uz.pdp.maven.backend.utils.fileWriterAndLoader.FileWriterAndLoader;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -46,6 +48,17 @@ public class BookService implements BaseService {
         }
 
         return null;
+    }
+
+    public List<Book> getBooksByFilter(Filter<Book> filter) {
+        ArrayList<Book> result = new ArrayList<>();
+        List<Book> books = bookWriterAndLoader.load(Book.class);
+        for (Book book : books) {
+            if(filter.check(book)){
+                result.add(book);
+            }
+        }
+        return result;
     }
 
     public Book getNewOrNonCompletedBookByUserId(Long userId) {

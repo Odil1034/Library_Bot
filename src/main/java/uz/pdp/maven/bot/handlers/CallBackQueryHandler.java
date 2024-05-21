@@ -6,6 +6,7 @@ import uz.pdp.maven.bot.states.base.BaseState;
 import uz.pdp.maven.bot.states.child.AddBookState;
 import uz.pdp.maven.bot.states.child.MainMenuState;
 import uz.pdp.maven.bot.states.child.RegistrationState;
+import uz.pdp.maven.bot.states.child.SearchBookState;
 
 import java.util.Objects;
 
@@ -30,6 +31,8 @@ public class CallBackQueryHandler extends BaseHandler {
             mainState();
         } else if (Objects.equals(baseState, BaseState.ADD_BOOK_STATE)) {
             addBookState();
+        } else if (Objects.equals(baseState, BaseState.SEARCH_BOOK_STATE)) {
+            searchBookState();
         } else if (Objects.equals(baseState, BaseState.MY_FAVOURITE_BOOKS_STATE)) {
             myFavouriteBooksState();
         }
@@ -49,7 +52,7 @@ public class CallBackQueryHandler extends BaseHandler {
     private void mainState() {
         if (curUser.getState() == null) {
             String curState = update.callbackQuery().data();
-            if(curState!=null) changeState(curState);
+            if (curState != null) changeState(curState);
         } else {
             String stateStr = curUser.getState();
             MainMenuState state = MainMenuState.valueOf(stateStr);
@@ -81,7 +84,31 @@ public class CallBackQueryHandler extends BaseHandler {
     }
 
     private void searchBookState() {
+        SendMessage sendMessage = messageMaker.searchBookMenu(curUser);
+        bot.execute(sendMessage);
         changeStates(BaseState.SEARCH_BOOK_STATE, null);
+
+        CallbackQuery callbackQuery = update.callbackQuery();
+        String data = callbackQuery.data();
+
+        if(data.equals("BY_NAME")){
+            bot.execute(new SendMessage(curUser.getId(), "Enter name: "));
+            changeState(SearchBookState.SEARCH_BY.name());
+        }else if(data.equals("BY_AUTHOR")){
+            bot.execute(new SendMessage(curUser.getId(), "Enter name: "));
+            changeState(SearchBookState.SEARCH_BY.name());
+        } else if (data.equals("BY_GENRE")) {
+            bot.execute(new SendMessage(curUser.getId(), "Enter name: "));
+            changeState(SearchBookState.SEARCH_BY.name());
+
+        } else if (data.equals("ALL_BOOKS")) {
+            bot.execute(new SendMessage(curUser.getId(), "Enter name: "));
+            changeState(SearchBookState.SEARCH_BY.name());
+
+        } else if(data.equals("BACK_TO_MAIN_MENU")){
+            changeStates(BaseState.MAIN_MENU_STATE, null);
+        }
+
     }
 
     private void addBookState() {

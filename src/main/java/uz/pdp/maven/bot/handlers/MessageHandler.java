@@ -2,14 +2,17 @@ package uz.pdp.maven.bot.handlers;
 
 import com.pengrad.telegrambot.model.*;
 import com.pengrad.telegrambot.request.SendMessage;
+import org.jetbrains.annotations.NotNull;
 import uz.pdp.maven.backend.models.book.Book;
 import uz.pdp.maven.backend.models.myUser.MyUser;
+import uz.pdp.maven.backend.service.bookService.filter.Filter;
 import uz.pdp.maven.backend.types.bookTypes.Genre;
 import uz.pdp.maven.bot.states.base.BaseState;
 import uz.pdp.maven.bot.states.child.AddBookState;
 import uz.pdp.maven.bot.states.child.MainMenuState;
 import uz.pdp.maven.bot.states.child.RegistrationState;
 
+import java.util.List;
 import java.util.Objects;
 
 import static uz.pdp.maven.bot.maker.MessageMaker.welcomeMessage;
@@ -90,7 +93,6 @@ public class MessageHandler extends BaseHandler {
                 case AddBookState.ENTER_BOOK_NAME -> {
                     String name = getText();
                     newBook.setName(name);
-                    System.out.println("Name: " + newBook.getName());
                     bookService.save(newBook);
                     changeState(AddBookState.ENTER_BOOK_AUTHOR.name());
                     SendMessage bookAuthorMessage = messageMaker.enterBookAuthor(curUser);
@@ -99,7 +101,6 @@ public class MessageHandler extends BaseHandler {
                 }
                 case ENTER_BOOK_AUTHOR -> {
                     String author = getText();
-                    System.out.println("Author: " + newBook.getAuthor());
                     newBook.setAuthor(author);
                     bookService.save(newBook);
                     changeState(AddBookState.SELECT_BOOK_GENRE.name());
@@ -109,7 +110,6 @@ public class MessageHandler extends BaseHandler {
                 }
                 case SELECT_BOOK_GENRE -> {
                     Genre genre = getGenre();
-                    System.out.println("Genre: " + newBook.getGenre().toString());
                     newBook.setGenre(genre);
                     bookService.save(newBook);
                     changeState(AddBookState.ENTER_BOOK_DESCRIPTION.name());
@@ -119,7 +119,6 @@ public class MessageHandler extends BaseHandler {
                 }
                 case ENTER_BOOK_DESCRIPTION -> {
                     String description = getText();
-                    System.out.println("Description: " + newBook.getDescription());
                     newBook.setDescription(description);
                     bookService.save(newBook);
                     changeState(AddBookState.ENTER_BOOK_PHOTO_ID.name());
@@ -129,7 +128,6 @@ public class MessageHandler extends BaseHandler {
                 }
                 case ENTER_BOOK_PHOTO_ID -> {
                     String photoId = update.message().photo()[0].fileId();
-                    System.out.println("Photo Id: " + newBook.getPhotoId());
                     newBook.setPhotoId(photoId);
                     bookService.save(newBook);
                     changeState(AddBookState.ENTER_BOOK_FILE_ID.name());
@@ -139,7 +137,6 @@ public class MessageHandler extends BaseHandler {
                 }
                 case ENTER_BOOK_FILE_ID -> {
                     String fileId = update.message().document().fileId();
-                    System.out.println("File Id: " + newBook.getFileId());
                     newBook.setFileId(fileId);
                     bookService.save(newBook);
                     changeState(null);
@@ -209,10 +206,36 @@ public class MessageHandler extends BaseHandler {
     public void handleMainMenu(MyUser curUser) {
         SendMessage sendMessage = messageMaker.mainMenu(curUser);
         bot.execute(sendMessage);
+
     }
 
     private void handleSearchBook(MyUser curUser) {
-        SendMessage sendMessage = messageMaker.searchBookMenu(curUser);
-        bot.execute(sendMessage);
+        String curState = curUser.getState();
+
+        SendMessage searchResult;
+
+        if(curState.equals("BY_NAME")){
+            String name = getText();
+            Filter<Book> bookFilterByName = (book) -> book.getName().contains(name);
+            searchResult = getBookListStrByFilter(bookFilterByName);
+            bot.execute(searchResult);
+        }else if(curState.equals("BY_AUTHOR")){
+            String author = getText();
+            Filter<Book> bookFilterByAuthor = (book) -> book.getAuthor().contains(author);
+            searchResult = getBookListStrByFilter(bookFilterByAuthor);
+            bot.execute(searchResult);
+        }else if(curState.equals("BY_GENRE")){
+
+        }
+    }
+
+    private @NotNull SendMessage getBookListStrByFilter(Filter<Book> bookFilter) {
+        StringBuilder searchResultStr = new StringBuilder();
+        List<Book> books = bookService.getBooksByFilter(bookFilter);
+        for (int i = 0; i < books.size(); i++) {
+            Book book = books.get(i);
+            searchResultStr.append("SEARCH RESULT\n").append(i + 1).append(".   ").append(book.getName()).append("    ").append(book.getAuthor()).append("   ").append(book.getDescription());
+        }
+        return new SendMessage(curUser.getId(), searchResultStr.toString());
     }
 }
