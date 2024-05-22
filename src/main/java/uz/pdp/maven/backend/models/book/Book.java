@@ -4,9 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import uz.pdp.maven.backend.types.bookTypes.Genre;
-import uz.pdp.maven.forExample.SendFile;
 
-import java.util.Objects;
 import java.util.UUID;
 
 @Data
@@ -25,6 +23,6 @@ public class Book {
     private boolean isComplete;
 
     public Book() {
-        Id = UUID.randomUUID().toString();
+        this.Id = UUID.randomUUID().toString();
     }
 }

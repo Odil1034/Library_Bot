@@ -26,7 +26,7 @@ public class BookService implements BaseService {
 
         for (int i = 0; i < books.size(); i++) {
             Book curBook = books.get(i);
-            if (Objects.equals(book.getFileId(), curBook.getFileId())) {
+            if (Objects.equals(book.getId(), curBook.getId())) {
                 books.set(i, book);
                 bookWriterAndLoader.write(books);
                 return;
@@ -37,12 +37,12 @@ public class BookService implements BaseService {
         bookWriterAndLoader.write(books);
     }
 
-    public Book get(String Id) {
+    public Book get(String bookId) {
         List<Book> books = bookWriterAndLoader.load(Book.class);
 
         for (int i = 0; i < books.size(); i++) {
             Book curBook = books.get(i);
-            if (curBook.getId().equals(Id)) {
+            if (curBook.getId().equals(bookId)) {
                 return curBook;
             }
         }

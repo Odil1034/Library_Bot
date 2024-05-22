@@ -55,8 +55,14 @@ public class CallBackQueryHandler extends BaseHandler {
 
     private void mainState() {
 
-        String stateStr = curUser.getState();
-        MainMenuState state = MainMenuState.valueOf(stateStr);
+        MainMenuState state;
+        if (curUser.getState() == null) {
+            String data = update.callbackQuery().data();
+            state = MainMenuState.valueOf(data);
+        } else {
+            String stateStr = curUser.getState();
+            state = MainMenuState.valueOf(stateStr);
+        }
         CallbackQuery callbackQuery = update.callbackQuery();
         switch (state) {
             case MAIN_MENU -> {
@@ -193,7 +199,7 @@ public class CallBackQueryHandler extends BaseHandler {
         String stateStr = curUser.getState();
         SearchBookState state = SearchBookState.valueOf(stateStr);
 
-        switch (state){
+        switch (state) {
             case SEARCH_BY -> {
                 String data = callbackQuery.data();
                 searchBookMenu(data);
