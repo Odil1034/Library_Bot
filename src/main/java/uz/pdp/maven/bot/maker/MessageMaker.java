@@ -5,7 +5,7 @@ import com.pengrad.telegrambot.model.request.InlineKeyboardButton;
 import com.pengrad.telegrambot.model.request.InlineKeyboardMarkup;
 import com.pengrad.telegrambot.model.request.KeyboardButton;
 import com.pengrad.telegrambot.model.request.ReplyKeyboardMarkup;
-import com.pengrad.telegrambot.request.DeleteMessage;
+import com.pengrad.telegrambot.request.DeleteMyCommands;
 import com.pengrad.telegrambot.request.SendMessage;
 import org.jetbrains.annotations.NotNull;
 import uz.pdp.maven.backend.models.book.Book;
@@ -13,7 +13,6 @@ import uz.pdp.maven.backend.models.myUser.MyUser;
 import uz.pdp.maven.backend.types.bookTypes.Genre;
 
 import static uz.pdp.maven.bot.states.child.MainMenuState.*;
-import static uz.pdp.maven.bot.states.child.RegistrationState.*;
 import static uz.pdp.maven.bot.states.child.AddBookState.*;
 
 public class MessageMaker {
@@ -58,8 +57,7 @@ public class MessageMaker {
                         new InlineKeyboardButton("By Author").callbackData("BY_AUTHOR")},
                 {new InlineKeyboardButton("By Genre").callbackData("BY_GENRE"),
                         new InlineKeyboardButton("All Books").callbackData("ALL_BOOKS")},
-                {new InlineKeyboardButton("Back").callbackData("BACK"),
-                        new InlineKeyboardButton("Main Menu").callbackData("MAIN_MENU")}
+                {new InlineKeyboardButton("Main Menu").callbackData("MAIN_MENU")}
         };
         InlineKeyboardMarkup keyboardMarkup = new InlineKeyboardMarkup(buttons);
         sendMessage.replyMarkup(keyboardMarkup);
@@ -76,36 +74,27 @@ public class MessageMaker {
     }
 
     public SendMessage enterBookNameMenu(MyUser curUser) {
-
         SendMessage sendMessage = new SendMessage(curUser.getId(), "Enter Book name: ");
-
         InlineKeyboardButton[][] buttons = {
-                {
-                        new InlineKeyboardButton("Main Menu").callbackData("MAIN_MENU")
-                }
+                {new InlineKeyboardButton("Main Menu").callbackData("MAIN_MENU")}
         };
-
         InlineKeyboardMarkup keyboardMarkup = new InlineKeyboardMarkup(buttons);
         return sendMessage.replyMarkup(keyboardMarkup);
     }
 
     public SendMessage selectGenreMenu(MyUser curUser) {
         SendMessage sendMessage = new SendMessage(curUser.getId(), "Select Genre: ");
-        InlineKeyboardButton[][] buttons = {
-                {new InlineKeyboardButton(Genre.BADIIY_ADABIYOTLAR.name())},
-                {new InlineKeyboardButton(Genre.SHERIYAT.name())},
-                {new InlineKeyboardButton(Genre.DASTURLASH.name())},
-                {new InlineKeyboardButton(Genre.ILMIY.name())},
-                {new InlineKeyboardButton(Genre.DINIY.name())},
-                {new InlineKeyboardButton(Genre.SARGUZASHT.name())},
-                {new InlineKeyboardButton(Genre.BOSHQALAR.name())},
-                new InlineKeyboardButton[]
-                        {new InlineKeyboardButton("Edit Book Author").callbackData("EDIT_BOOK_AUTHOR"),
-                                new InlineKeyboardButton("Edit Book Name").callbackData("EDIT_BOOK_NAME")},
-                {new InlineKeyboardButton("Main Menu").callbackData("MAIN_MENU")}
+        KeyboardButton[][] buttons = {
+                {new KeyboardButton(Genre.BADIIY_ADABIYOTLAR.name())},
+                {new KeyboardButton(Genre.SHERIYAT.name())},
+                {new KeyboardButton(Genre.DASTURLASH.name())},
+                {new KeyboardButton(Genre.ILMIY.name())},
+                {new KeyboardButton(Genre.DINIY.name())},
+                {new KeyboardButton(Genre.SARGUZASHT.name())},
+                {new KeyboardButton(Genre.BOSHQALAR.name())}
         };
-        InlineKeyboardMarkup keyboardMarkup = new InlineKeyboardMarkup(buttons);
-        sendMessage.replyMarkup(keyboardMarkup);
+        ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup(buttons);
+        sendMessage.replyMarkup(replyKeyboardMarkup);
         return sendMessage;
     }
 
@@ -130,8 +119,8 @@ public class MessageMaker {
         return sendMessage.replyMarkup(keyboardMarkup);
     }
 
-    public SendMessage bookIsAddedMessage(MyUser curUser, Book newBuilderBook) {
-        return new SendMessage(curUser.getId(), getBookInfo(newBuilderBook));
+    public SendMessage bookIsAddedMessage(MyUser curUser, Book newBook) {
+        return new SendMessage(curUser.getId(), getBookInfo(newBook));
     }
 
     private String getBookInfo(Book book) {

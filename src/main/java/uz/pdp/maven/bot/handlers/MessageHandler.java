@@ -209,21 +209,21 @@ public class MessageHandler extends BaseHandler {
     }
 
     private void handleSearchBook(MyUser curUser) {
-        String curState = curUser.getState();
+        String state = curUser.getState();
 
         SendMessage searchResult;
 
-        if(curState.equals("BY_NAME")){
+        if(state.equals("BY_NAME")){
             String name = getText();
             Filter<Book> bookFilterByName = (book) -> book.getName().contains(name);
             searchResult = getBookListStrByFilter(bookFilterByName);
             bot.execute(searchResult);
-        }else if(curState.equals("BY_AUTHOR")){
+        }else if(state.equals("BY_AUTHOR")){
             String author = getText();
             Filter<Book> bookFilterByAuthor = (book) -> book.getAuthor().contains(author);
             searchResult = getBookListStrByFilter(bookFilterByAuthor);
             bot.execute(searchResult);
-        }else if(curState.equals("BY_GENRE")){
+        }else if(state.equals("BY_GENRE")){
 
         }
     }

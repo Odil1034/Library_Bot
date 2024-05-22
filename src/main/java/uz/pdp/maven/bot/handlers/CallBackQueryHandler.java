@@ -39,6 +39,8 @@ public class CallBackQueryHandler extends BaseHandler {
     }
 
     private void registrationState() {
+
+        Message message = update.callbackQuery().message();
         if (curUser.getState().equals(RegistrationState.SEND_PHONE_NUMBER.name())) {
             userService.save(curUser);
         } else if (curUser.getState().equals(RegistrationState.REGISTER.name())) {
@@ -46,16 +48,13 @@ public class CallBackQueryHandler extends BaseHandler {
             if (data.equals("MAIN_MENU")) {
                 changeStates(BaseState.MAIN_MENU_STATE, MAIN_MENU.name());
                 bot.execute(messageMaker.mainMenu(curUser));
+                deleteMessage(message.messageId());
             }
         }
     }
 
     private void mainState() {
 
-        String data1 = update.callbackQuery().data();
-        if (data1.equals("BACK")) {
-            bot.execute(messageMaker.mainMenu(curUser));
-        }
         String stateStr = curUser.getState();
         MainMenuState state = MainMenuState.valueOf(stateStr);
         CallbackQuery callbackQuery = update.callbackQuery();
@@ -63,6 +62,15 @@ public class CallBackQueryHandler extends BaseHandler {
             case MAIN_MENU -> {
                 String data = callbackQuery.data();
                 mainMenu(data);
+            }
+            case SEARCH_BOOK -> {
+                searchBookState();
+            }
+            case MY_FAVOURITE_BOOKS -> {
+                myFavouriteBooksState();
+            }
+            case ADD_BOOK -> {
+                addBookState();
             }
         }
     }
@@ -116,16 +124,17 @@ public class CallBackQueryHandler extends BaseHandler {
                 SendMessage bookNameMessage = messageMaker.enterBookNameMenu(curUser);
                 bot.execute(bookNameMessage);
                 changeState(AddBookState.ENTER_BOOK_NAME.name());
+                deleteMessage(message.messageId());
             }
             case ENTER_BOOK_AUTHOR -> {
                 String data = update.callbackQuery().data();
                 if (data.equals("MAIN_MENU")) {
                     changeStates(BaseState.MAIN_MENU_STATE, MAIN_MENU.name());
-                    deleteMessage(message.messageId());
                     bot.execute(messageMaker.mainMenu(curUser));
                 } else if (data.equals("ENTER_BOOK_NAME")) {
                     changeState(AddBookState.ENTER_BOOK_NAME.name());
                 }
+                deleteMessage(message.messageId());
             }
             case SELECT_BOOK_GENRE -> {
                 String data = update.callbackQuery().data();
@@ -138,6 +147,7 @@ public class CallBackQueryHandler extends BaseHandler {
                 } else if (data.equals("ENTER_BOOK_AUTHOR")) {
                     changeState(AddBookState.ENTER_BOOK_AUTHOR.name());
                 }
+                deleteMessage(message.messageId());
             }
             case ENTER_BOOK_PHOTO_ID -> {
                 String data = update.callbackQuery().data();
@@ -152,6 +162,7 @@ public class CallBackQueryHandler extends BaseHandler {
                 } else if (data.equals("SELECT_BOOK_GENRE")) {
                     changeState(AddBookState.SELECT_BOOK_GENRE.name());
                 }
+                deleteMessage(message.messageId());
             }
             case ENTER_BOOK_DESCRIPTION -> {
                 String data = update.callbackQuery().data();
@@ -168,6 +179,7 @@ public class CallBackQueryHandler extends BaseHandler {
                 } else if (data.equals("")) {
                     changeState(AddBookState.SELECT_BOOK_GENRE.name());
                 }
+                deleteMessage(message.messageId());
             }
             default -> anyThingIsWrongMessage();
         }
@@ -176,29 +188,45 @@ public class CallBackQueryHandler extends BaseHandler {
     private void searchBookState() {
         SendMessage sendMessage = messageMaker.searchBookMenu(curUser);
         bot.execute(sendMessage);
-        changeStates(BaseState.SEARCH_BOOK_STATE, null);
 
         CallbackQuery callbackQuery = update.callbackQuery();
-        String data = callbackQuery.data();
+        String stateStr = curUser.getState();
+        SearchBookState state = SearchBookState.valueOf(stateStr);
+
+        switch (state){
+            case SEARCH_BY -> {
+                String data = callbackQuery.data();
+                searchBookMenu(data);
+            }
+            case BOOK_LIST -> {
+
+            }
+            case SELECT_FILE -> {
+
+            }
+            case DOWNLOAD -> {
+
+            }
+            case ADD_MY_FAVOURITE_BOOKS -> {
+
+            }
+        }
+    }
+
+    private void searchBookMenu(String data) {
 
         if (data.equals("BY_NAME")) {
-            bot.execute(new SendMessage(curUser.getId(), "Enter name: "));
-            changeState(SearchBookState.SEARCH_BY.name());
+            bot.execute(new SendMessage(curUser.getId(), "SEARCHING BOOK INFO"));
+            bot.execute(new SendMessage(curUser.getId(), "Enter book name: "));
         } else if (data.equals("BY_AUTHOR")) {
-            bot.execute(new SendMessage(curUser.getId(), "Enter name: "));
-            changeState(SearchBookState.SEARCH_BY.name());
+            bot.execute(new SendMessage(curUser.getId(), "Enter book author: "));
         } else if (data.equals("BY_GENRE")) {
-            bot.execute(new SendMessage(curUser.getId(), "Enter name: "));
-            changeState(SearchBookState.SEARCH_BY.name());
-
+            bot.execute(messageMaker.selectGenreMenu(curUser));
         } else if (data.equals("ALL_BOOKS")) {
-            bot.execute(new SendMessage(curUser.getId(), "Enter name: "));
-            changeState(SearchBookState.SEARCH_BY.name());
-
+            bot.execute(new SendMessage(curUser.getId(), "All books"));
         } else if (data.equals("MAIN_MENU")) {
             changeStates(BaseState.MAIN_MENU_STATE, null);
         }
-
     }
 
     private void myFavouriteBooksState() {
