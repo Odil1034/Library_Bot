@@ -1,101 +1,13 @@
 [
   {
-    "Id": "87b6b582-5da7-4eb8-8660-218aa7283573",
-    "name": "Tushda kechgan umrlar",
-    "author": "O\u0027tkir Hoshimov",
-    "genre": "BADIIY_ADABIYOTLAR",
-    "description": "Asar haqida: Tushda kechgan umrlar“ — oʻzbek yozuvchisi Oʻtkir Hoshimov qalamiga mansub roman. Muallif asarni 1993-yil yozgan. Ilk bor „Sharq yulduzi“ jurnalida serialashtirilgan. Kitob oʻlaroq 1994-yil Toshkent shahrida „Sharq“ nashriyotida chop etilgan. Roman muallifning eng mashhur asarlaridan biridir.",
-    "photoId": "AgACAgIAAxkBAAIMXGZMKrMmhO_wOUn9RCDvCVLZ_2_uAALN4DEbqoJgSkrlNPUu6LEfAQADAgADcwADNQQ",
-    "fileId": null,
-    "userId": 1040000390,
-    "isComplete": false
-  },
-  {
-    "Id": "87b6b582-5da7-4eb8-8660-218aa7283573",
+    "Id": "8caaf32d-6c92-4527-ac39-b2570cc82f53",
     "name": "Ufq",
     "author": "Said Ahmad",
     "genre": "BADIIY_ADABIYOTLAR",
-    "description": "Roman-trilogiyada yozuvchi Ikkinchi jahon urushining olovli yillarida oʻzbek dehqonlarining front orqasida koʻrsatgan mehnat qahramonliklari haqida hikoya qiladi, urushdan oldingi va keyingi davr muammolari haqida fikr yuritadi.\n\nRomanda davrga xos qiyinchiliklar, mashaqqatlar ichida urush va mehnat frontiga safarbar qilingan yoshlar: Azizxon va Lutfinisa, Nizomjon va Dildor, Tursunboy va Zebixon kabi tutashgan taqdirlar hayotidagi fojialar tasvirlangan. Qiyinchiliklardan keyin qahramonlarning yana sevgiga va sadoqatga roʻbaroʻ boʻlishi, birinchi muhabbat davr va sinovlar qaʼriga singib ketishini koʻrish, jonli tasvirlar orqali tarixiy maʼlumotlar bilan tanishish, ezilgan xalqning hayot mashaqqatlarini tushunish mumkin.",
-    "photoId": "AgACAgIAAxkBAAIL-mZMHcmXeBZCgrmFwH6kHueMpobdAAJu4DEbqoJgSgr4E5sQbM9pAQADAgADcwADNQQ",
-    "fileId": "BQACAgIAAxkBAAIL_GZMHfBgzidqLfOoFevsxYAsqGToAAKNSgACqoJgSqwCT0yJ-9HwNQQ",
+    "description": null,
+    "photoId": null,
+    "fileId": null,
     "userId": 1040000390,
-    "isComplete": true
-  },
-  {
-    "Id": "87b6b582-5da7-4eb8-8660-218aa7283573",
-    "name": "Jimjitlik romani",
-    "author": "Said Ahmad",
-    "genre": "BADIIY_ADABIYOTLAR",
-    "description": "Jimjitlik romanida sovet davridagi rahbarlarning chirkin hayoti, ezilgan oddiy xalqning turmush tarzi, uzoq yillar rahbarlar taziyqi ostida Afrikada yashagan, ayoli va farzandidan ayrilib uyiga qaytgan Tolibjon, boylik va mansab uchun har qanday jirkanchlikka tayyor xotinboz rais Mirvali, otasi oʻldirilib, onasi Mirlvali tomonidan tortib olingan Azizbek kabi insonlar taqdiri hikoya qilinadi. Asarda turgʻunlik davri illatlari mukammal tarzda ochib berilgan.\n\nRomanida sirtdan tinch, sokin koʻringan shoʻro davrining ichki dramalari, tuzum inqirozi butun keskinligi, shiddati bilan koʻrsatilgan. Asardagi deyarli barcha yetakchi personajlar fojiyaviy qismat egalaridir. Roman oʻzining asov, „bebosh“ ifoda tarzi bilan jozibalidir.",
-    "photoId": "AgACAgIAAxkBAAIMCGZMH0kV9MTXmCWGBKDmLJSLBFfbAAKE4DEbqoJgSpTOKI0rKCz0AQADAgADcwADNQQ",
-    "fileId": "BQACAgIAAxkBAAIMCmZMIH7HPAaklqiPPLmj8gk6cnkPAAKXSgACqoJgSrE1oCnCnAAB-DUE",
-    "userId": 1040000390,
-    "isComplete": true
-  },
-  {
-    "Id": "87b6b582-5da7-4eb8-8660-218aa7283573",
-    "name": "Shaytanat 1-kitob",
-    "author": "Tohir Malik",
-    "genre": "BADIIY_ADABIYOTLAR",
-    "description": "„Shaytanat“ asarida jinoyat olamidagi voqealar fonida asosiy eʼtibor asar qahramonlarining ruhiy dunyosini tahlil etishga qaratilgan. Kishilarni jinoyatning razil olamidan ehtiyot boʻlishga chaqiruvchi ushbu ogohlantiruvchi asar mazmuni Tohir Malikning „Jinoyatning uzun yoʻli“ (2004) ilmiy-tahliliy risolasida davom ettirilgan.Mashhur qoʻshiqchi Elchin oʻz xotinini qasddan oʻldirganlikda ayblanib, koʻp yillarga qamalib ketadi. Gap shundaki, u gʻirt mast holda qimor oʻynab, hamma narsasini yutqazib qoʻyadi. Yutib chiqish umidida xotinini ham qimorga tikib yuboradi. Oxir-oqibat yutqazib qoʻygan Elchin nima boʻlayotganini anglamay, mastlik taʼsirida uxlab qoladi. Oʻziga kelgach xotinini oʻlik holda topadi. Bu qotillik mashhur jinoiy toʻda yetakchisi Asadbekning odamlari tomonidan sodir etilganini tushunib yetadi. Endilikda Elchinnning maqsadi — Asadbekdan qasos olishdan iborat.",
-    "photoId": "AgACAgIAAxkBAAIMFmZMJA-s2ogH_uZqz5Etu1zYqtT8AALB4DEbqoJgSjFF24X2JT0tAQADAgADcwADNQQ",
-    "fileId": "BQACAgIAAxkBAAIMGGZMJMzgF7v_NR26As6XaJSEYp-yAAKwSgACqoJgSp6XHg6ehT9dNQQ",
-    "userId": 1040000390,
-    "isComplete": true
-  },
-  {
-    "Id": "87b6b582-5da7-4eb8-8660-218aa7283573",
-    "name": "Shaytanat 2-kitob",
-    "author": "Tohir Malik",
-    "genre": "BADIIY_ADABIYOTLAR",
-    "description": "„Shaytanat“ asarida jinoyat olamidagi voqealar fonida asosiy eʼtibor asar qahramonlarining ruhiy dunyosini tahlil etishga qaratilgan. Kishilarni jinoyatning razil olamidan ehtiyot boʻlishga chaqiruvchi ushbu ogohlantiruvchi asar mazmuni Tohir Malikning „Jinoyatning uzun yoʻli“ (2004) ilmiy-tahliliy risolasida davom ettirilgan.\n\nAsarda mashhur qoʻshiqchi Elchin oʻz xotinini qasddan oʻldirganlikda ayblanib, koʻp yillarga qamalib ketadi. Gap shundaki, u gʻirt mast holda qimor oʻynab, hamma narsasini yutqazib qoʻyadi. Yutib chiqish umidida xotinini ham qimorga tikib yuboradi. Oxir-oqibat yutqazib qoʻygan Elchin nima boʻlayotganini anglamay, mastlik taʼsirida uxlab qoladi. Oʻziga kelgach xotinini oʻlik holda topadi. Bu qotillik mashhur jinoiy toʻda yetakchisi Asadbekning odamlari tomonidan sodir etilganini tushunib yetadi. Endilikda Elchinnning maqsadi — Asadbekdan qasos olishdan iborat.",
-    "photoId": "AgACAgIAAxkBAAIMJGZMJUky1VRHof532UMWnnnddGQKAALD4DEbqoJgSmILjl6cMJq3AQADAgADcwADNQQ",
-    "fileId": "BQACAgIAAxkBAAIMJmZMJVe5VBFwxM5n-5A9lJh2ICDFAAK0SgACqoJgSnMBeLf1HbYINQQ",
-    "userId": 1040000390,
-    "isComplete": true
-  },
-  {
-    "Id": "87b6b582-5da7-4eb8-8660-218aa7283573",
-    "name": "Shaytanat 3-kitob",
-    "author": "Tohir Malik",
-    "genre": "BADIIY_ADABIYOTLAR",
-    "description": "„Shaytanat“ asarida jinoyat olamidagi voqealar fonida asosiy eʼtibor asar qahramonlarining ruhiy dunyosini tahlil etishga qaratilgan. Kishilarni jinoyatning razil olamidan ehtiyot boʻlishga chaqiruvchi ushbu ogohlantiruvchi asar mazmuni Tohir Malikning „Jinoyatning uzun yoʻli“ (2004) ilmiy-tahliliy risolasida davom ettirilgan.Mashhur qoʻshiqchi Elchin oʻz xotinini qasddan oʻldirganlikda ayblanib, koʻp yillarga qamalib ketadi. Gap shundaki, u gʻirt mast holda qimor oʻynab, hamma narsasini yutqazib qoʻyadi. Yutib chiqish umidida xotinini ham qimorga tikib yuboradi. Oxir-oqibat yutqazib qoʻygan Elchin nima boʻlayotganini anglamay, mastlik taʼsirida uxlab qoladi. Oʻziga kelgach xotinini oʻlik holda topadi. Bu qotillik mashhur jinoiy toʻda yetakchisi Asadbekning odamlari tomonidan sodir etilganini tushunib yetadi. Endilikda Elchinnning maqsadi — Asadbekdan qasos olishdan iborat.",
-    "photoId": "AgACAgIAAxkBAAIMMmZMJZcqte26LdGvR7JSz_si5uEPAALE4DEbqoJgSr67_PqmipnRAQADAgADcwADNQQ",
-    "fileId": "BQACAgIAAxkBAAIMNGZMJaaaIqW7u00JBtMiX0HgTBXwAAK1SgACqoJgSqIUaXObYeBiNQQ",
-    "userId": 1040000390,
-    "isComplete": true
-  },
-  {
-    "Id": "87b6b582-5da7-4eb8-8660-218aa7283573",
-    "name": "Shaytanat 4-kitob",
-    "author": "Tohir Malik",
-    "genre": "BADIIY_ADABIYOTLAR",
-    "description": "„Shaytanat“ asarida jinoyat olamidagi voqealar fonida asosiy eʼtibor asar qahramonlarining ruhiy dunyosini tahlil etishga qaratilgan. Kishilarni jinoyatning razil olamidan ehtiyot boʻlishga chaqiruvchi ushbu ogohlantiruvchi asar mazmuni Tohir Malikning „Jinoyatning uzun yoʻli“ (2004) ilmiy-tahliliy risolasida davom ettirilgan.\n\nAsarda mashhur qoʻshiqchi Elchin oʻz xotinini qasddan oʻldirganlikda ayblanib, koʻp yillarga qamalib ketadi. Gap shundaki, u gʻirt mast holda qimor oʻynab, hamma narsasini yutqazib qoʻyadi. Yutib chiqish umidida xotinini ham qimorga tikib yuboradi. Oxir-oqibat yutqazib qoʻygan Elchin nima boʻlayotganini anglamay, mastlik taʼsirida uxlab qoladi. Oʻziga kelgach xotinini oʻlik holda topadi. Bu qotillik mashhur jinoiy toʻda yetakchisi Asadbekning odamlari tomonidan sodir etilganini tushunib yetadi. Endilikda Elchinnning maqsadi — Asadbekdan qasos olishdan iborat.",
-    "photoId": "AgACAgIAAxkBAAIMQGZMJfmNLcLOg8A43VA75Z9l0ZcnAALF4DEbqoJgSjUYwEkxMVgXAQADAgADcwADNQQ",
-    "fileId": "BQACAgIAAxkBAAIMQmZMJhKiT9t6KlER9iYr1EDICGVaAAK2SgACqoJgSpP8-_lHGVePNQQ",
-    "userId": 1040000390,
-    "isComplete": true
-  },
-  {
-    "Id": "87b6b582-5da7-4eb8-8660-218aa7283573",
-    "name": "Shaytanat 5-kitob",
-    "author": "Tohir Malik",
-    "genre": "BADIIY_ADABIYOTLAR",
-    "description": "„Shaytanat“ asarida jinoyat olamidagi voqealar fonida asosiy eʼtibor asar qahramonlarining ruhiy dunyosini tahlil etishga qaratilgan. Kishilarni jinoyatning razil olamidan ehtiyot boʻlishga chaqiruvchi ushbu ogohlantiruvchi asar mazmuni Tohir Malikning „Jinoyatning uzun yoʻli“ (2004) ilmiy-tahliliy risolasida davom ettirilgan.\n\nAsarda mashhur qoʻshiqchi Elchin oʻz xotinini qasddan oʻldirganlikda ayblanib, koʻp yillarga qamalib ketadi. Gap shundaki, u gʻirt mast holda qimor oʻynab, hamma narsasini yutqazib qoʻyadi. Yutib chiqish umidida xotinini ham qimorga tikib yuboradi. Oxir-oqibat yutqazib qoʻygan Elchin nima boʻlayotganini anglamay, mastlik taʼsirida uxlab qoladi. Oʻziga kelgach xotinini oʻlik holda topadi. Bu qotillik mashhur jinoiy toʻda yetakchisi Asadbekning odamlari tomonidan sodir etilganini tushunib yetadi. Endilikda Elchinnning maqsadi — Asadbekdan qasos olishdan iborat.",
-    "photoId": "AgACAgIAAxkBAAIMTmZMJlX0GtVh4PVX96mXLtJHb4MvAALG4DEbqoJgSjnlxbmTo3D9AQADAgADcwADNQQ",
-    "fileId": "BQACAgIAAxkBAAIMUGZMJq7SGBZCc-toe78G2vw_MejlAAK-SgACqoJgSoYQIhG2EnOWNQQ",
-    "userId": 1040000390,
-    "isComplete": true
-  },
-  {
-    "Id": "87b6b582-5da7-4eb8-8660-218aa7283573",
-    "name": "Tushda kechgan umrlar",
-    "author": "O\u0027tkir Hoshimov",
-    "genre": "BADIIY_ADABIYOTLAR",
-    "description": "Asar haqida: Tushda kechgan umrlar“ — oʻzbek yozuvchisi Oʻtkir Hoshimov qalamiga mansub roman. Muallif asarni 1993-yil yozgan. Ilk bor „Sharq yulduzi“ jurnalida serialashtirilgan. Kitob oʻlaroq 1994-yil Toshkent shahrida „Sharq“ nashriyotida chop etilgan. Roman muallifning eng mashhur asarlaridan biridir.",
-    "photoId": "AgACAgIAAxkBAAIMXGZMKrMmhO_wOUn9RCDvCVLZ_2_uAALN4DEbqoJgSkrlNPUu6LEfAQADAgADcwADNQQ",
-    "fileId": "BQACAgIAAxkBAAIMXmZMKteZV6IPPL1NQyjMjeJzmNk9AALeSgACqoJgSkrBE3Nw5AEFNQQ",
-    "userId": 1040000390,
-    "isComplete": true
+    "isComplete": false
   }
 ]
