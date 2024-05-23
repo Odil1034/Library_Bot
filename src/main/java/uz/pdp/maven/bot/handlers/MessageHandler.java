@@ -6,7 +6,6 @@ import org.jetbrains.annotations.NotNull;
 import uz.pdp.maven.backend.models.book.Book;
 import uz.pdp.maven.backend.models.myUser.MyUser;
 import uz.pdp.maven.backend.service.bookService.filter.Filter;
-import uz.pdp.maven.backend.types.bookTypes.Genre;
 import uz.pdp.maven.bot.states.base.BaseState;
 import uz.pdp.maven.bot.states.child.AddBookState;
 import uz.pdp.maven.bot.states.child.MainMenuState;
@@ -89,12 +88,12 @@ public class MessageHandler extends BaseHandler {
 
         if (state != null) {
             curState = AddBookState.valueOf(state);
-            Book newBook = bookService.getNewOrNonCompletedBookByUserId(curUser.getId());
+            curBook = bookService.getNewOrNonCompletedBookByUserId(curUser.getId());
             switch (curState) {
                 case AddBookState.ENTER_BOOK_NAME -> {
                     String name = getText();
-                    newBook.setName(name);
-                    bookService.save(newBook);
+                    curBook.setName(name);
+                    bookService.save(curBook);
                     SendMessage sendMessage = messageMaker.enterBookAuthor(curUser);
                     bot.execute(sendMessage);
                     changeState(AddBookState.ENTER_BOOK_AUTHOR.name());
@@ -102,26 +101,36 @@ public class MessageHandler extends BaseHandler {
                 }
                 case ENTER_BOOK_AUTHOR -> {
                     String author = getText();
-                    newBook.setAuthor(author);
-                    bookService.save(newBook);
-                    SendMessage sendMessage = messageMaker.selectGenreMenu(curUser);
+                    curBook.setAuthor(author);
+                    bookService.save(curBook);
+                    SendMessage sendMessage = messageMaker.selectGenre(curUser);
                     bot.execute(sendMessage);
                     changeState(AddBookState.SELECT_BOOK_GENRE.name());
                     return;
                 }
-                case SELECT_BOOK_GENRE -> {
-                    Genre genre = getGenre();
-                    newBook.setGenre(genre);
-                    bookService.save(newBook);
-                    changeState(AddBookState.ENTER_BOOK_DESCRIPTION.name());
+                case SELECT_BOOK_GENRE -> bot.execute(new SendMessage(curUser.getId(), "Janrni tanlang"));
+                case ENTER_BOOK_LANGUAGE -> {
+                    String language = getText();
+                    curBook.setLanguage(language);
+                    bookService.save(curBook);
+                    SendMessage sendMessage = messageMaker.enterBookPage(curUser);
+                    bot.execute(sendMessage);
+                    changeState(AddBookState.ENTER_BOOK_PAGE.name());
+                    return;
+                }
+                case ENTER_BOOK_PAGE -> {
+                    int countOfPage = Integer.parseInt(getText());
+                    curBook.setCountOfPage(countOfPage);
+                    bookService.save(curBook);
                     SendMessage sendMessage = messageMaker.enterBookDescription(curUser);
                     bot.execute(sendMessage);
+                    changeState(AddBookState.ENTER_BOOK_DESCRIPTION.name());
                     return;
                 }
                 case ENTER_BOOK_DESCRIPTION -> {
                     String description = getText();
-                    newBook.setDescription(description);
-                    bookService.save(newBook);
+                    curBook.setDescription(description);
+                    bookService.save(curBook);
                     changeState(AddBookState.ENTER_BOOK_PHOTO_ID.name());
                     SendMessage sendMessage = messageMaker.enterBookPhoto(curUser);
                     bot.execute(sendMessage);
@@ -129,8 +138,8 @@ public class MessageHandler extends BaseHandler {
                 }
                 case ENTER_BOOK_PHOTO_ID -> {
                     String photoId = update.message().photo()[0].fileId();
-                    newBook.setPhotoId(photoId);
-                    bookService.save(newBook);
+                    curBook.setPhotoId(photoId);
+                    bookService.save(curBook);
                     changeState(AddBookState.ENTER_BOOK_FILE_ID.name());
                     SendMessage sendMessage = messageMaker.enterBookFile(curUser);
                     bot.execute(sendMessage);
@@ -138,8 +147,8 @@ public class MessageHandler extends BaseHandler {
                 }
                 case ENTER_BOOK_FILE_ID -> {
                     String fileId = update.message().document().fileId();
-                    newBook.setFileId(fileId);
-                    bookService.save(newBook);
+                    curBook.setFileId(fileId);
+                    bookService.save(curBook);
                     changeState(null);
                 }
                 default -> {
@@ -148,20 +157,20 @@ public class MessageHandler extends BaseHandler {
                 }
             }
 
-            if (checkBookIsValid(newBook)) {
-                newBook.setComplete(true);
-                bookService.save(newBook);
+            if (checkBookIsValid(curBook)) {
+                curBook.setComplete(true);
+                bookService.save(curBook);
                 changeStates(BaseState.MAIN_MENU_STATE, null);
             }
 
-            if (Objects.equals(newBook.isComplete(), true)) {
-                bookService.save(newBook);
-                SendMessage bookIsAddedMessage = messageMaker.bookIsAddedMessage(curUser, newBook);
+            if (Objects.equals(curBook.isComplete(), true)) {
+                bookService.save(curBook);
+                SendMessage bookIsAddedMessage = messageMaker.bookIsAddedMessage(curUser, curBook);
                 bot.execute(bookIsAddedMessage);
             } else {
                 handleAddBook(curUser);
             }
-            handleMainMenu(curUser);
+            changeStates(BaseState.MAIN_MENU_STATE, MainMenuState.MAIN_MENU.name());
         }
     }
 
@@ -174,12 +183,9 @@ public class MessageHandler extends BaseHandler {
                 && checkStrIsBlankNullAndEmpty(book.getPhotoId())
                 && checkStrIsBlankNullAndEmpty(book.getFileId())
                 && checkStrIsBlankNullAndEmpty(book.getId())
+                && checkStrIsBlankNullAndEmpty(book.getLanguage())
+                && book.getCountOfPage() == 0
                 && !book.isComplete());
-    }
-
-    private Genre getGenre() {
-        String genreStr = update.message().text();
-        return Genre.valueOf(genreStr);
     }
 
     private String getText() {
@@ -211,7 +217,6 @@ public class MessageHandler extends BaseHandler {
     public void handleMainMenu(MyUser curUser) {
         SendMessage sendMessage = messageMaker.mainMenu(curUser);
         bot.execute(sendMessage);
-
     }
 
     private void handleSearchBook(MyUser curUser) {
