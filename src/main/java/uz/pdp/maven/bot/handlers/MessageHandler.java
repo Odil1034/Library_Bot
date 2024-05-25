@@ -1,10 +1,8 @@
 package uz.pdp.maven.bot.handlers;
 
 import com.pengrad.telegrambot.model.*;
-import com.pengrad.telegrambot.model.request.InlineKeyboardButton;
 import com.pengrad.telegrambot.model.request.InlineKeyboardMarkup;
 import com.pengrad.telegrambot.request.SendMessage;
-import org.jetbrains.annotations.NotNull;
 import uz.pdp.maven.backend.models.book.Book;
 import uz.pdp.maven.backend.models.myUser.MyUser;
 import uz.pdp.maven.backend.service.bookService.filter.Filter;
@@ -39,9 +37,9 @@ public class MessageHandler extends BaseHandler {
                     case REGISTRATION_STATE -> handleRegistrationMenu();
                     case MAIN_MENU_STATE -> handleMainMenu(curUser);
                     case ADD_BOOK_STATE -> handleAddBook(curUser);
-                    case SEARCH_BOOK_STATE -> handleSearchBook(curUser);
-                    case MY_FAVOURITE_BOOKS_STATE -> handleMyFavouriteBook(curUser);
+                    case SEARCH_BOOK_STATE -> handleSearchBook();
                     case SEARCH_BY_STATE -> handleSearchBy();
+                    case MY_FAVOURITE_BOOKS_STATE -> handleMyFavouriteBook(curUser);
                     default -> bot.execute(new SendMessage(curUser.getId(), "Unexpected option"));
                 }
             }
@@ -56,6 +54,21 @@ public class MessageHandler extends BaseHandler {
         } else if (message.contact() != null) {
             handleContactMessage(message.contact());
         }
+    }
+
+    private void handleSearchBook() {
+
+        String stateStr = curUser.getState();
+        SearchBookState state = SearchBookState.valueOf(stateStr);
+        switch (state) {
+            case SEARCH_BY -> handleSearchBy();
+            case SELECT_FILE -> handleSelectFile();
+            default -> {}
+        }
+    }
+
+    private void handleSelectFile() {
+        bot.execute(messageMaker.bookNotFound(curUser));
     }
 
     private void handleNotStart(MyUser curUser) {
@@ -221,13 +234,6 @@ public class MessageHandler extends BaseHandler {
         bot.execute(sendMessage);
     }
 
-    private void handleSearchBook(MyUser curUser) {
-        String state = curUser.getState();
-        if (state.equals(SearchBookState.SEARCH_BY.name())) {
-            handleSearchBy();
-        }
-    }
-
     private void handleSearchBy() {
 
         String stateStr = curUser.getState();
@@ -236,7 +242,7 @@ public class MessageHandler extends BaseHandler {
         switch (state) {
             case BY_NAME -> {
                 String name = getText();
-                Filter<Book> bookFilterByName = (book) -> book.getName().contains(name);
+                Filter<Book> bookFilterByName = (book -> book.getName().contains(name));
                 List<Book> bookList = getBookListStrByFilter(bookFilterByName);
                 SendMessage sendMessage = messageMaker.showBookList(curUser, bookList);
                 InlineKeyboardMarkup keyboardMarkup = messageMaker.makeInlineKeyboardButtons(bookList);
@@ -245,12 +251,14 @@ public class MessageHandler extends BaseHandler {
             }
             case BY_AUTHOR -> {
                 String author = getText();
-                Filter<Book> bookFilterByAuthor = (book) -> book.getAuthor().equals(author);
+                Filter<Book> bookFilterByAuthor = (book) -> book.getAuthor().contains(author);
                 List<Book> bookList = getBookListStrByFilter(bookFilterByAuthor);
-                InlineKeyboardMarkup keyboardMarkup = messageMaker.makeInlineKeyboardButtons(bookList);
                 SendMessage sendMessage = messageMaker.showBookList(curUser, bookList);
+                InlineKeyboardMarkup keyboardMarkup = messageMaker.makeInlineKeyboardButtons(bookList);
                 sendMessage.replyMarkup(keyboardMarkup);
                 bot.execute(sendMessage);
+            }
+            case ALL_BOOKS, BY_GENRE -> {
             }
         }
         changeStates(BaseState.SEARCH_BOOK_STATE, SearchBookState.SELECT_FILE.name());

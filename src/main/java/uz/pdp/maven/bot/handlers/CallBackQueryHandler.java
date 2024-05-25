@@ -2,7 +2,6 @@ package uz.pdp.maven.bot.handlers;
 
 import com.pengrad.telegrambot.model.*;
 import com.pengrad.telegrambot.model.request.InlineKeyboardMarkup;
-import com.pengrad.telegrambot.request.SendDocument;
 import com.pengrad.telegrambot.request.SendMessage;
 import uz.pdp.maven.backend.models.book.Book;
 import uz.pdp.maven.backend.service.bookService.filter.Filter;
@@ -13,9 +12,8 @@ import uz.pdp.maven.bot.states.child.*;
 import java.util.List;
 import java.util.Objects;
 
-import static uz.pdp.maven.bot.states.child.MainMenuState.MAIN_MENU;
-import static uz.pdp.maven.bot.states.child.MainMenuState.SEARCH_BOOK;
-import static uz.pdp.maven.bot.states.child.SearchByState.BY_GENRE;
+import static uz.pdp.maven.bot.states.child.MainMenuState.*;
+import static uz.pdp.maven.bot.states.child.SearchByState.*;
 
 public class CallBackQueryHandler extends BaseHandler {
 
@@ -79,7 +77,6 @@ public class CallBackQueryHandler extends BaseHandler {
             case SEARCH_BOOK -> searchBookState();
             case MY_FAVOURITE_BOOKS -> myFavouriteBooksState();
             case ADD_BOOK -> addBookState();
-
         }
     }
 
@@ -199,16 +196,6 @@ public class CallBackQueryHandler extends BaseHandler {
         }
     }
 
-    private boolean backToMainMenu(String data, Message message) {
-        if (data.equals("MAIN_MENU")) {
-            changeStates(BaseState.MAIN_MENU_STATE, MAIN_MENU.name());
-            mainState();
-            deleteMessage(message.messageId());
-            return true;
-        }
-        return false;
-    }
-
     private void searchBookState() {
 
         CallbackQuery callbackQuery = update.callbackQuery();
@@ -218,72 +205,95 @@ public class CallBackQueryHandler extends BaseHandler {
             changeStates(BaseState.SEARCH_BOOK_STATE, SearchBookState.SEARCH_BY.name());
             return;
         }
-        Message message = callbackQuery.message();
 
-        if(backToMainMenu(data, message)) return;
+        Message message = callbackQuery.message();
+        if (backToMainMenu(data, message)) return;
         String stateStr = curUser.getState();
         SearchBookState state = SearchBookState.valueOf(stateStr);
 
         switch (state) {
-            case SEARCH_BY -> searchByState();
+            case SEARCH_BY -> {
+                changeStates(BaseState.SEARCH_BY_STATE, SearchByState.BY_NAME.name());
+                searchByState();
+            }
             case SELECT_FILE -> {
                 String bookId = update.callbackQuery().data();
                 Book book = bookService.get(bookId);
-                String fileId = book.getFileId();
-                SendDocument sendDocument = messageMaker.sendDocument(curUser, fileId);
-                bot.execute(sendDocument);
-            }
-            case ADD_MY_FAVOURITE_BOOKS -> {
-
+                if (book == null) {
+                    bot.execute(messageMaker.bookNotFound(curUser));
+                    changeStates(BaseState.SEARCH_BY_STATE, SearchByState.BY_NAME.name());
+                    return;
+                }
+                bot.execute(messageMaker.sendBookPhoto(curUser, book));
+                bot.execute(messageMaker.sendDocument(curUser, book));
             }
         }
     }
 
+    private boolean backToMainMenu(String data, Message message) {
+        if (data.equals("MAIN_MENU")) {
+            changeStates(BaseState.MAIN_MENU_STATE, MAIN_MENU.name());
+            mainState();
+            return true;
+        }
+        return false;
+    }
+
     private void searchByState() {
 
-        String stateStr = update.callbackQuery().data();
-        SearchByState state = SearchByState.valueOf(stateStr);
-        changeBaseState(BaseState.SEARCH_BY_STATE);
+        CallbackQuery callbackQuery = update.callbackQuery();
+        Message message = callbackQuery.message();
+        String data = callbackQuery.data();
 
+        if(backToMainMenu(data, message)) return;
+        if(curUser.getState().equals(HANDLE_GENRE.name())){
+            handleBookGenre();
+        }
+        SearchByState state = SearchByState.valueOf(data);
+        changeBaseState(BaseState.SEARCH_BY_STATE);
         switch (state) {
             case BY_NAME -> {
                 bot.execute(new SendMessage(curUser.getId(), "SEARCHING BOOK INFO \n\nEnter book name: "));
                 changeState(SearchByState.BY_NAME.name());
             }
             case BY_AUTHOR -> {
-                bot.execute(new SendMessage(curUser.getId(), "Enter book author: "));
+                bot.execute(new SendMessage(curUser.getId(), "SEARCHING BOOK INFO \n\nEnter book author: "));
                 changeState(SearchByState.BY_AUTHOR.name());
             }
             case BY_GENRE -> {
-                String data = update.callbackQuery().data();
-                if (data.equals(BY_GENRE.name())) {
-                    bot.execute(messageMaker.selectGenre(curUser));
-                    changeStates(BaseState.SEARCH_BY_STATE, BY_GENRE.name());
-                } else {
-                    String genreStr = update.callbackQuery().data();
-                    Genre genre = Genre.valueOf(genreStr);
-                    Filter<Book> bookFilterByGenre = (book -> book.getGenre().equals(genre));
-                    List<Book> bookList = getBookListStrByFilter(bookFilterByGenre);
-                    SendMessage sendMessage = messageMaker.showBookList(curUser, bookList);
-                    InlineKeyboardMarkup keyboardMarkup = messageMaker.makeInlineKeyboardButtons(bookList);
-                    sendMessage.replyMarkup(keyboardMarkup);
-                    bot.execute(sendMessage);
-                }
+                bot.execute(messageMaker.selectGenre(curUser));
+                changeStates(BaseState.SEARCH_BY_STATE, HANDLE_GENRE.name());
             }
             case ALL_BOOKS -> {
-                bot.execute(new SendMessage(curUser.getId(), "ALL BOOKS\n"));
                 List<Book> allBooks = bookService.getAllBooks();
                 SendMessage sendMessage = messageMaker.showBookList(curUser, allBooks);
                 InlineKeyboardMarkup keyboardMarkup = messageMaker.makeInlineKeyboardButtons(allBooks);
                 sendMessage.replyMarkup(keyboardMarkup);
                 bot.execute(sendMessage);
+                changeStates(BaseState.SEARCH_BOOK_STATE, SearchBookState.SELECT_FILE.name());
             }
         }
+    }
+
+    private void handleBookGenre() {
+        String genreStr = update.callbackQuery().data();
+        Genre genre = Genre.valueOf(genreStr);
+        Filter<Book> bookFilterByGenre = (book -> book.getGenre().equals(genre));
+        List<Book> bookList = getBookListStrByFilter(bookFilterByGenre);
+        SendMessage sendMessage = messageMaker.showBookList(curUser, bookList);
+        InlineKeyboardMarkup keyboardMarkup = messageMaker.makeInlineKeyboardButtons(bookList);
+        sendMessage.replyMarkup(keyboardMarkup);
+        bot.execute(sendMessage);
         changeStates(BaseState.SEARCH_BOOK_STATE, SearchBookState.SELECT_FILE.name());
     }
 
     private void myFavouriteBooksState() {
         changeStates(BaseState.MY_FAVOURITE_BOOKS_STATE, null);
-        System.out.println("myFavouriteBooksState is run");
+        Filter<Book> bookFilter = (book -> book.getUserId().equals(curUser.getId()));
+        List<Book> books = bookService.getBooksByFilter(bookFilter);
+        SendMessage sendMessage = messageMaker.showBookList(curUser, books);
+        InlineKeyboardMarkup keyboardMarkup = messageMaker.makeInlineKeyboardButtons(books);
+        sendMessage.replyMarkup(keyboardMarkup);
+        bot.execute(sendMessage);
     }
 }

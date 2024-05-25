@@ -5,7 +5,7 @@
     "firstname": "Odiljon",
     "lastname": "Baxriddinov",
     "phoneNumber": "+998974351034",
-    "baseState": "SEARCH_BY_STATE",
-    "state": "SEARCH_BY"
+    "baseState": "MAIN_MENU_STATE",
+    "state": "MAIN_MENU"
   }
 ]

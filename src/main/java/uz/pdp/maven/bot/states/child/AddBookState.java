@@ -3,7 +3,6 @@ package uz.pdp.maven.bot.states.child;
 import lombok.Getter;
 import uz.pdp.maven.bot.states.State;
 
-
 @Getter
 public enum AddBookState implements State {
     ENTER_BOOK_NAME,

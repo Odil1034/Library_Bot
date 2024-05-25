@@ -5,8 +5,11 @@ import com.pengrad.telegrambot.model.request.InlineKeyboardButton;
 import com.pengrad.telegrambot.model.request.InlineKeyboardMarkup;
 import com.pengrad.telegrambot.model.request.KeyboardButton;
 import com.pengrad.telegrambot.model.request.ReplyKeyboardMarkup;
+import com.pengrad.telegrambot.request.BaseRequest;
 import com.pengrad.telegrambot.request.SendDocument;
 import com.pengrad.telegrambot.request.SendMessage;
+import com.pengrad.telegrambot.request.SendPhoto;
+import com.pengrad.telegrambot.response.BaseResponse;
 import org.jetbrains.annotations.NotNull;
 import uz.pdp.maven.backend.models.book.Book;
 import uz.pdp.maven.backend.models.myUser.MyUser;
@@ -185,22 +188,37 @@ public class MessageMaker {
         StringJoiner stringJoiner = new StringJoiner("\n");
         for (int i = 0; i < books.size(); i++) {
             Book book = books.get(i);
-            stringJoiner.add(i + 1 + ".     \uD83D\uDCD3 " + book.getName())
-                    .add("    ✍️ " + book.getAuthor());
+            stringJoiner
+                    .add(i + 1 + ".     \uD83D\uDCD3 " + book.getName())
+                    .add("        🌐 " + book.getGenre())
+                    .add("        ✍️ " + book.getAuthor() + "\n");
         }
 
         return new SendMessage(curUser.getId(), stringJoiner.toString());
     }
 
-    public SendMessage showBook(MyUser curUser, Book book) {
+    public SendPhoto sendBookPhoto(MyUser curUser, Book book) {
+        return new SendPhoto(curUser.getId(), book.getPhotoId());
+    }
+
+    public SendDocument sendDocument(MyUser curUser, Book book) {
+
+        SendDocument sendDocument = new SendDocument(curUser.getId(), book.getFileId());
 
         StringJoiner stringJoiner = new StringJoiner("\n");
-        stringJoiner.add("Book").add(book.getName())
-                .add(book.getGenre().name())
-                .add(book.getAuthor())
-                .add(book.getDescription());
+        stringJoiner.add("\uD83D\uDCD3 " + book.getName())
+                .add(" 🌐 " + book.getGenre().name())
+                .add(" ✍️ " + book.getAuthor())
+                .add(" 📄 " + book.getCountOfPage() + " bet")
+                .add("📚 " + book.getLanguage())
+                .add("\n\n Kitob haqida: \n" + book.getDescription());
 
-        return new SendMessage(curUser.getId(), stringJoiner.toString());
+        sendDocument = sendDocument.caption(stringJoiner.toString());
+        InlineKeyboardButton[][] backAndMainKeyboard = getBackAndMainKeyboard();
+        InlineKeyboardMarkup keyboardMarkup = new InlineKeyboardMarkup(backAndMainKeyboard);
+        sendDocument.replyMarkup(keyboardMarkup);
+
+        return sendDocument;
     }
 
 
@@ -224,17 +242,22 @@ public class MessageMaker {
                 .toArray(InlineKeyboardButton[][]::new);
         return new InlineKeyboardMarkup(keyboardArray);
     }
+//
+//    public SendDocument sendDocument(MyUser curUser, Book book) {
+//        SendMessage sendMessage = showBook(curUser, book);
+//        SendDocument sendDocument = new SendDocument(curUser.getId(), fileId);
+//        InlineKeyboardButton[][] button = {
+//                new InlineKeyboardButton[]{
+//                        getNewInlineButton("Main Menu", "MAIN_MENU")
+//                }
+//        };
+//        InlineKeyboardMarkup keyboardMarkup = new InlineKeyboardMarkup(button);
+//        sendDocument.replyMarkup(keyboardMarkup);
+//        return sendDocument;
+//    }
 
-    public SendDocument sendDocument(MyUser curUser, String fileId) {
-        SendDocument sendDocument = new SendDocument(curUser.getId(), fileId);
-        InlineKeyboardButton[][] button = {
-                new InlineKeyboardButton[]{
-                        getNewInlineButton("Main Menu", "MAIN_MENU")
-                }
-        };
-        InlineKeyboardMarkup keyboardMarkup = new InlineKeyboardMarkup(button);
-        sendDocument.replyMarkup(keyboardMarkup);
-        return sendDocument;
+    public SendMessage bookNotFound(MyUser curUser) {
+        return new SendMessage(curUser.getId(), "Book not found");
     }
 }
 
