@@ -31,7 +31,7 @@ public class UserService implements BaseService, PathConstants {
         writerAndReader.write(users);
     }
 
-    public MyUser get(String id) {
+    public MyUser get(Long id) {
         List<MyUser> users = writerAndReader.load(MyUser.class);
         for (MyUser user : users) {
             if (Objects.equals(user.getId(), id)) {

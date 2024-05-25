@@ -3,18 +3,16 @@ package uz.pdp.maven.backend.models.book;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-import uz.pdp.maven.backend.models.BaseModel;
 import uz.pdp.maven.backend.types.bookTypes.Genre;
 
+import java.io.File;
 import java.util.UUID;
 
-@EqualsAndHashCode(callSuper = true)
 @Data
 @AllArgsConstructor
 @Builder
 
-public class Book extends BaseModel {
+public class Book {
     private String Id;
     private String name;
     private String author;
@@ -26,4 +24,8 @@ public class Book extends BaseModel {
     private String fileId;
     private Long userId;
     private boolean isComplete;
+
+    public Book() {
+        this.Id = UUID.randomUUID().toString();
+    }
 }

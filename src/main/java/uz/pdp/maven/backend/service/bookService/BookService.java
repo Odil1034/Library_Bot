@@ -50,10 +50,6 @@ public class BookService implements BaseService {
         return null;
     }
 
-    public List<Book> getAllBooks(){
-        return bookWriterAndLoader.load(Book.class);
-    }
-
     public List<Book> getBooksByFilter(Filter<Book> filter) {
         ArrayList<Book> result = new ArrayList<>();
         List<Book> books = bookWriterAndLoader.load(Book.class);

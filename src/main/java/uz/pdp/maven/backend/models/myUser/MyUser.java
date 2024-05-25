@@ -1,7 +1,10 @@
 package uz.pdp.maven.backend.models.myUser;
 
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
@@ -9,6 +12,7 @@ import lombok.*;
 @Builder
 
 public class MyUser {
+
     private Long Id;
     private String username;
     private String firstname;

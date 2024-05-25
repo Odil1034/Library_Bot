@@ -7,16 +7,12 @@ import com.pengrad.telegrambot.model.request.KeyboardButton;
 import com.pengrad.telegrambot.model.request.ReplyKeyboardMarkup;
 import com.pengrad.telegrambot.request.SendMessage;
 import org.jetbrains.annotations.NotNull;
-import uz.pdp.maven.backend.models.BaseModel;
 import uz.pdp.maven.backend.models.book.Book;
 import uz.pdp.maven.backend.models.myUser.MyUser;
 import uz.pdp.maven.backend.types.bookTypes.Genre;
-import uz.pdp.maven.bot.states.child.SearchByState;
 
 import static uz.pdp.maven.backend.types.bookTypes.Genre.*;
 
-import java.awt.*;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.StringJoiner;
@@ -63,20 +59,39 @@ public class MessageMaker {
         SendMessage sendMessage = new SendMessage(curUser.getId(), "Search Book");
 
         InlineKeyboardButton[][] buttons = {
-                {getNewInlineButton("By Name", SearchByState.BY_NAME.name()),
-                        getNewInlineButton("By Author", SearchByState.BY_AUTHOR.name())},
-                {getNewInlineButton("By Genre", SearchByState.BY_GENRE.name()),
-                        getNewInlineButton("All Books", SearchByState.ALL_BOOKS.name())},
+                {getNewInlineButton("By Name", "BY_NAME"),
+                        getNewInlineButton("By Author", "BY_AUTHOR")},
+                {getNewInlineButton("By Genre", "BY_GENRE"),
+                        getNewInlineButton("All Books", "ALL_BOOKS")},
                 {getNewInlineButton("Main Menu", "MAIN_MENU")}
         };
         InlineKeyboardMarkup keyboardMarkup = new InlineKeyboardMarkup(buttons);
         sendMessage.replyMarkup(keyboardMarkup);
-
         return sendMessage;
     }
 
+    public static void myFavouriteBookMenu(List<Book> books) {
+
+        Map<Genre, List<Book>> collect = books.stream().collect(Collectors.groupingBy(Book::getGenre));
+
+        StringJoiner joiner = new StringJoiner("\n");
+
+        collect.forEach((genre, books1) -> {
+            int i;
+            joiner.add("\n" + genre.name() + "\n");
+            for (i = 0; i < books1.size(); i++) {
+                joiner.add(i + 1 + ". "
+                        + books1.get(i).getName() + "   "
+                        + books1.get(i).getAuthor());
+            }
+            i = 0;
+        });
+
+        System.out.println(joiner);
+    }
+
     public SendMessage enterBookNameMenu(MyUser curUser) {
-        SendMessage sendMessage = new SendMessage(curUser.getId(), "\nEnter Book name: ");
+        SendMessage sendMessage = new SendMessage(curUser.getId(), "ADD BOOK MENU\n\nEnter Book name: ");
         InlineKeyboardButton[][] buttons = {
                 new InlineKeyboardButton[]{
                         getNewInlineButton("Main Menu", "MAIN_MENU")
@@ -173,27 +188,6 @@ public class MessageMaker {
         return sendMessage;
     }
 
-    public String showBookList(List<Book> books) {
-
-        Map<Genre, List<Book>> collect = books.stream().collect(Collectors.groupingBy(Book::getGenre));
-
-        StringJoiner joiner = new StringJoiner("\n");
-
-        collect.forEach((genre, books1) -> {
-            int i;
-            joiner.add("\n" + genre.name() + "\n");
-            for (i = 0; i < books1.size(); i++) {
-                joiner.add(i + 1 + ". "
-                        + books1.get(i).getName() + "   "
-                        + books1.get(i).getAuthor());
-            }
-        });
-
-        System.out.println(joiner);
-
-        return joiner.toString();
-    }
-
     private InlineKeyboardButton[][] getBackAndMainKeyboard() {
         return new InlineKeyboardButton[][]{
                 new InlineKeyboardButton[]{
@@ -205,25 +199,5 @@ public class MessageMaker {
     private InlineKeyboardButton getNewInlineButton(String buttonName, String callBackData) {
         return new InlineKeyboardButton(buttonName).callbackData(callBackData);
     }
-
-    private <T extends BaseModel> InlineKeyboardButton makeInlineKeyboardButton(T t, int num) {
-        InlineKeyboardButton inlineKeyboardButton = new InlineKeyboardButton(String.valueOf(num));
-        return inlineKeyboardButton.callbackData(String.valueOf(t.getId()));
-    }
-
-    public <T extends BaseModel> InlineKeyboardMarkup makeInlineKeyboardButtons(List<T> list) {
-        List<List<InlineKeyboardButton>> rows = new ArrayList<>();
-
-        for (int i = 0; i < list.size(); i += 3) {
-            List<InlineKeyboardButton> row = new ArrayList<>();
-            for (int j = i; j < i + 3 && j < list.size(); j++) {
-                row.add(makeInlineKeyboardButton(list.get(j), j + 1));
-            }
-            rows.add(row);
-        }
-        InlineKeyboardButton[][] keyboardArray = rows.stream()
-                .map(row -> row.toArray(new InlineKeyboardButton[0]))
-                .toArray(InlineKeyboardButton[][]::new);
-        return new InlineKeyboardMarkup(keyboardArray);
-    }
 }
+
