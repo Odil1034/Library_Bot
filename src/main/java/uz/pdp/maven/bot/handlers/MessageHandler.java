@@ -171,6 +171,7 @@ public class MessageHandler extends BaseHandler {
                 handleAddBook(curUser);
             }
             changeStates(BaseState.MAIN_MENU_STATE, MainMenuState.MAIN_MENU.name());
+            bot.execute(messageMaker.mainMenu(curUser));
         }
     }
 

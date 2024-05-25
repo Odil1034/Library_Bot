@@ -336,5 +336,31 @@
     "fileId": "BQACAgIAAxkBAAIT9GZO7X8-By3dxCmm-D0tOA1dbF8eAAKGSwAC7Ft5SjkVQVpPE0fANQQ",
     "userId": 1040000390,
     "isComplete": true
+  },
+  {
+    "Id": "3d8468ba-aec7-43cf-afb1-bbdf266c788c",
+    "name": "Ming marta shukur",
+    "author": "Aziz Nesin",
+    "genre": "BOSHQALAR",
+    "language": "Uzbek",
+    "countOfPage": 10,
+    "description": "Ming bora shukr",
+    "photoId": "AgACAgIAAxkBAAIXGGZReYmy_SDJQTfbgPUic7SHmMSaAAIk2DEbvGOJSliEHhlOiNAlAQADAgADcwADNQQ",
+    "fileId": "BQACAgIAAxkBAAIXGmZRebGW8S6qZD4cmWFEE2cg7bzjAALuUgACeB2JSr-cW9FKfhmkNQQ",
+    "userId": 1040000390,
+    "isComplete": true
+  },
+  {
+    "Id": "46b985db-e0d8-4b46-86a0-03a712142ed8",
+    "name": "Murtad",
+    "author": "Abdulhamid Ismoil",
+    "genre": "BADIIY_ADABIYOTLAR",
+    "language": "Uzbek",
+    "countOfPage": 99,
+    "description": "Бу китобга кўмиладиган сиру-синоатларни ҳам ҳозирлаб қўйибман: шундай бир китоб бўлсинки, бола онасининг кўрпа тагидаги чўпчакларидан бир чўчиб, бир хўрсиниб, бир юрагини тўлдириб, ўнгини тушдан ажратолмагандек, ё-да мана шу чол қинғир-қийшиқ бармоқлари ила эски-туски дафтарларни титкилар экан, орадан бир парча хат унинг нурсиз кўзи эмас, тўғридан-тўғри ҳалқумга тиқилган нафасига йўлиққандек...",
+    "photoId": "AgACAgIAAxkBAAIXK2ZRep3dd3awGSF-yTz_QVv_9fS8AAIs3DEbeB2JSgoOkMNP4ceQAQADAgADcwADNQQ",
+    "fileId": "BQACAgIAAxkBAAIXLWZReqqA7MJdC33Nu4trFDtR6CPuAALyUgACeB2JSj0iY0uzseqMNQQ",
+    "userId": 1040000390,
+    "isComplete": true
   }
 ]

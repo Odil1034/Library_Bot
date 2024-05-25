@@ -114,7 +114,6 @@ public class CallBackQueryHandler extends BaseHandler {
         String data = update.callbackQuery().data();
 
         if (backToMainMenu(data, message)) return;
-        if (backForAddBook(data, message, state)) return;
 
         switch (state) {
             case ENTER_BOOK_NAME -> {
@@ -126,14 +125,14 @@ public class CallBackQueryHandler extends BaseHandler {
             }
             case ENTER_BOOK_AUTHOR -> {
                 if (data.equals("BACK")) {
-                    changeState(AddBookState.ENTER_BOOK_NAME.name());
                     SendMessage bookNameMessage = messageMaker.enterBookNameMenu(curUser);
                     bot.execute(bookNameMessage);
-                    deleteMessage(update.message().messageId());
+                    changeState(AddBookState.ENTER_BOOK_NAME.name());
                     return;
                 }
                 SendMessage sendMessage = messageMaker.selectGenre(curUser);
                 bot.execute(sendMessage);
+                deleteMessage(message.messageId());
                 deleteMessage(message.messageId());
             }
             case SELECT_BOOK_GENRE -> {
@@ -141,7 +140,6 @@ public class CallBackQueryHandler extends BaseHandler {
                     changeState(AddBookState.ENTER_BOOK_AUTHOR.name());
                     SendMessage sendMessage = messageMaker.enterBookAuthor(curUser);
                     bot.execute(sendMessage);
-                    deleteMessage(update.message().messageId());
                     return;
                 }
                 Genre genre = Genre.valueOf(data);
@@ -152,14 +150,12 @@ public class CallBackQueryHandler extends BaseHandler {
                 changeState(AddBookState.ENTER_BOOK_LANGUAGE.name());
                 SendMessage sendMessage = messageMaker.enterBookLanguage(curUser);
                 bot.execute(sendMessage);
-                deleteMessage(update.message().messageId());
             }
             case ENTER_BOOK_LANGUAGE -> {
                 if (data.equals("BACK")) {
                     changeState(AddBookState.SELECT_BOOK_GENRE.name());
                     SendMessage sendMessage = messageMaker.selectGenre(curUser);
                     bot.execute(sendMessage);
-                    deleteMessage(update.message().messageId());
                     deleteMessage(message.messageId());
                 }
             }
@@ -168,7 +164,6 @@ public class CallBackQueryHandler extends BaseHandler {
                     changeState(AddBookState.ENTER_BOOK_LANGUAGE.name());
                     SendMessage sendMessage = messageMaker.enterBookLanguage(curUser);
                     bot.execute(sendMessage);
-                    deleteMessage(update.message().messageId());
                     return;
                 }
                 deleteMessage(message.messageId());
@@ -178,7 +173,6 @@ public class CallBackQueryHandler extends BaseHandler {
                     changeState(AddBookState.ENTER_BOOK_PHOTO_ID.name());
                     SendMessage sendMessage = messageMaker.enterBookPhoto(curUser);
                     bot.execute(sendMessage);
-                    deleteMessage(update.message().messageId());
                     return;
                 }
                 deleteMessage(message.messageId());
@@ -188,7 +182,6 @@ public class CallBackQueryHandler extends BaseHandler {
                     changeState(AddBookState.ENTER_BOOK_PAGE.name());
                     SendMessage sendMessage = messageMaker.enterBookPage(curUser);
                     bot.execute(sendMessage);
-                    deleteMessage(update.message().messageId());
                     return;
                 }
                 deleteMessage(message.messageId());
@@ -198,21 +191,10 @@ public class CallBackQueryHandler extends BaseHandler {
                     changeState(AddBookState.ENTER_BOOK_DESCRIPTION.name());
                     SendMessage sendMessage = messageMaker.enterBookDescription(curUser);
                     bot.execute(sendMessage);
-                    deleteMessage(update.message().messageId());
                 }
             }
             default -> anyThingIsWrongMessage();
         }
-    }
-
-    private boolean backForAddBook(String data, Message message, AddBookState state) {
-        if (data.equals("BACK")) {
-            AddBookState prevState = state.getPrevState();
-            changeStates(BaseState.ADD_BOOK_STATE, prevState.name());
-            deleteMessage(message.messageId());
-            return true;
-        }
-        return false;
     }
 
     private boolean backToMainMenu(String data, Message message) {
@@ -226,17 +208,19 @@ public class CallBackQueryHandler extends BaseHandler {
     }
 
     private void searchBookState() {
-        SendMessage sendMessage = messageMaker.searchBookMenu(curUser);
-        bot.execute(sendMessage);
+
+        changeState(SearchBookState.SEARCH_BY.name());
 
         CallbackQuery callbackQuery = update.callbackQuery();
+        String data = callbackQuery.data();
         String stateStr = curUser.getState();
         SearchBookState state = SearchBookState.valueOf(stateStr);
 
         switch (state) {
             case SEARCH_BY -> {
-                String data = callbackQuery.data();
-                searchBookMenu(data);
+                SendMessage sendMessage = messageMaker.searchBookMenu(curUser);
+                bot.execute(sendMessage);
+                searchByMenu(data);
             }
             case BOOK_LIST -> {
 
@@ -253,19 +237,16 @@ public class CallBackQueryHandler extends BaseHandler {
         }
     }
 
-    private void searchBookMenu(String data) {
+    private void searchByMenu(String data) {
 
-        if (data.equals("BY_NAME")) {
-            bot.execute(new SendMessage(curUser.getId(), "SEARCHING BOOK INFO"));
-            bot.execute(new SendMessage(curUser.getId(), "Enter book name: "));
-        } else if (data.equals("BY_AUTHOR")) {
-            bot.execute(new SendMessage(curUser.getId(), "Enter book author: "));
-        } else if (data.equals("BY_GENRE")) {
-            bot.execute(messageMaker.selectGenre(curUser));
-        } else if (data.equals("ALL_BOOKS")) {
-            bot.execute(new SendMessage(curUser.getId(), "All books"));
-        } else if (data.equals("MAIN_MENU")) {
-            changeStates(BaseState.MAIN_MENU_STATE, null);
+        switch (data) {
+            case "BY_NAME" -> {
+                bot.execute(new SendMessage(curUser.getId(), "SEARCHING BOOK INFO"));
+                bot.execute(new SendMessage(curUser.getId(), "Enter book name: "));
+            }
+            case "BY_AUTHOR" -> bot.execute(new SendMessage(curUser.getId(), "Enter book author: "));
+            case "BY_GENRE" -> bot.execute(messageMaker.selectGenre(curUser));
+            case "ALL_BOOKS" -> bot.execute(new SendMessage(curUser.getId(), "All books"));
         }
     }
 
