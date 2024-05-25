@@ -5,7 +5,6 @@ import uz.pdp.maven.backend.service.BaseService;
 import uz.pdp.maven.backend.service.bookService.filter.Filter;
 import uz.pdp.maven.backend.utils.fileWriterAndLoader.FileWriterAndLoader;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -22,7 +21,7 @@ public class BookService implements BaseService {
     }
 
     public void save(Book book) {
-        List<Book> books = bookWriterAndLoader.load(Book.class);
+        List<Book> books = bookWriterAndLoader.read(Book.class);
 
         for (int i = 0; i < books.size(); i++) {
             Book curBook = books.get(i);
@@ -38,7 +37,7 @@ public class BookService implements BaseService {
     }
 
     public Book get(String bookId) {
-        List<Book> books = bookWriterAndLoader.load(Book.class);
+        List<Book> books = bookWriterAndLoader.read(Book.class);
 
         for (int i = 0; i < books.size(); i++) {
             Book curBook = books.get(i);
@@ -52,7 +51,7 @@ public class BookService implements BaseService {
 
     public List<Book> getBooksByFilter(Filter<Book> filter) {
         ArrayList<Book> result = new ArrayList<>();
-        List<Book> books = bookWriterAndLoader.load(Book.class);
+        List<Book> books = bookWriterAndLoader.read(Book.class);
         for (Book book : books) {
             if(filter.check(book)){
                 result.add(book);
@@ -61,8 +60,12 @@ public class BookService implements BaseService {
         return result;
     }
 
+    public List<Book> getAllBooks(){
+        return bookWriterAndLoader.read(Book.class);
+    }
+
     public Book getNewOrNonCompletedBookByUserId(Long userId) {
-        List<Book> bookList = bookWriterAndLoader.load(Book.class);
+        List<Book> bookList = bookWriterAndLoader.read(Book.class);
         for (Book book : bookList) {
             if (book.getUserId().equals(userId)) {
                 if (!book.isComplete()) {

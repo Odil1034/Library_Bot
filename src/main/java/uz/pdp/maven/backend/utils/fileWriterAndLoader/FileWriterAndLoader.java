@@ -33,7 +33,7 @@ public class FileWriterAndLoader<M> {
         }
     }
 
-    public List<M> load(Class<M> mClass) {
+    public List<M> read(Class<M> mClass) {
         try {
             String json = Files.readString(path);
             Type type = TypeToken.getParameterized(List.class, mClass).getType();

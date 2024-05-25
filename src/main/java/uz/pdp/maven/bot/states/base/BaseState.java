@@ -8,6 +8,7 @@ public enum BaseState implements State {
     MAIN_MENU_STATE,
     ADD_BOOK_STATE,
     SEARCH_BOOK_STATE,
-    MY_FAVOURITE_BOOKS_STATE;
+    MY_FAVOURITE_BOOKS_STATE,
+    SEARCH_BY_STATE;
 
 }

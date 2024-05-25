@@ -1,21 +1,20 @@
 package uz.pdp.maven.bot.handlers;
 
 import com.pengrad.telegrambot.model.*;
+import com.pengrad.telegrambot.model.request.InlineKeyboardButton;
+import com.pengrad.telegrambot.model.request.InlineKeyboardMarkup;
 import com.pengrad.telegrambot.request.SendMessage;
 import org.jetbrains.annotations.NotNull;
 import uz.pdp.maven.backend.models.book.Book;
 import uz.pdp.maven.backend.models.myUser.MyUser;
 import uz.pdp.maven.backend.service.bookService.filter.Filter;
 import uz.pdp.maven.bot.states.base.BaseState;
-import uz.pdp.maven.bot.states.child.AddBookState;
-import uz.pdp.maven.bot.states.child.MainMenuState;
-import uz.pdp.maven.bot.states.child.RegistrationState;
+import uz.pdp.maven.bot.states.child.*;
 
-import java.util.List;
-import java.util.Objects;
-import java.util.StringJoiner;
+import java.util.*;
 
 import static uz.pdp.maven.bot.maker.MessageMaker.welcomeMessage;
+import static uz.pdp.maven.bot.states.child.SearchByState.*;
 
 public class MessageHandler extends BaseHandler {
 
@@ -42,6 +41,7 @@ public class MessageHandler extends BaseHandler {
                     case ADD_BOOK_STATE -> handleAddBook(curUser);
                     case SEARCH_BOOK_STATE -> handleSearchBook(curUser);
                     case MY_FAVOURITE_BOOKS_STATE -> handleMyFavouriteBook(curUser);
+                    case SEARCH_BY_STATE -> handleSearchBy();
                     default -> bot.execute(new SendMessage(curUser.getId(), "Unexpected option"));
                 }
             }
@@ -204,9 +204,10 @@ public class MessageHandler extends BaseHandler {
     }
 
     private void handleRegistrationMenu() {
-        if(curUser.getState() == null){
+        if (curUser.getState() == null) {
             changeStates(BaseState.REGISTRATION_STATE, RegistrationState.NOT_REGISTERED.name());
-        }if (curUser.getState().equals(RegistrationState.NOT_REGISTERED.name())) {
+        }
+        if (curUser.getState().equals(RegistrationState.NOT_REGISTERED.name())) {
             SendMessage sendMessage = messageMaker.enterPhoneNumber(curUser);
             bot.execute(sendMessage);
             changeStates(BaseState.REGISTRATION_STATE, RegistrationState.SEND_PHONE_NUMBER.name());
@@ -222,53 +223,49 @@ public class MessageHandler extends BaseHandler {
 
     private void handleSearchBook(MyUser curUser) {
         String state = curUser.getState();
+        if (state.equals(SearchBookState.SEARCH_BY.name())) {
+            handleSearchBy();
+        } else if (state.equals(SearchBookState.BOOK_LIST.name())) {
 
-        SendMessage searchResult;
+        } else if (state.equals(SearchBookState.ADD_MY_FAVOURITE_BOOKS.name())) {
 
-        if (state.equals("BY_NAME")) {
-            String name = getText();
-            Filter<Book> bookFilterByName = (book) -> book.getName().contains(name);
-            searchResult = getBookListStrByFilter(bookFilterByName);
-            bot.execute(searchResult);
-        } else if (state.equals("BY_AUTHOR")) {
-            String author = getText();
-            Filter<Book> bookFilterByAuthor = (book) -> book.getAuthor().contains(author);
-            searchResult = getBookListStrByFilter(bookFilterByAuthor);
-            bot.execute(searchResult);
-        } else if (state.equals("BY_GENRE")) {
+        } else if (state.equals(SearchBookState.SELECT_FILE.name())) {
+
+        } else if (state.equals(SearchBookState.DOWNLOAD.name())) {
+
+        } else {
 
         }
+
     }
 
-    private @NotNull SendMessage getBookListStrByFilter(Filter<Book> bookFilter) {
-        StringBuilder searchResultStr = new StringBuilder();
-        List<Book> books = bookService.getBooksByFilter(bookFilter);
+    private void handleSearchBy() {
 
-        return showBookList(books);
-    }
+        String stateStr = curUser.getState();
+        SearchByState state = valueOf(stateStr);
 
-    public SendMessage showBookList(List<Book> books) {
+        switch (state) {
+            case BY_NAME -> {
+                String name = getText();
+                Filter<Book> bookFilterByName = (book) -> book.getName().contains(name);
+                List<Book> bookList = getBookListStrByFilter(bookFilterByName);
+                SendMessage sendMessage = messageMaker.showBookList(curUser, bookList);
+                InlineKeyboardMarkup keyboardMarkup = messageMaker.makeInlineKeyboardButtons(bookList);
+                sendMessage.replyMarkup(keyboardMarkup);
+                bot.execute(sendMessage);
+            }
+            case BY_AUTHOR -> {
+                String author = getText();
+                Filter<Book> bookFilterByAuthor = (book) -> book.getAuthor().equals(author);
+                List<Book> bookList = getBookListStrByFilter(bookFilterByAuthor);
+                InlineKeyboardMarkup keyboardMarkup = messageMaker.makeInlineKeyboardButtons(bookList);
+                SendMessage sendMessage = messageMaker.showBookList(curUser, bookList);
+                sendMessage.replyMarkup(keyboardMarkup);
+                bot.execute(sendMessage);
+            }
+            default -> {
 
-        StringJoiner stringJoiner = new StringJoiner("\n");
-        stringJoiner.add("BOOKS LIST\n");
-        for (int i = 0; i < books.size(); i++) {
-            Book book = books.get(i);
-            stringJoiner.add(i + 1 + ".   ").add(book.getName())
-                    .add("    " + book.getGenre().name())
-                    .add("     " + book.getAuthor())
-                    .add("      " + book.getDescription());
+            }
         }
-
-        return new SendMessage(curUser.getId(), stringJoiner.toString());
-    }
-
-    public void showBook(Book book) {
-        StringJoiner stringJoiner = new StringJoiner("\n");
-        stringJoiner.add("Book").add(book.getName())
-                .add(book.getGenre().name())
-                .add(book.getAuthor())
-                .add(book.getDescription());
-
-        bot.execute(new SendMessage(curUser.getId(), stringJoiner.toString()));
     }
 }

@@ -1,6 +1,5 @@
 package uz.pdp.maven.backend.service.userService;
 
-import com.pengrad.telegrambot.model.User;
 import uz.pdp.maven.backend.models.myUser.MyUser;
 import uz.pdp.maven.backend.paths.PathConstants;
 import uz.pdp.maven.backend.service.BaseService;
@@ -18,7 +17,7 @@ public class UserService implements BaseService, PathConstants {
     }
 
     public void save(MyUser myUser) {
-        List<MyUser> users = writerAndReader.load(MyUser.class);
+        List<MyUser> users = writerAndReader.read(MyUser.class);
         for (int i = 0; i < users.size(); i++) {
             MyUser curUser = users.get(i);
             if (Objects.equals(curUser.getId(), myUser.getId())) {
@@ -32,7 +31,7 @@ public class UserService implements BaseService, PathConstants {
     }
 
     public MyUser get(Long id) {
-        List<MyUser> users = writerAndReader.load(MyUser.class);
+        List<MyUser> users = writerAndReader.read(MyUser.class);
         for (MyUser user : users) {
             if (Objects.equals(user.getId(), id)) {
                 return user;

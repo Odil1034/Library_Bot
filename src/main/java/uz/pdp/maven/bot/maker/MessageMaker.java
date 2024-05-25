@@ -13,6 +13,7 @@ import uz.pdp.maven.backend.types.bookTypes.Genre;
 
 import static uz.pdp.maven.backend.types.bookTypes.Genre.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.StringJoiner;
@@ -198,6 +199,52 @@ public class MessageMaker {
 
     private InlineKeyboardButton getNewInlineButton(String buttonName, String callBackData) {
         return new InlineKeyboardButton(buttonName).callbackData(callBackData);
+    }
+
+    public SendMessage showBookList(MyUser curUser, List<Book> books) {
+
+        StringJoiner stringJoiner = new StringJoiner("\n");
+        for (int i = 0; i < books.size(); i++) {
+            Book book = books.get(i);
+            stringJoiner.add(i + 1 + ".     \uD83D\uDCD3 " + book.getName())
+                    .add("    ✍\uFE0F " + book.getAuthor());
+        }
+
+        return new SendMessage(curUser.getId(), stringJoiner.toString());
+    }
+
+    public SendMessage showBook(MyUser curUser, Book book) {
+
+        StringJoiner stringJoiner = new StringJoiner("\n");
+        stringJoiner.add("Book").add(book.getName())
+                .add(book.getGenre().name())
+                .add(book.getAuthor())
+                .add(book.getDescription());
+
+        return new SendMessage(curUser.getId(), stringJoiner.toString());
+    }
+
+
+
+    public <T extends Book> InlineKeyboardButton makeInlineKeyboardButton(T t, int num) {
+        InlineKeyboardButton inlineKeyboardButton = new InlineKeyboardButton(String.valueOf(num));
+        return inlineKeyboardButton.callbackData(String.valueOf(t.getId()));
+    }
+
+    public <T extends Book> InlineKeyboardMarkup makeInlineKeyboardButtons(List<T> list) {
+        List<List<InlineKeyboardButton>> rows = new ArrayList<>();
+
+        for (int i = 0; i < list.size(); i += 3) {
+            List<InlineKeyboardButton> row = new ArrayList<>();
+            for (int j = i; j < i + 3 && j < list.size(); j++) {
+                row.add(makeInlineKeyboardButton(list.get(j), j + 1));
+            }
+            rows.add(row);
+        }
+        InlineKeyboardButton[][] keyboardArray = rows.stream()
+                .map(row -> row.toArray(new InlineKeyboardButton[0]))
+                .toArray(InlineKeyboardButton[][]::new);
+        return new InlineKeyboardMarkup(keyboardArray);
     }
 }
 

@@ -4,14 +4,19 @@ import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.model.User;
 import com.pengrad.telegrambot.request.DeleteMessage;
+import org.jetbrains.annotations.NotNull;
 import uz.pdp.maven.backend.models.book.Book;
 import uz.pdp.maven.backend.service.bookService.BookService;
+import uz.pdp.maven.backend.service.bookService.filter.Filter;
 import uz.pdp.maven.bean.BeanController;
 import uz.pdp.maven.backend.models.myUser.MyUser;
 import uz.pdp.maven.backend.service.userService.UserService;
 import uz.pdp.maven.backend.paths.PathConstants;
 import uz.pdp.maven.bot.maker.MessageMaker;
 import uz.pdp.maven.bot.states.base.BaseState;
+import uz.pdp.maven.bot.states.child.SearchByState;
+
+import java.util.List;
 
 public abstract class BaseHandler implements PathConstants {
 
@@ -74,6 +79,10 @@ public abstract class BaseHandler implements PathConstants {
 
     public String incorrectValueMes(String value){
         return "Enter incorrect value : " + value;
+    }
+
+    public @NotNull List<Book> getBookListStrByFilter(Filter<Book> bookFilter) {
+        return bookService.getBooksByFilter(bookFilter);
     }
 
 }
