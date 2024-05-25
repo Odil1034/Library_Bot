@@ -336,5 +336,44 @@
     "fileId": "BQACAgIAAxkBAAIT9GZO7X8-By3dxCmm-D0tOA1dbF8eAAKGSwAC7Ft5SjkVQVpPE0fANQQ",
     "userId": 1040000390,
     "isComplete": true
+  },
+  {
+    "Id": "c64e0efa-2109-466a-8f90-bd71712e4302",
+    "name": "Andisha va g‘urur",
+    "author": "Jeyn Ostin",
+    "genre": "BADIIY_ADABIYOTLAR",
+    "language": "Uzbek",
+    "countOfPage": 404,
+    "description": "Jeyn Ostin «Andisha va g‘urur» («Gordost i predubejdeni ye») asarida qishloq dvoryanining qizi Elizabet Bennet bilan \no‘zining kelib chiqishi, boyligi ila mag‘rur boy pomeshchikning \no‘g‘li Fitsuilyam Darsi o‘rtasidagi sarguzashtlarni hikoya qila di. Asar 1813-yilda nashr qilinib, adabiyot dunyosida katta \nshov-shuvga sabab bo‘ldi. Ushbu asar haqida o‘sha paytdagi \n«Britaniya tanqidchisi» jurnali shunday yozgan edi: «Asar shu \npaytgacha o‘quvchilar hukmiga havola qilingan bu turdagi \nhamma romanlardan yuqori turadi». Umid qilamizki, mazkur \nasar hurmatli o‘zbek kitobxonlariga ham manzur bo‘ladi.",
+    "photoId": "AgACAgIAAxkBAAIUIGZO8XECmnMUM64V5KBZXUDMJ9iUAAIW2jEb7Ft5SjrCDjiOR3J9AQADAgADcwADNQQ",
+    "fileId": "BQACAgIAAxkBAAIUImZO8YHe2-C2YhvOj36pvpOnm2C_AAKmSwAC7Ft5SmJM2Iwigu9RNQQ",
+    "userId": 1040000390,
+    "isComplete": true
+  },
+  {
+    "Id": "6291a494-11f3-48e7-b5d3-f8a712709890",
+    "name": "Kichkina Shahzoda",
+    "author": "Antuan de-Sent Ekzyuperi",
+    "genre": "BADIIY_ADABIYOTLAR",
+    "language": "UZbek",
+    "countOfPage": 60,
+    "description": "Jeyn Ostin «Andisha va g‘urur» («Gordost i predubejdeni ye») asarida qishloq dvoryanining qizi Elizabet Bennet bilan \no‘zining kelib chiqishi, boyligi ila mag‘rur boy pomeshchikning \no‘g‘li Fitsuilyam Darsi o‘rtasidagi sarguzashtlarni hikoya qila di. Asar 1813-yilda nashr qilinib, adabiyot dunyosida katta \nshov-shuvga sabab bo‘ldi. Ushbu asar haqida o‘sha paytdagi \n«Britaniya tanqidchisi» jurnali shunday yozgan edi: «Asar shu \npaytgacha o‘quvchilar hukmiga havola qilingan bu turdagi \nhamma romanlardan yuqori turadi». Umid qilamizki, mazkur \nasar hurmatli o‘zbek kitobxonlariga ham manzur bo‘ladi.",
+    "photoId": "AgACAgIAAxkBAAIUM2ZO8yK4_R4TnICOL7N-MiQmUbJGAAIf2jEb7Ft5SgVnqSifNs6qAQADAgADcwADNQQ",
+    "fileId": "BQACAgIAAxkBAAIUNWZO8zQs4mtu42WCxL4R9HsUt6NXAAK4SwAC7Ft5SqhAFC1nzTaZNQQ",
+    "userId": 1040000390,
+    "isComplete": true
+  },
+  {
+    "Id": "d1718734-46fb-45cc-a3e6-bdd037f667cf",
+    "name": "Buyuk shaxmat taxtasi",
+    "author": "Zbignev Bjezinkiy",
+    "genre": "SARGUZASHT",
+    "language": "Uzbek",
+    "countOfPage": 68,
+    "description": "Тахминан 500 йил муқаддам қитъалар сиёсий жиҳатдан ўзаро алоқа қила бошлаганларидан бери Евросиё жаҳон қудратининг маркази бўлиб келди. Евросиёда яшайдиган халқлар, асосан, унинг Ғарбий Оврўпа қисмида истиқомат қилувчи халқлар турли замонларда турли йўллар билан дунёнинг бошқа минтақаларига кириб борганлар ва у ерларда ҳукмронлик қилганлар. Ҳолбуки, шу вақтнинг ўзида айрим Евросиё давлатлари ўзлари учун алоҳида \nмақомга эришганлар ва жаҳоннинг етакчи давлатига хос имтиёзлардан фойдаланганлар.",
+    "photoId": "AgACAgIAAxkBAAIUcmZPduFstJM2b9VsXmTnx55F-IU3AAKX3DEb7FuBSqn5f4SQRrHWAQADAgADcwADNQQ",
+    "fileId": "BQACAgIAAxkBAAIUdGZPdvVX9ZTPKBoS0AgAATGOiTBlnQAC5kkAAuxbgUpgeojuauHN0DUE",
+    "userId": 1040000390,
+    "isComplete": true
   }
 ]

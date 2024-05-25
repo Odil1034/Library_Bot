@@ -4,14 +4,22 @@ import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.model.User;
 import com.pengrad.telegrambot.request.DeleteMessage;
+import com.pengrad.telegrambot.request.SendMessage;
 import uz.pdp.maven.backend.models.book.Book;
 import uz.pdp.maven.backend.service.bookService.BookService;
+import uz.pdp.maven.backend.service.bookService.filter.Filter;
+import uz.pdp.maven.backend.types.bookTypes.Genre;
 import uz.pdp.maven.bean.BeanController;
 import uz.pdp.maven.backend.models.myUser.MyUser;
 import uz.pdp.maven.backend.service.userService.UserService;
 import uz.pdp.maven.backend.paths.PathConstants;
 import uz.pdp.maven.bot.maker.MessageMaker;
 import uz.pdp.maven.bot.states.base.BaseState;
+
+import java.util.List;
+import java.util.Map;
+import java.util.StringJoiner;
+import java.util.stream.Collectors;
 
 public abstract class BaseHandler implements PathConstants {
 
@@ -33,7 +41,7 @@ public abstract class BaseHandler implements PathConstants {
     public abstract void handle(Update update);
 
     protected MyUser getUserOrCreate(User from) {
-        MyUser myUser = userService.get(from.id());
+        MyUser myUser = userService.get(String.valueOf(from.id()));
         if (myUser == null) {
             MyUser newMyUser = MyUser.builder()
                     .Id(from.id())
@@ -76,4 +84,19 @@ public abstract class BaseHandler implements PathConstants {
         return "Enter incorrect value : " + value;
     }
 
+    public List<Book> getBookListStrByFilter(Filter<Book> bookFilter) {
+
+        List<Book> books = bookService.getBooksByFilter(bookFilter);
+
+        return books;
+    }
+
+    public void showBook(Book book) {
+        StringJoiner stringJoiner = new StringJoiner("\n");
+        stringJoiner.add("Book").add(book.getName())
+                .add(book.getGenre().name())
+                .add(book.getAuthor());
+
+        bot.execute(new SendMessage(curUser.getId(), stringJoiner.toString()));
+    }
 }

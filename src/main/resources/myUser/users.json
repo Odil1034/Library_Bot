@@ -4,8 +4,8 @@
     "username": "Odil1034",
     "firstname": "Odiljon",
     "lastname": "Baxriddinov",
-    "phoneNumber": "+998974351034",
-    "baseState": "ADD_BOOK_STATE",
-    "state": "ENTER_BOOK_NAME"
+    "phoneNumber": null,
+    "baseState": "REGISTRATION_STATE",
+    "state": null
   }
 ]
