@@ -5,21 +5,20 @@ import com.pengrad.telegrambot.model.request.InlineKeyboardButton;
 import com.pengrad.telegrambot.model.request.InlineKeyboardMarkup;
 import com.pengrad.telegrambot.model.request.KeyboardButton;
 import com.pengrad.telegrambot.model.request.ReplyKeyboardMarkup;
+import com.pengrad.telegrambot.request.SendDocument;
 import com.pengrad.telegrambot.request.SendMessage;
 import org.jetbrains.annotations.NotNull;
 import uz.pdp.maven.backend.models.book.Book;
 import uz.pdp.maven.backend.models.myUser.MyUser;
-import uz.pdp.maven.backend.types.bookTypes.Genre;
 
 import static uz.pdp.maven.backend.types.bookTypes.Genre.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.StringJoiner;
-import java.util.stream.Collectors;
 
 import static uz.pdp.maven.bot.states.child.MainMenuState.*;
+import static uz.pdp.maven.bot.states.child.SearchByState.*;
 
 public class MessageMaker {
 
@@ -60,35 +59,15 @@ public class MessageMaker {
         SendMessage sendMessage = new SendMessage(curUser.getId(), "Search Book");
 
         InlineKeyboardButton[][] buttons = {
-                {getNewInlineButton("By Name", "BY_NAME"),
-                        getNewInlineButton("By Author", "BY_AUTHOR")},
-                {getNewInlineButton("By Genre", "BY_GENRE"),
-                        getNewInlineButton("All Books", "ALL_BOOKS")},
-                {getNewInlineButton("Main Menu", "MAIN_MENU")}
+                {getNewInlineButton("By Name", BY_NAME.name()),
+                        getNewInlineButton("By Author", BY_AUTHOR.name())},
+                {getNewInlineButton("By Genre", BY_GENRE.name()),
+                        getNewInlineButton("All Books", ALL_BOOKS.name())},
+                {getNewInlineButton("Main Menu", MAIN_MENU.name())}
         };
         InlineKeyboardMarkup keyboardMarkup = new InlineKeyboardMarkup(buttons);
         sendMessage.replyMarkup(keyboardMarkup);
         return sendMessage;
-    }
-
-    public static void myFavouriteBookMenu(List<Book> books) {
-
-        Map<Genre, List<Book>> collect = books.stream().collect(Collectors.groupingBy(Book::getGenre));
-
-        StringJoiner joiner = new StringJoiner("\n");
-
-        collect.forEach((genre, books1) -> {
-            int i;
-            joiner.add("\n" + genre.name() + "\n");
-            for (i = 0; i < books1.size(); i++) {
-                joiner.add(i + 1 + ". "
-                        + books1.get(i).getName() + "   "
-                        + books1.get(i).getAuthor());
-            }
-            i = 0;
-        });
-
-        System.out.println(joiner);
     }
 
     public SendMessage enterBookNameMenu(MyUser curUser) {
@@ -207,7 +186,7 @@ public class MessageMaker {
         for (int i = 0; i < books.size(); i++) {
             Book book = books.get(i);
             stringJoiner.add(i + 1 + ".     \uD83D\uDCD3 " + book.getName())
-                    .add("    ✍\uFE0F " + book.getAuthor());
+                    .add("    ✍️ " + book.getAuthor());
         }
 
         return new SendMessage(curUser.getId(), stringJoiner.toString());
@@ -223,7 +202,6 @@ public class MessageMaker {
 
         return new SendMessage(curUser.getId(), stringJoiner.toString());
     }
-
 
 
     public <T extends Book> InlineKeyboardButton makeInlineKeyboardButton(T t, int num) {
@@ -245,6 +223,18 @@ public class MessageMaker {
                 .map(row -> row.toArray(new InlineKeyboardButton[0]))
                 .toArray(InlineKeyboardButton[][]::new);
         return new InlineKeyboardMarkup(keyboardArray);
+    }
+
+    public SendDocument sendDocument(MyUser curUser, String fileId) {
+        SendDocument sendDocument = new SendDocument(curUser.getId(), fileId);
+        InlineKeyboardButton[][] button = {
+                new InlineKeyboardButton[]{
+                        getNewInlineButton("Main Menu", "MAIN_MENU")
+                }
+        };
+        InlineKeyboardMarkup keyboardMarkup = new InlineKeyboardMarkup(button);
+        sendDocument.replyMarkup(keyboardMarkup);
+        return sendDocument;
     }
 }
 

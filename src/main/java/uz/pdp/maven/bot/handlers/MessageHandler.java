@@ -225,18 +225,7 @@ public class MessageHandler extends BaseHandler {
         String state = curUser.getState();
         if (state.equals(SearchBookState.SEARCH_BY.name())) {
             handleSearchBy();
-        } else if (state.equals(SearchBookState.BOOK_LIST.name())) {
-
-        } else if (state.equals(SearchBookState.ADD_MY_FAVOURITE_BOOKS.name())) {
-
-        } else if (state.equals(SearchBookState.SELECT_FILE.name())) {
-
-        } else if (state.equals(SearchBookState.DOWNLOAD.name())) {
-
-        } else {
-
         }
-
     }
 
     private void handleSearchBy() {
@@ -263,9 +252,7 @@ public class MessageHandler extends BaseHandler {
                 sendMessage.replyMarkup(keyboardMarkup);
                 bot.execute(sendMessage);
             }
-            default -> {
-
-            }
         }
+        changeStates(BaseState.SEARCH_BOOK_STATE, SearchBookState.SELECT_FILE.name());
     }
 }

@@ -77,10 +77,6 @@ public abstract class BaseHandler implements PathConstants {
         return str == null || str.isEmpty() || str.isBlank();
     }
 
-    public String incorrectValueMes(String value){
-        return "Enter incorrect value : " + value;
-    }
-
     public @NotNull List<Book> getBookListStrByFilter(Filter<Book> bookFilter) {
         return bookService.getBooksByFilter(bookFilter);
     }

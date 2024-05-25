@@ -2,6 +2,7 @@ package uz.pdp.maven.bot.handlers;
 
 import com.pengrad.telegrambot.model.*;
 import com.pengrad.telegrambot.model.request.InlineKeyboardMarkup;
+import com.pengrad.telegrambot.request.SendDocument;
 import com.pengrad.telegrambot.request.SendMessage;
 import uz.pdp.maven.backend.models.book.Book;
 import uz.pdp.maven.backend.service.bookService.filter.Filter;
@@ -14,6 +15,7 @@ import java.util.Objects;
 
 import static uz.pdp.maven.bot.states.child.MainMenuState.MAIN_MENU;
 import static uz.pdp.maven.bot.states.child.MainMenuState.SEARCH_BOOK;
+import static uz.pdp.maven.bot.states.child.SearchByState.BY_GENRE;
 
 public class CallBackQueryHandler extends BaseHandler {
 
@@ -39,7 +41,7 @@ public class CallBackQueryHandler extends BaseHandler {
         } else if (Objects.equals(baseState, BaseState.MY_FAVOURITE_BOOKS_STATE)) {
             myFavouriteBooksState();
         } else if (Objects.equals(baseState, BaseState.SEARCH_BY_STATE)) {
-            searchByMenu();
+            searchByState();
         }
     }
 
@@ -74,15 +76,10 @@ public class CallBackQueryHandler extends BaseHandler {
                 String data = callbackQuery.data();
                 mainMenu(data);
             }
-            case SEARCH_BOOK -> {
-                searchBookState();
-            }
-            case MY_FAVOURITE_BOOKS -> {
-                myFavouriteBooksState();
-            }
-            case ADD_BOOK -> {
-                addBookState();
-            }
+            case SEARCH_BOOK -> searchBookState();
+            case MY_FAVOURITE_BOOKS -> myFavouriteBooksState();
+            case ADD_BOOK -> addBookState();
+
         }
     }
 
@@ -196,7 +193,9 @@ public class CallBackQueryHandler extends BaseHandler {
                     bot.execute(sendMessage);
                 }
             }
-            default -> anyThingIsWrongMessage();
+            default -> {
+
+            }
         }
     }
 
@@ -221,23 +220,18 @@ public class CallBackQueryHandler extends BaseHandler {
         }
         Message message = callbackQuery.message();
 
-        backToMainMenu(data, message);
+        if(backToMainMenu(data, message)) return;
         String stateStr = curUser.getState();
         SearchBookState state = SearchBookState.valueOf(stateStr);
 
         switch (state) {
-            case SEARCH_BY -> searchByMenu();
-            case BOOK_LIST -> {
+            case SEARCH_BY -> searchByState();
+            case SELECT_FILE -> {
                 String bookId = update.callbackQuery().data();
                 Book book = bookService.get(bookId);
-                SendMessage sendMessage = messageMaker.showBook(curUser, book);
-                bot.execute(sendMessage);
-            }
-            case SELECT_FILE -> {
-
-            }
-            case DOWNLOAD -> {
-
+                String fileId = book.getFileId();
+                SendDocument sendDocument = messageMaker.sendDocument(curUser, fileId);
+                bot.execute(sendDocument);
             }
             case ADD_MY_FAVOURITE_BOOKS -> {
 
@@ -245,10 +239,11 @@ public class CallBackQueryHandler extends BaseHandler {
         }
     }
 
-    private void searchByMenu() {
+    private void searchByState() {
 
         String stateStr = update.callbackQuery().data();
         SearchByState state = SearchByState.valueOf(stateStr);
+        changeBaseState(BaseState.SEARCH_BY_STATE);
 
         switch (state) {
             case BY_NAME -> {
@@ -260,45 +255,35 @@ public class CallBackQueryHandler extends BaseHandler {
                 changeState(SearchByState.BY_AUTHOR.name());
             }
             case BY_GENRE -> {
-                bot.execute(messageMaker.selectGenre(curUser));
-                changeState(SearchByState.BY_GENRE.name());
-                Genre genre = getGenre();
-
-                Filter<Book> bookFilterByGenre = (book -> book.getGenre().equals(genre));
-
-                List<Book> bookList = getBookListStrByFilter(bookFilterByGenre);
-                SendMessage sendMessage = messageMaker.showBookList(curUser, bookList);
-                InlineKeyboardMarkup keyboardMarkup = messageMaker.makeInlineKeyboardButtons(bookList);
-                sendMessage.replyMarkup(keyboardMarkup);
-                bot.execute(sendMessage);
+                String data = update.callbackQuery().data();
+                if (data.equals(BY_GENRE.name())) {
+                    bot.execute(messageMaker.selectGenre(curUser));
+                    changeStates(BaseState.SEARCH_BY_STATE, BY_GENRE.name());
+                } else {
+                    String genreStr = update.callbackQuery().data();
+                    Genre genre = Genre.valueOf(genreStr);
+                    Filter<Book> bookFilterByGenre = (book -> book.getGenre().equals(genre));
+                    List<Book> bookList = getBookListStrByFilter(bookFilterByGenre);
+                    SendMessage sendMessage = messageMaker.showBookList(curUser, bookList);
+                    InlineKeyboardMarkup keyboardMarkup = messageMaker.makeInlineKeyboardButtons(bookList);
+                    sendMessage.replyMarkup(keyboardMarkup);
+                    bot.execute(sendMessage);
+                }
             }
-            case ALL_BOOK -> {
-                bot.execute(new SendMessage(curUser.getId(), "All books"));
-                changeState(SearchByState.ALL_BOOK.name());
+            case ALL_BOOKS -> {
+                bot.execute(new SendMessage(curUser.getId(), "ALL BOOKS\n"));
                 List<Book> allBooks = bookService.getAllBooks();
                 SendMessage sendMessage = messageMaker.showBookList(curUser, allBooks);
                 InlineKeyboardMarkup keyboardMarkup = messageMaker.makeInlineKeyboardButtons(allBooks);
                 sendMessage.replyMarkup(keyboardMarkup);
                 bot.execute(sendMessage);
             }
-            default -> {
-
-            }
         }
-        changeBaseState(BaseState.SEARCH_BY_STATE);
-    }
-
-    private Genre getGenre() {
-        String data = update.callbackQuery().data();
-        return Genre.valueOf(data);
+        changeStates(BaseState.SEARCH_BOOK_STATE, SearchBookState.SELECT_FILE.name());
     }
 
     private void myFavouriteBooksState() {
         changeStates(BaseState.MY_FAVOURITE_BOOKS_STATE, null);
         System.out.println("myFavouriteBooksState is run");
-    }
-
-    public void anyThingIsWrongMessage() {
-        bot.execute(new SendMessage(curUser.getId(), "Anything is wrong ❌❌❌"));
     }
 }

@@ -4,7 +4,7 @@ public enum SearchByState {
 
     BY_NAME,
     BY_AUTHOR,
-    ALL_BOOK,
-    BY_GENRE;
+    ALL_BOOKS,
+    BY_GENRE
 
 }
