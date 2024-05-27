@@ -110,11 +110,11 @@ public class CallBackQueryHandler extends BaseHandler {
         AddBookState state = AddBookState.valueOf(stateStr);
         String data = update.callbackQuery().data();
 
-        if (backToMainMenu(data, message)) return;
+        if (backToMainMenu(data)) return;
 
         switch (state) {
             case ENTER_BOOK_NAME -> {
-                backToMainMenu(data, message);
+                backToMainMenu(data);
                 SendMessage bookNameMessage = messageMaker.enterBookNameMenu(curUser);
                 bot.execute(bookNameMessage);
                 changeState(AddBookState.ENTER_BOOK_NAME.name());
@@ -206,8 +206,7 @@ public class CallBackQueryHandler extends BaseHandler {
             return;
         }
 
-        Message message = callbackQuery.message();
-        if (backToMainMenu(data, message)) return;
+        if (backToMainMenu(data)) return;
         String stateStr = curUser.getState();
         SearchBookState state = SearchBookState.valueOf(stateStr);
 
@@ -230,7 +229,7 @@ public class CallBackQueryHandler extends BaseHandler {
         }
     }
 
-    private boolean backToMainMenu(String data, Message message) {
+    private boolean backToMainMenu(String data) {
         if (data.equals("MAIN_MENU")) {
             changeStates(BaseState.MAIN_MENU_STATE, MAIN_MENU.name());
             mainState();
@@ -242,10 +241,9 @@ public class CallBackQueryHandler extends BaseHandler {
     private void searchByState() {
 
         CallbackQuery callbackQuery = update.callbackQuery();
-        Message message = callbackQuery.message();
         String data = callbackQuery.data();
 
-        if(backToMainMenu(data, message)) return;
+        if(backToMainMenu(data)) return;
         if(curUser.getState().equals(HANDLE_GENRE.name())){
             handleBookGenre();
         }

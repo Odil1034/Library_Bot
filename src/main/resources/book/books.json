@@ -362,5 +362,18 @@
     "fileId": "BQACAgIAAxkBAAIXLWZReqqA7MJdC33Nu4trFDtR6CPuAALyUgACeB2JSj0iY0uzseqMNQQ",
     "userId": 1040000390,
     "isComplete": true
+  },
+  {
+    "Id": "700a1928-7ede-43e7-a757-35a09c99ee93",
+    "name": "Lokomotivlarni ta‘mirlash texnologiyasi",
+    "author": "Transport Universiteti",
+    "genre": "ILMIY",
+    "language": "Uzbek",
+    "countOfPage": 200,
+    "description": "O‘zbekistondagi barcha lokomotivlarni ta‘mirlash texnologiyalarini o‘z ichiga oladi",
+    "photoId": "AgACAgIAAxkBAAIZmWZR75d_EzEQUtHGNf164lkxK8_OAAI31zEbsKeQSmTYlHEPaqD-AQADAgADcwADNQQ",
+    "fileId": "BQACAgIAAxkBAAIZm2ZR7--aR8SlbeD0ZqrkurQ2BK2yAAL3PAACb6-hSZCd1cBaD0hqNQQ",
+    "userId": 1040000390,
+    "isComplete": true
   }
 ]

@@ -5,7 +5,16 @@
     "firstname": "Odiljon",
     "lastname": "Baxriddinov",
     "phoneNumber": "+998974351034",
-    "baseState": "MAIN_MENU_STATE",
-    "state": "MAIN_MENU"
+    "baseState": "MY_FAVOURITE_BOOKS_STATE",
+    "state": null
+  },
+  {
+    "Id": 6803259185,
+    "username": "Jasurbek_49",
+    "firstname": "Jasurbek",
+    "lastname": null,
+    "phoneNumber": "998887091986",
+    "baseState": "SEARCH_BOOK_STATE",
+    "state": "SELECT_FILE"
   }
 ]
